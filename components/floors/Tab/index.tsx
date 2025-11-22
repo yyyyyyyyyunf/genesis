@@ -3,12 +3,11 @@
 import React, { useState } from 'react';
 import { TabProps } from './schema';
 import { cn } from '@/lib/utils';
-import { useRenderer } from '@/components/renderer/RendererContext';
+import { ClientRecursiveRenderer } from '@/components/renderer/ClientRecursiveRenderer';
 
 export const Tab = ({ data }: { data: TabProps }) => {
   const { items, defaultActiveKey } = data;
   const [activeKey, setActiveKey] = useState(defaultActiveKey || items[0]?.key);
-  const renderFloor = useRenderer();
 
   if (!items || items.length === 0) return null;
 
@@ -38,11 +37,7 @@ export const Tab = ({ data }: { data: TabProps }) => {
       <div className="p-4 bg-gray-50 min-h-[200px]">
         {activeItem.children && activeItem.children.length > 0 ? (
           <div className="space-y-4">
-            {activeItem.children.map((floor: any) => (
-              <React.Fragment key={floor.id}>
-                {renderFloor(floor)}
-              </React.Fragment>
-            ))}
+             <ClientRecursiveRenderer floors={activeItem.children} />
           </div>
         ) : (
           <div className="text-center text-gray-400 py-10">
@@ -53,4 +48,3 @@ export const Tab = ({ data }: { data: TabProps }) => {
     </div>
   );
 };
-

@@ -1,4 +1,4 @@
-import { RecursiveRenderer } from '@/components/renderer/RecursiveRenderer';
+import { ServerRecursiveRenderer } from '@/components/renderer/ServerRecursiveRenderer';
 
 // Mock Page Configuration (DSL)
 // This is what the database or Agent would return.
@@ -20,7 +20,8 @@ const mockPageConfig = [
       src: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&auto=format&fit=crop&q=60',
       alt: 'Sale Banner',
       aspectRatio: '16/9',
-      objectFit: 'cover'
+      objectFit: 'cover',
+      clickUrl: 'https://www.google.com' // Testing the Client Wrapper
     }
   },
   {
@@ -106,7 +107,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100 py-10">
       <h1 className="text-center text-2xl font-bold mb-8">Next.js Low-Code Agent Platform Demo</h1>
-      <RecursiveRenderer floors={mockPageConfig} />
+      {/* 
+        This is now a Server Component iterating over the floors.
+        It will statically render Text and Image on the server.
+        It will hydrate Tab and Shelf on the client.
+      */}
+      <ServerRecursiveRenderer floors={mockPageConfig} />
     </div>
   );
 }

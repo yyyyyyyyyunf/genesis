@@ -7,6 +7,7 @@ export const mockPageConfig = [
   {
     id: 'floor_1',
     type: COMPONENT_NAMES.Text,
+    alias: '主标题',
     data: {
       content: '双十一全球好物节',
       align: 'center',
@@ -17,6 +18,7 @@ export const mockPageConfig = [
   {
     id: 'floor_banner',
     type: COMPONENT_NAMES.Image,
+    alias: '活动Banner',
     data: {
       src: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&auto=format&fit=crop&q=60',
       alt: 'Sale Banner',
@@ -28,6 +30,7 @@ export const mockPageConfig = [
   {
     id: 'floor_2',
     type: COMPONENT_NAMES.Text,
+    alias: '副标题',
     data: {
       content: '精选全球各地必买清单，限时特惠',
       align: 'center',
@@ -38,6 +41,7 @@ export const mockPageConfig = [
   {
     id: 'floor_3',
     type: COMPONENT_NAMES.Tab,
+    alias: '国家馆Tab',
     data: {
       defaultActiveKey: 'korea',
       items: [

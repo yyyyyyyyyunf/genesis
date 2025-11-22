@@ -4,6 +4,16 @@
 
 > **注意**: `type` 字段现在使用数字 ID (Type ID)。请务必使用对应的数字。
 
+## 页面结构 (Page Structure)
+
+一个标准的楼层 (Floor) 对象包含以下字段：
+- `id`: (string) 楼层的唯一标识符
+- `type`: (number) 组件的数字 Type ID
+- `alias`: (string, 可选) 楼层的别名，用于在对话中指代该楼层 (例如 "主标题", "活动 Banner")
+- `data`: (object) 组件的具体配置数据，详见下方各组件定义
+
+---
+
 ## 组件: Text (Type ID: 1)
 
 ### 属性 (Properties)

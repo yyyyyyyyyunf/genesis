@@ -11,6 +11,7 @@ We split the component registry into two parts to enforce separation of concerns
 
 - **`server-registry.tsx`**: Contains stateless RSCs (Text, Image). These are rendered as static HTML on the server. No JS is sent to the client for these (except for interactivity wrappers).
 - **`client-registry.tsx`**: Contains interactive Client Components (Tab, Shelf). These are hydrated on the client.
+- **`full-registry.ts`**: Combines both registries for use in Client-side recursion (e.g. inside Tabs).
 
 ### 2. Recursive Rendering Engine
 - **`ServerRecursiveRenderer`**: The root entry point. It runs on the server, iterates over the JSON DSL, and decides whether to render a Server Component directly or wrap a Client Component in `<Suspense>`.
@@ -44,8 +45,11 @@ components/
     Tab/            # Client Component
     server-registry.tsx
     client-registry.tsx
+    full-registry.ts
+    utils.tsx       # Registry Helpers
   renderer/
     ServerRecursiveRenderer.tsx  # Root Entry
+    ServerFloorItem.tsx          # Server Render Logic Helper
     ClientRecursiveRenderer.tsx  # Nested Client Entry
 scripts/
   generate-agent-docs.ts  # Knowledge Base Generator

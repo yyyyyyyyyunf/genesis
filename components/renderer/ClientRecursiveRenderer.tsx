@@ -1,17 +1,12 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import { ClientRegistry } from '../floors/client-registry';
-import { ServerRegistry } from '../floors/server-registry';
+import { FullRegistry } from '../floors/full-registry';
 import { Floor } from '../floors/types';
 
 interface ClientRecursiveRendererProps {
   floors: Floor[];
 }
-
-// Combined Registry for Client-Side Rendering
-// When rendering on the client (e.g. inside a Tab), we need access to ALL components
-const FullRegistry = { ...ServerRegistry, ...ClientRegistry };
 
 export const ClientRecursiveRenderer = ({ floors }: ClientRecursiveRendererProps) => {
   if (!floors || floors.length === 0) return null;
@@ -38,4 +33,3 @@ export const ClientRecursiveRenderer = ({ floors }: ClientRecursiveRendererProps
     </>
   );
 };
-

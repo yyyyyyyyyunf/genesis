@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { TabProps } from './schema';
 import { cn } from '@/lib/utils';
-import { ClientRecursiveRenderer } from '@/components/renderer/ClientRecursiveRenderer';
+import { ClientRecursiveRenderer } from '@/components/engine/renderer/ClientRecursiveRenderer';
 
 export const Tab = ({ data }: { data: TabProps }) => {
   const { items, defaultActiveKey } = data;

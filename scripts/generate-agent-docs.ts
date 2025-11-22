@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { ZodType, ZodObject, ZodEnum, ZodOptional, ZodDefault, ZodString, ZodNumber, ZodBoolean, ZodArray } from 'zod';
-import { SchemaRegistry } from '../components/floors/schemas';
+import { SchemaRegistry } from '../components/widgets/schemas';
 
 const OUTPUT_FILE = path.join(process.cwd(), 'agent-manual.md');
 

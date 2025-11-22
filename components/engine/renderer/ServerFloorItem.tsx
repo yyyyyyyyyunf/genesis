@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
-import { ServerRegistry } from '../floors/server-registry';
-import { ClientRegistry } from '../floors/client-registry';
-import { Floor } from '../floors/types';
+import { ServerRegistry } from '../../../widgets/server-registry';
+import { ClientRegistry } from '../../../widgets/client-registry';
+import { Floor } from '../../types';
 
 export const ServerFloorItem = ({ floor }: { floor: Floor }) => {
   // 1. Try Server Registry first (RSC Preference)

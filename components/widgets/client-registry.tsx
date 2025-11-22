@@ -1,6 +1,6 @@
 import React from 'react';
-import { FloorComponentProps } from './types';
-import { dynamicClientFloor } from './utils';
+import { FloorComponentProps } from '../engine/types';
+import { dynamicClientFloor } from '../engine/utils';
 
 export const ClientRegistry: Record<string, React.ComponentType<FloorComponentProps>> = {
   // Tab is inherently interactive (useState), so it lives here

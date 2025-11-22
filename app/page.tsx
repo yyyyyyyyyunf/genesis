@@ -1,4 +1,4 @@
-import { ServerRecursiveRenderer } from '@/components/renderer/ServerRecursiveRenderer';
+import { ServerRecursiveRenderer } from '@/components/engine/renderer/ServerRecursiveRenderer';
 
 // Mock Page Configuration (DSL)
 // This is what the database or Agent would return.

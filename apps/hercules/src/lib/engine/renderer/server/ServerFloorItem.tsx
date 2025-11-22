@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { ServerRegistry } from '@/widgets/server-registry';
 import { ClientRegistry } from '@/widgets/client-registry';
-import { Floor } from '../types';
+import { Floor } from '../../types';
 import { getComponentKey } from '@/widgets/component-map';
 
 export const ServerFloorItem = ({ floor }: { floor: Floor }) => {

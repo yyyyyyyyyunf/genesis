@@ -16,6 +16,16 @@ interface EditorState {
   loadConfig: (config: PageConfig) => void;
 }
 
+// 简单的对象合并工具
+// 注意：这会用 data 中的属性覆盖 target 中的属性，如果是对象则递归合并
+// 但这里为了简化 AutoForm 的行为（AutoForm 传回的是该字段的完整新值），
+// 我们应该假定 data 是部分更新，但对于复杂的嵌套结构，AutoForm 已经处理了完整性。
+// 实际上，最安全的方式是浅层合并 data 到 floor.data，这正是目前所做的。
+// 但对于 Tab 的 items 数组，AutoForm 会传回整个 items 数组，所以浅层合并是没问题的：
+// floor.data = { ...floor.data, items: newItemsArray }
+// 这里的 data 是 { items: [...] }
+// 所以 { ...floor.data, ...data } 结果是 items 被完全替换，这正是我们要的。
+
 export const useEditorStore = create<EditorState>((set, get) => ({
   currentConfig: [],
   draftConfig: null,
@@ -51,4 +61,3 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 
   loadConfig: (config) => set({ currentConfig: config }),
 }));
-

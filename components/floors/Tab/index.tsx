@@ -1,0 +1,56 @@
+'use client';
+
+import React, { useState } from 'react';
+import { TabProps } from './schema';
+import { cn } from '@/lib/utils';
+import { useRenderer } from '@/components/renderer/RendererContext';
+
+export const Tab = ({ data }: { data: TabProps }) => {
+  const { items, defaultActiveKey } = data;
+  const [activeKey, setActiveKey] = useState(defaultActiveKey || items[0]?.key);
+  const renderFloor = useRenderer();
+
+  if (!items || items.length === 0) return null;
+
+  const activeItem = items.find((item) => item.key === activeKey) || items[0];
+
+  return (
+    <div className="w-full flex flex-col">
+      {/* Tab Headers */}
+      <div className="flex border-b overflow-x-auto">
+        {items.map((item) => (
+          <button
+            key={item.key}
+            onClick={() => setActiveKey(item.key)}
+            className={cn(
+              'px-6 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors',
+              activeKey === item.key
+                ? 'border-black text-black'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            )}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      <div className="p-4 bg-gray-50 min-h-[200px]">
+        {activeItem.children && activeItem.children.length > 0 ? (
+          <div className="space-y-4">
+            {activeItem.children.map((floor: any) => (
+              <React.Fragment key={floor.id}>
+                {renderFloor(floor)}
+              </React.Fragment>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-400 py-10">
+            No content in this tab
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+

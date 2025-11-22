@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useEditorStore } from '@/lib/store';
 import { PreviewFrame } from '@/components/PreviewFrame';
-import { LayerTree } from '@/components/LayerTree';
+import { FloorTree } from '@/components/FloorTree';
 import { PropertyInspector } from '@/components/PropertyInspector';
 import { ChatPanel } from '@/components/ChatPanel';
 import { ComponentToolbar } from '@/components/ComponentToolbar';
@@ -156,7 +156,7 @@ export default function Home() {
                 <div className={`flex border-b border-gray-200 transition-all duration-300 ${isChatPanelOpen ? 'h-[60%]' : 'h-full'}`}>
                   {/* 图层树 (40%) */}
                   <div className="w-[40%] border-r border-gray-200 h-full overflow-hidden bg-gray-50">
-                    <LayerTree />
+                    <FloorTree />
                   </div>
                   
                   {/* 属性检查器 (60%) */}

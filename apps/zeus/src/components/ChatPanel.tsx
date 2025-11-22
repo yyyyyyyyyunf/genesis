@@ -26,6 +26,10 @@ export function ChatPanel() {
 
   return (
     <div className="flex flex-col h-full border-t border-gray-200">
+      {/* 标题栏 */}
+      <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+        <h3 className="font-bold text-gray-700">AI 助手</h3>
+      </div>
       
       {/* 审查控制 - 覆盖层或专用区域 */}
       {draftConfig && (

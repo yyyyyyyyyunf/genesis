@@ -29,7 +29,7 @@ export function PreviewFrame() {
         src={`${HERCULES_URL}?mode=preview`}
         className="w-full h-full border-none bg-white shadow-lg"
         style={{ maxWidth: '100%', maxHeight: '100%' }}
-        title="Hercules Preview"
+        title="Hercules 预览"
       />
     </div>
   );

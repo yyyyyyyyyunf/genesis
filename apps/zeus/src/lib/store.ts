@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { PageConfig } from '@genesis/hercules/types';
+import { findFloorNode, updateFloorNode, removeFloorNode } from './utils';
 
 interface EditorState {
   currentConfig: PageConfig;
   draftConfig: PageConfig | null;
   selectedFloorId: string | null;
   
-  // UI State
+  // UI 状态
   isManualEditorOpen: boolean;
   isChatPanelOpen: boolean;
 
@@ -16,11 +17,11 @@ interface EditorState {
   selectFloor: (id: string | null) => void;
   updateFloor: (floorId: string, data?: any, alias?: string) => void;
   
-  // Floor Management
+  // 楼层管理
   addFloor: (type: number, index?: number) => void;
   removeFloor: (id: string) => void;
 
-  // UI Actions
+  // UI 操作
   toggleManualEditor: () => void;
   toggleChatPanel: () => void;
   
@@ -62,16 +63,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     const { currentConfig, draftConfig } = get();
     const targetConfig = draftConfig || currentConfig;
     
-    const newConfig = targetConfig.map(floor => {
-      if (floor.id === floorId) {
-        return {
-          ...floor,
-          ...(data ? { data: { ...floor.data, ...data } } : {}),
-          ...(alias !== undefined ? { alias } : {}),
-        };
-      }
-      return floor;
-    });
+    const newConfig = updateFloorNode(targetConfig, floorId, { data, alias });
 
     if (draftConfig) {
       set({ draftConfig: newConfig });
@@ -101,9 +93,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   removeFloor: (id) => {
     const { currentConfig, draftConfig } = get();
     if (draftConfig) {
-      set({ draftConfig: draftConfig.filter(f => f.id !== id) });
+      set({ draftConfig: removeFloorNode(draftConfig, id) });
     } else {
-      set({ currentConfig: currentConfig.filter(f => f.id !== id) });
+      set({ currentConfig: removeFloorNode(currentConfig, id) });
     }
   },
 

@@ -10,13 +10,15 @@ import { AutoForm, unwrapSchema } from './AutoForm';
 
 import { Trash2 } from 'lucide-react';
 
+import { findFloorNode } from '@/lib/utils';
+
 export function PropertyInspector() {
   const { currentConfig, draftConfig, selectedFloorId, updateFloor, removeFloor } = useEditorStore();
   const displayConfig = draftConfig || currentConfig;
-  const selectedFloor = displayConfig.find(f => f.id === selectedFloorId);
+  const selectedFloor = selectedFloorId ? findFloorNode(displayConfig, selectedFloorId) : null;
 
   if (!selectedFloor) {
-    return <div className="p-4 text-gray-400 text-center">选择一个图层以编辑属性</div>;
+    return <div className="p-4 text-gray-400 text-center">请选择一个楼层以编辑属性</div>;
   }
 
   const componentName = getComponentKey(selectedFloor.type);
@@ -37,7 +39,7 @@ export function PropertyInspector() {
           return description.split(': ')[0];
       }
       // 使用明确的 Fallback 以区分
-      return description || 'Alias'; 
+      return description; 
   };
   const aliasLabel = getAliasLabel();
 

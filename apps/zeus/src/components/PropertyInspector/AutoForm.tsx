@@ -18,7 +18,7 @@ function getLabelFromSchema(schema: ZodType, defaultLabel?: string): string | un
   let current: ZodType | null = schema;
   
   while (current) {
-      // Check if current layer has description
+      // 检查当前层是否有描述
       if (current.description) {
         const parts = current.description.split(': ');
         if (parts.length > 1) {
@@ -26,13 +26,13 @@ function getLabelFromSchema(schema: ZodType, defaultLabel?: string): string | un
         }
       }
 
-      // Unwrap one layer
+      // 解包一层
       if (current instanceof ZodOptional) {
         current = current.unwrap();
       } else if (current instanceof ZodDefault) {
         current = current.removeDefault();
       } else {
-        // Not a wrapper we know how to unwrap, stop
+        // 不是我们知道如何解包的包装器，停止
         current = null;
       }
   }

@@ -6,7 +6,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { COMPONENT_MAP } from '@genesis/hercules/component-map';
 import { Type, Image as ImageIcon, LayoutGrid, Columns, Box } from 'lucide-react';
 
-// Icon mapping based on component names (keys in COMPONENT_MAP values)
+// 基于组件名称的图标映射 (COMPONENT_MAP 值的 keys)
 const NAME_TO_ICON: Record<string, React.ElementType> = {
   'Text': Type,
   'Image': ImageIcon,
@@ -15,12 +15,12 @@ const NAME_TO_ICON: Record<string, React.ElementType> = {
 };
 
 function getIconForComponent(name: string): React.ElementType {
-  return NAME_TO_ICON[name] || Box; // Default to Box icon if no match found
+  return NAME_TO_ICON[name] || Box; // 如果没有匹配，默认使用 Box 图标
 }
 
 interface ComponentItemProps {
-  label: string; // Chinese label
-  componentName: string; // English name for icon lookup
+  label: string; // 中文标签
+  componentName: string; // 用于查找图标的英文名称
   className?: string;
   style?: React.CSSProperties;
 }
@@ -40,8 +40,8 @@ export function ComponentItem({ label, componentName, className, style }: Compon
 
 interface ComponentCardProps {
   type: number;
-  name: string; // English name
-  label: string; // Chinese label
+  name: string; // 英文名称
+  label: string; // 中文标签
 }
 
 function ComponentCard({ type, name, label }: ComponentCardProps) {
@@ -50,8 +50,8 @@ function ComponentCard({ type, name, label }: ComponentCardProps) {
     data: {
       type: 'new_component',
       componentType: type,
-      label, // Passing Chinese label for overlay
-      componentName: name, // Passing English name for icon lookup
+      label, // 传递中文标签用于覆盖层
+      componentName: name, // 传递英文名称用于图标查找
     },
   });
 

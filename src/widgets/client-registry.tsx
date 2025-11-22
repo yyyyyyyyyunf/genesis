@@ -2,8 +2,7 @@ import React from 'react';
 import { FloorComponentProps } from '@/lib/engine/types';
 import { dynamicClientFloor } from '@/lib/engine/utils';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const ClientRegistry: Record<string, React.ComponentType<FloorComponentProps<any>>> = {
+export const ClientRegistry: Record<string, React.ComponentType<FloorComponentProps>> = {
   // Tab 本质上是交互式的 (useState)，所以它放在这里
   Tab: dynamicClientFloor(() => import('./Tab').then(mod => mod.Tab)),
   

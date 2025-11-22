@@ -97,9 +97,24 @@ export const mockPageConfig = [
           key: 'japan',
           children: [
             {
+              id: 'floor_jp_header',
+              type: COMPONENT_NAMES.Text,
+              data: { content: '日系清爽', align: 'center', color: 'text-blue-400', size: 'lg' }
+            },
+            {
+              id: 'floor_jp_banner',
+              type: COMPONENT_NAMES.Image,
+              data: {
+                  src: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=800&auto=format&fit=crop&q=60',
+                  alt: 'Japan Vibe',
+                  aspectRatio: '4/3',
+                  objectFit: 'cover'
+              }
+            },
+            {
               id: 'floor_jp_text',
               type: COMPONENT_NAMES.Text,
-              data: { content: '敬请期待...', align: 'center', color: 'text-gray-400' }
+              data: { content: '更多商品敬请期待...', align: 'center', color: 'text-gray-400' }
             }
           ]
         }

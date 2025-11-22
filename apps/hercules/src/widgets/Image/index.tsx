@@ -24,7 +24,7 @@ export const Image = ({ data }: { data: ImageProps }) => {
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
-      alt={alt || 'image'}
+      alt={alt || '图片'}
       className={cn('w-full h-full', fitMap[objectFit || 'cover'])}
     />
   );

@@ -24,7 +24,7 @@ export const Tab = ({ data }: { data: TabProps }) => {
             className={cn(
               'px-6 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors',
               activeKey === item.key
-                ? 'border-black text-black'
+                ? 'border-green-600 text-green-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             )}
           >
@@ -41,7 +41,7 @@ export const Tab = ({ data }: { data: TabProps }) => {
           </div>
         ) : (
           <div className="text-center text-gray-400 py-10">
-            No content in this tab
+            此标签页暂无内容
           </div>
         )}
       </div>

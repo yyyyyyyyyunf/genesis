@@ -13,7 +13,7 @@ export const Shelf = ({ data }: { data: ShelfProps }) => {
         'w-full',
         layout === 'grid' ? 'grid grid-cols-2 gap-4' : 'flex overflow-x-auto gap-4 pb-4'
       )}>
-        {products.map((product) => (
+        {products?.map((product) => (
           <div 
             key={product.id} 
             className={cn(
@@ -26,7 +26,7 @@ export const Shelf = ({ data }: { data: ShelfProps }) => {
                  /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={product.imageUrl} alt={product.name} className="h-full object-cover rounded-md" />
               ) : (
-                'Image'
+                '图片'
               )}
             </div>
             <h3 className="font-medium text-sm truncate">{product.name}</h3>

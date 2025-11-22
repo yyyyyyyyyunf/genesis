@@ -1,16 +1,15 @@
 "use client";
 
-import React from 'react';
 import { ZodObject, ZodString, ZodEnum, ZodType, ZodArray, ZodOptional, ZodDefault, ZodNumber, ZodBoolean } from 'zod';
-import { Plus, Trash2, ChevronRight, ChevronDown } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 
 // 解包 ZodOptional 和 ZodDefault 以获取底层类型
 function unwrapSchema(schema: ZodType): ZodType {
   if (schema instanceof ZodOptional) {
-    return unwrapSchema(schema.unwrap());
+    return unwrapSchema(schema.unwrap() as ZodType);
   }
   if (schema instanceof ZodDefault) {
-    return unwrapSchema(schema.removeDefault());
+    return unwrapSchema(schema.removeDefault() as ZodType);
   }
   return schema;
 }
@@ -59,7 +58,7 @@ export function AutoForm({ schema, data, onChange, label, level = 0 }: AutoFormP
             onClick={() => {
               // 简单的默认值推断
               let defaultValue: any = undefined;
-              const unwrappedItem = unwrapSchema(itemSchema);
+              const unwrappedItem = unwrapSchema(itemSchema as ZodType);
               if (unwrappedItem instanceof ZodString) defaultValue = '';
               if (unwrappedItem instanceof ZodObject) defaultValue = {};
               
@@ -85,7 +84,7 @@ export function AutoForm({ schema, data, onChange, label, level = 0 }: AutoFormP
                 </button>
               </div>
               <AutoForm
-                schema={itemSchema}
+                schema={itemSchema as ZodType}
                 data={item}
                 onChange={(val) => {
                   const newItems = [...items];
@@ -107,60 +106,65 @@ export function AutoForm({ schema, data, onChange, label, level = 0 }: AutoFormP
   }
 
   // 3. 处理基础类型 (String, Enum, Number, Boolean)
+  const renderField = () => {
+    if (unwrappedSchema instanceof ZodEnum) {
+      const options = unwrappedSchema.options as string[];
+      return (
+        <select
+          value={data ?? ''}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full p-2 border rounded text-sm bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+        >
+          <option value="" disabled>请选择</option>
+          {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+        </select>
+      );
+    }
+
+    if (unwrappedSchema instanceof ZodString) {
+      return (
+        <input
+          type="text"
+          value={data ?? ''}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+      );
+    }
+
+    if (unwrappedSchema instanceof ZodNumber) {
+       return (
+        <input
+          type="number"
+          value={data ?? 0}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+      );
+    }
+
+    if (unwrappedSchema instanceof ZodBoolean) {
+       return (
+        <input
+          type="checkbox"
+          checked={!!data}
+          onChange={(e) => onChange(e.target.checked)}
+          className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+        />
+      );
+    }
+
+    return null;
+  };
+
+  const fieldContent = renderField();
+
+  if (!fieldContent) return null;
+
   return (
     <div className="mb-3">
       {label && <label className="block text-xs font-medium text-gray-700 mb-1 capitalize">{label}</label>}
-      
-      {(() => {
-        if (unwrappedSchema instanceof ZodEnum) {
-          const options = unwrappedSchema.options as string[];
-          return (
-            <select
-              value={data ?? ''}
-              onChange={(e) => onChange(e.target.value)}
-              className="w-full p-2 border rounded text-sm bg-white focus:ring-2 focus:ring-blue-500 outline-none"
-            >
-              <option value="" disabled>请选择</option>
-              {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-          );
-        }
-
-        if (unwrappedSchema instanceof ZodString) {
-          return (
-            <input
-              type="text"
-              value={data ?? ''}
-              onChange={(e) => onChange(e.target.value)}
-              className="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          );
-        }
-
-        if (unwrappedSchema instanceof ZodNumber) {
-           return (
-            <input
-              type="number"
-              value={data ?? 0}
-              onChange={(e) => onChange(Number(e.target.value))}
-              className="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          );
-        }
-
-        if (unwrappedSchema instanceof ZodBoolean) {
-           return (
-            <input
-              type="checkbox"
-              checked={!!data}
-              onChange={(e) => onChange(e.target.checked)}
-              className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            />
-          );
-        }
-
-        return <div className="text-xs text-red-400">不支持的类型</div>;
-      })()}
+      {fieldContent}
     </div>
   );
 }

@@ -12,7 +12,7 @@ export function ChatPanel() {
     if (!input.trim()) return;
     
     // 模拟 Agent 响应：随机打乱或更改配置以演示更新
-    console.log('Sending prompt to agent:', input);
+    console.log('发送指令给 Agent:', input);
     
     // 模拟网络延迟
     setTimeout(() => {
@@ -60,13 +60,18 @@ export function ChatPanel() {
           <input 
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && !!input.trim() && handleSend()}
             placeholder="例如：'把 Banner 变大一点'"
             className="flex-1 p-2 border rounded text-sm"
           />
           <button 
             onClick={handleSend}
-            className="px-4 py-2 bg-black text-white rounded text-sm font-medium"
+            disabled={!input.trim()}
+            className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
+                !input.trim() 
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
           >
             发送
           </button>

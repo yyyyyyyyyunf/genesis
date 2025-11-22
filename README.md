@@ -8,6 +8,7 @@ Genesis 是一个现代化的低代码营销页面搭建平台。采用 Monorepo
 
 - **apps/zeus**: 可视化编辑器 (Editor)。运营人员在此通过拖拽、配置和 AI 对话来构建页面。
 - **apps/hercules**: 渲染引擎 (Renderer)。负责将页面配置 (DSL) 渲染为最终的网页，同时提供给编辑器进行实时预览。
+- **apps/jarvis**: 后端服务 (Backend)。提供 API 接口、数据存储和 AI 代理能力。
 
 ## 环境要求
 
@@ -36,8 +37,9 @@ pnpm dev:all
 
 - **Zeus (编辑器)**: http://localhost:3000
 - **Hercules (渲染端)**: http://localhost:3001
+- **Jarvis (后端服务)**: http://localhost:3002
 
-> 注意：编辑器 (Zeus) 依赖渲染端 (Hercules) 进行页面预览，请确保两者都已成功启动。
+> 注意：编辑器 (Zeus) 依赖渲染端 (Hercules) 进行页面预览，同时依赖后端 (Jarvis) 存取数据，请确保所有服务都已成功启动。
 
 ## 其他命令
 
@@ -50,6 +52,7 @@ pnpm dev:all
 /
 ├── apps/
 │   ├── hercules/       # 渲染端应用 (Next.js)
+│   ├── jarvis/         # 后端服务 (Hono)
 │   └── zeus/           # 编辑端应用 (Next.js)
 ├── knowledge/          # 项目文档和知识库
 ├── package.json        # 根项目配置

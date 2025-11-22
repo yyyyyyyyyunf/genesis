@@ -1,8 +1,10 @@
 import { RealtimePreviewRenderer } from '@/lib/engine/renderer/realtime-preview/RealtimePreviewRenderer';
 import { ServerRecursiveRenderer } from '@/lib/engine/renderer/server/ServerRecursiveRenderer';
 import { Providers } from '@/providers';
-import { mockPageConfig } from '@/mocks/page-config';
 import { searchParamsCache } from '@/lib/search-params';
+import { fetchPageConfig } from '@/api/page-config';
+
+import { PageConfig } from '@/lib/types';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -11,6 +13,13 @@ interface PageProps {
 export default async function Home({ searchParams }: PageProps) {
   const { mode } = await searchParamsCache.parse(await searchParams);
   const isPreview = mode === 'preview';
+  
+  let pageConfig: PageConfig = [];
+  try {
+    pageConfig = await fetchPageConfig();
+  } catch (error) {
+    console.error('获取页面配置出错:', error);
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 py-10">
@@ -21,9 +30,9 @@ export default async function Home({ searchParams }: PageProps) {
       */}
       <Providers>
         {isPreview ? (
-           <RealtimePreviewRenderer initialFloors={mockPageConfig} />
+           <RealtimePreviewRenderer initialFloors={pageConfig} />
         ) : (
-           <ServerRecursiveRenderer floors={mockPageConfig} />
+           <ServerRecursiveRenderer floors={pageConfig} />
         )}
       </Providers>
     </div>

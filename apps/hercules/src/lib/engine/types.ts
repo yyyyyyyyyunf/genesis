@@ -5,7 +5,7 @@ export interface FloorComponentProps<T = unknown> {
 
 export interface Floor {
   id: string;
-  type: number; // 从字符串改为数字
+  type: number; // 1, 2, 3, ... (从字符串更改为数字)
   alias?: string; // 用户定义的楼层别名，用于标识楼层
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;

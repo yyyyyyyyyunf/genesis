@@ -7,7 +7,8 @@
     "gen:docs": "pnpm --filter hercules gen:docs",
     "dev:hercules": "pnpm --filter hercules dev",
     "dev:zeus": "pnpm --filter zeus dev",
-    "dev:all": "pnpm --parallel --filter hercules --filter zeus dev",
+    "dev:jarvis": "pnpm --filter jarvis dev",
+    "dev:all": "pnpm --parallel --filter hercules --filter zeus --filter jarvis dev",
     "build": "pnpm -r build",
     "test": "pnpm -r test"
   }

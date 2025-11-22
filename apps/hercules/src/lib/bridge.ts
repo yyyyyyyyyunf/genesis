@@ -13,14 +13,14 @@ export function initBridge() {
     const data = event.data as SyncMessage;
     
     if (data?.type === 'SYNC_CONFIG') {
-      console.log('[Hercules] Received config update', data.payload);
+      console.log('[Hercules] 收到配置更新', data.payload);
       usePageStore.setState({ pageConfig: data.payload });
     }
   };
 
   window.addEventListener('message', handleMessage);
 
-  // Notify parent that we are ready
+  // 通知父级我们已准备好
   window.parent.postMessage({ type: 'HERCULES_READY' }, '*');
 
   return () => {

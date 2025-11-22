@@ -1,4 +1,5 @@
-import { ServerRecursiveRenderer } from '@/components/engine/renderer/ServerRecursiveRenderer';
+import { ServerRecursiveRenderer } from '@/lib/engine/renderer/ServerRecursiveRenderer';
+import { LocaleProvider } from '@/lib/engine/context/LocaleContext';
 
 // Mock Page Configuration (DSL)
 // This is what the database or Agent would return.
@@ -112,7 +113,9 @@ export default function Home() {
         It will statically render Text and Image on the server.
         It will hydrate Tab and Shelf on the client.
       */}
-      <ServerRecursiveRenderer floors={mockPageConfig} />
+      <LocaleProvider locale="zh">
+        <ServerRecursiveRenderer floors={mockPageConfig} />
+      </LocaleProvider>
     </div>
   );
 }

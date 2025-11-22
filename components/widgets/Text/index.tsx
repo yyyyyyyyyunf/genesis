@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextProps } from './schema';
 import { cn } from '@/lib/utils';
+import { LocaleBadge } from './LocaleBadge';
 
 export const Text = ({ data }: { data: TextProps }) => {
   const { content, align, size, color } = data;
@@ -15,8 +16,11 @@ export const Text = ({ data }: { data: TextProps }) => {
 
   return (
     <div className={cn('w-full p-4', `text-${align}`)}>
-      <p className={cn(sizeMap[size || 'base'], color)}>{content}</p>
+      <p className={cn(sizeMap[size || 'base'], color)}>
+        {content}
+        {/* Demonstrating Context usage inside an RSC via a Client Component slot */}
+        <LocaleBadge />
+      </p>
     </div>
   );
 };
-

@@ -5,6 +5,7 @@ export const TextSchema = z.object({
   align: z.enum(['left', 'center', 'right']).optional().describe('文本对齐方式').default('left'),
   size: z.enum(['sm', 'base', 'lg', 'xl', '2xl']).optional().describe('字体大小').default('base'),
   color: z.string().optional().describe('文本颜色 (Hex 或 Tailwind 类)').default('text-black'),
+  mode: z.enum(['simple', 'with-locale']).optional().describe('显示模式').default('simple'),
 });
 
 export type TextProps = z.infer<typeof TextSchema>;

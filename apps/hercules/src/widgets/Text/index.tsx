@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { LocaleBadge } from './LocaleBadge';
 
 export const Text = ({ data }: { data: TextProps }) => {
-  const { content, align, size, color } = data;
+  const { content, align, size, color, mode } = data;
 
   const sizeMap = {
     sm: 'text-sm',
@@ -19,7 +19,7 @@ export const Text = ({ data }: { data: TextProps }) => {
       <p className={cn(sizeMap[size || 'base'], color)}>
         {content}
         {/* 演示在 RSC 内部通过 Client Component 插槽使用 Context */}
-        <LocaleBadge />
+        {mode === 'with-locale' && <LocaleBadge />}
       </p>
     </div>
   );

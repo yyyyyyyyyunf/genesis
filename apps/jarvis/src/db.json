@@ -4,10 +4,10 @@
     "type": 1,
     "alias": "主标题",
     "data": {
-      "content": "双十一全球好物节开始喽",
+      "content": "探索世界，从这里出发",
       "align": "center",
       "size": "2xl",
-      "color": "text-red-600 font-bold"
+      "color": "text-blue-600 font-bold"
     }
   },
   {
@@ -15,11 +15,11 @@
     "type": 2,
     "alias": "活动Banner",
     "data": {
-      "src": "https://placehold.co/800x450/2563eb/ffffff?text=Sale+Banner",
-      "alt": "Sale Banner",
+      "src": "https://placehold.co/800x450/0ea5e9/ffffff?text=Summer+Vacation",
+      "alt": "Summer Vacation Banner",
       "aspectRatio": "16/9",
       "objectFit": "cover",
-      "clickUrl": "https://www.google.com"
+      "clickUrl": "https://www.ctrip.com"
     }
   },
   {
@@ -27,7 +27,7 @@
     "type": 1,
     "alias": "副标题",
     "data": {
-      "content": "精选全球各地必买清单，限时特惠",
+      "content": "热门目的地特惠，机票酒店一站式搞定",
       "align": "center",
       "size": "base",
       "color": "text-gray-500"
@@ -36,52 +36,52 @@
   {
     "id": "floor_3",
     "type": 4,
-    "alias": "国家馆Tab",
+    "alias": "目的地Tab",
     "data": {
-      "defaultActiveKey": "korea",
+      "defaultActiveKey": "asia",
       "items": [
         {
-          "label": "韩国",
-          "key": "korea",
+          "label": "亚洲",
+          "key": "asia",
           "children": [
             {
-              "id": "floor_kr_header",
+              "id": "floor_asia_header",
               "type": 1,
               "data": {
-                "content": "韩国美妆专场",
+                "content": "亚洲热门度假地",
                 "align": "left",
                 "size": "xl"
               }
             },
             {
-              "id": "floor_kr_shelf",
+              "id": "floor_asia_shelf",
               "type": 3,
               "data": {
                 "layout": "grid",
                 "products": [
                   {
                     "id": "p1",
-                    "name": "Sulwhasoo Set",
-                    "price": "¥899",
-                    "imageUrl": "https://placehold.co/300x300/orange/white?text=Sulwhasoo"
+                    "name": "日本东京5日游",
+                    "price": "¥4599",
+                    "imageUrl": "https://placehold.co/300x300/ff99cc/white?text=Tokyo"
                   },
                   {
                     "id": "p2",
-                    "name": "Laneige Mask",
-                    "price": "¥199",
-                    "imageUrl": "https://placehold.co/300x300/blue/white?text=Laneige"
+                    "name": "泰国普吉岛自由行",
+                    "price": "¥2999",
+                    "imageUrl": "https://placehold.co/300x300/00ccff/white?text=Phuket"
                   },
                   {
                     "id": "p3",
-                    "name": "Innisfree Cream",
-                    "price": "¥120",
-                    "imageUrl": "https://placehold.co/300x300/green/white?text=Innisfree"
+                    "name": "巴厘岛海景酒店",
+                    "price": "¥1299",
+                    "imageUrl": "https://placehold.co/300x300/66cc99/white?text=Bali"
                   },
                   {
                     "id": "p4",
-                    "name": "Etude House",
-                    "price": "¥89",
-                    "imageUrl": "https://placehold.co/300x300/pink/white?text=Etude"
+                    "name": "新加坡亲子游",
+                    "price": "¥3899",
+                    "imageUrl": "https://placehold.co/300x300/ff6666/white?text=Singapore"
                   }
                 ]
               }
@@ -89,42 +89,42 @@
           ]
         },
         {
-          "label": "中国",
-          "key": "china",
+          "label": "欧洲",
+          "key": "europe",
           "children": [
             {
-              "id": "floor_cn_header",
+              "id": "floor_eu_header",
               "type": 1,
               "data": {
-                "content": "国潮崛起",
+                "content": "欧洲浪漫之旅",
                 "align": "center",
                 "size": "xl",
-                "color": "text-red-800"
+                "color": "text-indigo-800"
               }
             },
             {
-              "id": "floor_cn_shelf",
+              "id": "floor_eu_shelf",
               "type": 3,
               "data": {
                 "layout": "scroll",
                 "products": [
                   {
-                    "id": "c1",
-                    "name": "Florasis Lipstick",
-                    "price": "¥219",
-                    "imageUrl": "https://placehold.co/300x300/red/white?text=Florasis"
+                    "id": "e1",
+                    "name": "法国巴黎深度游",
+                    "price": "¥12999",
+                    "imageUrl": "https://placehold.co/300x300/9933cc/white?text=Paris"
                   },
                   {
-                    "id": "c2",
-                    "name": "Perfect Diary",
-                    "price": "¥109",
-                    "imageUrl": "https://placehold.co/300x300/black/white?text=Diary"
+                    "id": "e2",
+                    "name": "意大利罗马假日",
+                    "price": "¥11599",
+                    "imageUrl": "https://placehold.co/300x300/cc9933/white?text=Rome"
                   },
                   {
-                    "id": "c3",
-                    "name": "Colorkey",
-                    "price": "¥69",
-                    "imageUrl": "https://placehold.co/300x300/purple/white?text=Colorkey"
+                    "id": "e3",
+                    "name": "瑞士滑雪之旅",
+                    "price": "¥15999",
+                    "imageUrl": "https://placehold.co/300x300/cccccc/black?text=Swiss"
                   }
                 ]
               }
@@ -132,16 +132,37 @@
           ]
         },
         {
-          "label": "日本",
-          "key": "japan",
+          "label": "国内",
+          "key": "china",
           "children": [
             {
-              "id": "floor_jp_text",
+              "id": "floor_cn_text",
               "type": 1,
               "data": {
-                "content": "敬请期待...",
+                "content": "大美中华",
                 "align": "center",
-                "color": "text-gray-400"
+                "color": "text-red-600"
+              }
+            },
+             {
+              "id": "floor_cn_shelf",
+              "type": 3,
+              "data": {
+                "layout": "grid",
+                "products": [
+                  {
+                    "id": "c1",
+                    "name": "云南大理丽江",
+                    "price": "¥2599",
+                    "imageUrl": "https://placehold.co/300x300/3399ff/white?text=Yunnan"
+                  },
+                  {
+                    "id": "c2",
+                    "name": "四川九寨沟",
+                    "price": "¥1899",
+                    "imageUrl": "https://placehold.co/300x300/33cc33/white?text=Jiuzhai"
+                  }
+                ]
               }
             }
           ]

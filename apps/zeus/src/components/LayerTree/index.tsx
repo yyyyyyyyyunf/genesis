@@ -48,7 +48,7 @@ export function LayerTree() {
 
   return (
     <div className="flex flex-col h-full p-4 overflow-y-auto">
-      <h3 className="text-lg font-bold mb-4">楼层</h3>
+      <h3 className="text-lg font-bold mb-4">页面搭建</h3>
       <DndContext 
         sensors={sensors} 
         collisionDetection={closestCenter} 

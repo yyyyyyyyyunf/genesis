@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from './Text';
 import { Image } from './Image';
-import { FloorComponentProps } from '../engine/types';
+import { FloorComponentProps } from '@/lib/engine/types';
 
 // Server Registry - For components that can be rendered as RSC
 // We import them directly because RSCs don't need 'dynamic' for code splitting (the server handles it)

@@ -8,7 +8,7 @@ This project implements a **Hybrid Rendering Strategy** that leverages React Ser
 
 ### 1. Engine vs Widgets
 We strictly separate the "Engine" (Core Logic) from "Widgets" (Business Components).
-- **`components/engine`**: Contains the recursive rendering logic, type definitions, and registry helpers. It is agnostic to specific business logic.
+- **`lib/engine`**: Contains the recursive rendering logic, type definitions, and registry helpers. It is agnostic to specific business logic.
 - **`components/widgets`**: Contains the actual UI components (Text, Image, Tab, etc.).
 
 ### 2. Dual Registry System
@@ -40,7 +40,7 @@ pnpm run gen:docs
 
 ## Directory Structure
 ```
-components/
+lib/
   engine/               # Core Low-Code Engine
     renderer/
       ServerRecursiveRenderer.tsx
@@ -48,6 +48,7 @@ components/
       ServerFloorItem.tsx
     types.ts
     utils.tsx
+components/
   widgets/              # Business Components
     Image/
     Text/

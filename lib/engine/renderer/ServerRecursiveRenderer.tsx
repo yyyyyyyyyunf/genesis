@@ -1,5 +1,5 @@
 import React from 'react';
-import { Floor } from '../../types';
+import { Floor } from '../types';
 import { ServerFloorItem } from './ServerFloorItem';
 
 interface ServerRecursiveRendererProps {

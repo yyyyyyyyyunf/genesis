@@ -11,13 +11,13 @@ export function ChatPanel() {
   const handleSend = async () => {
     if (!input.trim()) return;
     
-    // Mock Agent response: Randomly shuffle or change the config to demonstrate update
+    // 模拟 Agent 响应：随机打乱或更改配置以演示更新
     console.log('Sending prompt to agent:', input);
     
-    // Simulating network delay
+    // 模拟网络延迟
     setTimeout(() => {
-        // For demo purposes, we just load the default mock config as a "change"
-        // In a real app, this would call an LLM API
+        // 为了演示目的，我们只是加载默认的模拟配置作为"更改"
+        // 在实际应用中，这将调用 LLM API
         setDraftConfig([...mockPageConfig].reverse()); 
     }, 1000);
     
@@ -27,22 +27,22 @@ export function ChatPanel() {
   return (
     <div className="flex flex-col h-full border-t border-gray-200">
       
-      {/* Review Controls - Overlay or dedicated area */}
+      {/* 审查控制 - 覆盖层或专用区域 */}
       {draftConfig && (
         <div className="bg-yellow-50 p-3 border-b border-yellow-200 flex items-center justify-between">
-            <span className="text-sm text-yellow-800 font-medium">Agent proposed changes</span>
+            <span className="text-sm text-yellow-800 font-medium">Agent 提议的更改</span>
             <div className="space-x-2">
                 <button 
                     onClick={commitDraft}
                     className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
                 >
-                    Accept
+                    接受
                 </button>
                 <button 
                     onClick={rejectDraft}
                     className="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
                 >
-                    Reject
+                    拒绝
                 </button>
             </div>
         </div>
@@ -50,9 +50,9 @@ export function ChatPanel() {
 
       <div className="flex-1 p-4 overflow-y-auto">
         <div className="text-center text-gray-400 text-sm mt-4">
-            Ask the agent to modify the page...
+            请让 Agent 修改页面...
         </div>
-        {/* Chat messages would go here */}
+        {/* 聊天消息将显示在这里 */}
       </div>
 
       <div className="p-4 border-t border-gray-200 bg-white">

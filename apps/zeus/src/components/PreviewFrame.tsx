@@ -14,7 +14,7 @@ export function PreviewFrame() {
     bridgeRef.current = new HostBridge(iframeRef);
   }, []);
 
-  // Sync config when it changes
+  // 监听配置变化并同步
   useEffect(() => {
     const configToSync = draftConfig || currentConfig;
     if (configToSync && bridgeRef.current) {

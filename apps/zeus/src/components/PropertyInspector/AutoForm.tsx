@@ -10,8 +10,8 @@ export function AutoForm({ schema, data, onChange }: { schema: ZodObject<any>, d
     <div className="space-y-4">
       {Object.entries(shape).map(([key, fieldSchema]) => {
         const fs = fieldSchema as ZodType;
-        // Simple heuristic for form fields
-        // In a real app, this would be recursive and handle more types
+        // 简单的表单字段启发式判断
+        // 在实际应用中，这将是递归的并且处理更多类型
         
         if (fs instanceof ZodString) {
           return (
@@ -43,7 +43,7 @@ export function AutoForm({ schema, data, onChange }: { schema: ZodObject<any>, d
           );
         }
 
-        return null; // Unsupported type for this simple demo
+        return null; // 这个简单演示不支持的类型
       })}
     </div>
   );

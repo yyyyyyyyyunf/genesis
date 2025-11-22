@@ -13,7 +13,7 @@ export function PropertyInspector() {
   const selectedFloor = displayConfig.find(f => f.id === selectedFloorId);
 
   if (!selectedFloor) {
-    return <div className="p-4 text-gray-400 text-center">Select a layer to edit properties</div>;
+    return <div className="p-4 text-gray-400 text-center">选择一个图层以编辑属性</div>;
   }
 
   const componentName = getComponentKey(selectedFloor.type);
@@ -34,7 +34,7 @@ export function PropertyInspector() {
          <label className="block text-xs font-medium text-gray-700 mb-1">Alias</label>
          <input 
             value={selectedFloor.alias || ''} 
-            onChange={(e) => { /* Need to update floor alias, not data */ }} 
+            onChange={(e) => { /* 需要更新楼层别名，而不是数据 */ }} 
             className="w-full p-2 border rounded text-sm"
          />
       </div>
@@ -44,7 +44,7 @@ export function PropertyInspector() {
       {schema && schema instanceof ZodObject ? (
         <AutoForm schema={schema} data={selectedFloor.data} onChange={handleUpdate} />
       ) : (
-        <div className="text-yellow-600 text-sm">No schema found or complex schema for {componentName}</div>
+        <div className="text-yellow-600 text-sm">未找到 Schema 或 {componentName} 的 Schema 过于复杂</div>
       )}
     </div>
   );

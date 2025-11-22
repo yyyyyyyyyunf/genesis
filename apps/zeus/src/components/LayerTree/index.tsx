@@ -38,7 +38,7 @@ export function LayerTree() {
       const newIndex = displayConfig.findIndex((item) => item.id === over.id);
       
       const newOrder = arrayMove(displayConfig, oldIndex, newIndex);
-      loadConfig(newOrder); // This should probably be a reorder action in store, but reusing loadConfig for simplicity or add reorder action
+      loadConfig(newOrder); // 这应该是 store 中的重新排序操作，但为了简单起见重用了 loadConfig，或者添加 reorder 操作
     }
   }
 

@@ -12,34 +12,34 @@ export default function Home() {
   const { loadConfig } = useEditorStore();
 
   useEffect(() => {
-    // Load initial mock data
+    // 加载初始模拟数据
     loadConfig(mockPageConfig);
   }, [loadConfig]);
 
   return (
     <main className="flex h-screen w-full bg-gray-50 overflow-hidden">
-      {/* Left Panel: Preview (60%) */}
+      {/* 左侧面板：预览区域 (60%) */}
       <div className="w-[60%] h-full border-r border-gray-200">
          <PreviewFrame />
       </div>
 
-      {/* Right Panel: Editor & AI (40%) */}
+      {/* 右侧面板：编辑器和 AI (40%) */}
       <div className="w-[40%] h-full flex flex-col">
         
-        {/* Top Half: Structure & Inspector */}
+        {/* 上半部分：结构树和属性检查器 */}
         <div className="h-[60%] flex border-b border-gray-200">
-          {/* Layer Tree (40%) */}
+          {/* 图层树 (40%) */}
           <div className="w-[40%] border-r border-gray-200 h-full overflow-hidden">
             <LayerTree />
           </div>
           
-          {/* Property Inspector (60%) */}
+          {/* 属性检查器 (60%) */}
           <div className="w-[60%] h-full overflow-hidden bg-white">
             <PropertyInspector />
           </div>
         </div>
 
-        {/* Bottom Half: AI Chat */}
+        {/* 下半部分：AI 聊天 */}
         <div className="h-[40%] bg-white">
           <ChatPanel />
         </div>

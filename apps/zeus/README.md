@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zeus 编辑器 (Zeus Editor)
 
-## Getting Started
+Zeus 是一个可视化的低代码营销页面编辑器。它允许运营人员通过拖放组件、编辑属性以及与 AI Agent 对话来构建页面。
 
-First, run the development server:
+## 功能特点
+
+- **可视化预览**: 通过 Iframe 嵌入 Hercules 渲染引擎，确保所见即所得。
+- **组件管理**: 
+  - **图层树 (Layer Tree)**: 支持拖拽排序的楼层管理。
+  - **属性检查器 (Property Inspector)**: 基于 Zod Schema 自动生成的表单，用于编辑组件属性。
+- **AI 辅助**: 集成 AI Chat Panel，允许通过自然语言指令修改页面配置 (Mock)。
+- **实时同步**: 编辑器的状态更改会实时同步到预览区域。
+
+## 技术栈
+
+- **框架**: Next.js 16 (App Router)
+- **状态管理**: Zustand
+- **拖拽库**: @dnd-kit
+- **样式**: Tailwind CSS
+- **通信**: `window.postMessage` (与 Hercules 通信)
+
+## 快速开始
+
+在项目根目录下运行以下命令启动开发服务器：
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm dev:all
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+该命令会同时启动：
+- **Zeus (编辑器)**: http://localhost:3000
+- **Hercules (渲染端)**: http://localhost:3001
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 架构概览
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Zeus 作为宿主应用 (Host)，通过 Iframe 加载 Hercules 作为子应用 (Remote)。
 
-## Learn More
+1.  **状态源**: 页面配置数据 (`PageConfig`) 存储在 Zeus 的 Zustand Store 中。
+2.  **通信桥接**: `src/lib/host-bridge.ts` 负责监听状态变化，并通过 `postMessage` 将最新的配置发送给 Hercules。
+3.  **预览**: `src/components/PreviewFrame.tsx` 封装了 Iframe 和通信逻辑。
 
-To learn more about Next.js, take a look at the following resources:
+## 目录结构
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/app`: Next.js 页面路由。
+- `src/components`: UI 组件。
+  - `LayerTree`: 图层管理组件。
+  - `PropertyInspector`: 属性编辑组件。
+  - `ChatPanel`: AI 对话组件。
+  - `PreviewFrame`: 预览容器。
+- `src/lib`: 工具函数和状态管理。
+  - `store.ts`: 全局状态定义。
+  - `host-bridge.ts`: 跨应用通信逻辑。

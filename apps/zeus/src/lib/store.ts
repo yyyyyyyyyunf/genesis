@@ -12,7 +12,7 @@ interface EditorState {
   selectFloor: (id: string | null) => void;
   updateFloor: (floorId: string, data: any) => void;
   
-  // Initial load
+  // 初始加载
   loadConfig: (config: PageConfig) => void;
 }
 

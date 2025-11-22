@@ -1,9 +1,12 @@
+import { COMPONENT_NAMES } from '@/lib/engine/component-map';
+
 // 模拟页面配置数据 (DSL)
 // 这是数据库或 Agent 返回的结构。
+// 现在使用数字 ID (COMPONENT_NAMES) 而不是字符串名称
 export const mockPageConfig = [
   {
     id: 'floor_1',
-    type: 'Text',
+    type: COMPONENT_NAMES.Text,
     data: {
       content: '双十一全球好物节',
       align: 'center',
@@ -13,7 +16,7 @@ export const mockPageConfig = [
   },
   {
     id: 'floor_banner',
-    type: 'Image',
+    type: COMPONENT_NAMES.Image,
     data: {
       src: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&auto=format&fit=crop&q=60',
       alt: 'Sale Banner',
@@ -24,7 +27,7 @@ export const mockPageConfig = [
   },
   {
     id: 'floor_2',
-    type: 'Text',
+    type: COMPONENT_NAMES.Text,
     data: {
       content: '精选全球各地必买清单，限时特惠',
       align: 'center',
@@ -34,7 +37,7 @@ export const mockPageConfig = [
   },
   {
     id: 'floor_3',
-    type: 'Tab',
+    type: COMPONENT_NAMES.Tab,
     data: {
       defaultActiveKey: 'korea',
       items: [
@@ -44,19 +47,19 @@ export const mockPageConfig = [
           children: [
             {
               id: 'floor_kr_header',
-              type: 'Text',
+              type: COMPONENT_NAMES.Text,
               data: { content: '韩国美妆专场', align: 'left', size: 'xl' }
             },
             {
               id: 'floor_kr_shelf',
-              type: 'Shelf',
+              type: COMPONENT_NAMES.Shelf,
               data: {
                 layout: 'grid',
                 products: [
-                  { id: 'p1', name: 'Sulwhasoo Set', price: '¥899', imageUrl: '' },
-                  { id: 'p2', name: 'Laneige Mask', price: '¥199', imageUrl: '' },
-                  { id: 'p3', name: 'Innisfree Cream', price: '¥120', imageUrl: '' },
-                  { id: 'p4', name: 'Etude House', price: '¥89', imageUrl: '' },
+                  { id: 'p1', name: 'Sulwhasoo Set', price: '¥899', imageUrl: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300&q=80' },
+                  { id: 'p2', name: 'Laneige Mask', price: '¥199', imageUrl: 'https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?w=300&q=80' },
+                  { id: 'p3', name: 'Innisfree Cream', price: '¥120', imageUrl: 'https://images.unsplash.com/photo-1556228552-e3a708957b92?w=300&q=80' },
+                  { id: 'p4', name: 'Etude House', price: '¥89', imageUrl: 'https://images.unsplash.com/photo-1571781535014-53bd13016e8e?w=300&q=80' },
                 ]
               }
             }
@@ -68,18 +71,18 @@ export const mockPageConfig = [
           children: [
             {
               id: 'floor_cn_header',
-              type: 'Text',
+              type: COMPONENT_NAMES.Text,
               data: { content: '国潮崛起', align: 'center', size: 'xl', color: 'text-red-800' }
             },
              {
               id: 'floor_cn_shelf',
-              type: 'Shelf',
+              type: COMPONENT_NAMES.Shelf,
               data: {
                 layout: 'scroll',
                 products: [
-                  { id: 'c1', name: 'Florasis Lipstick', price: '¥219', imageUrl: '' },
-                  { id: 'c2', name: 'Perfect Diary', price: '¥109', imageUrl: '' },
-                  { id: 'c3', name: 'Colorkey', price: '¥69', imageUrl: '' },
+                  { id: 'c1', name: 'Florasis Lipstick', price: '¥219', imageUrl: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300&q=80' },
+                  { id: 'c2', name: 'Perfect Diary', price: '¥109', imageUrl: 'https://images.unsplash.com/photo-1596462502278-27bfdd403348?w=300&q=80' },
+                  { id: 'c3', name: 'Colorkey', price: '¥69', imageUrl: 'https://images.unsplash.com/photo-1625093742435-6fa192b6fb10?w=300&q=80' },
                 ]
               }
             }
@@ -91,7 +94,7 @@ export const mockPageConfig = [
           children: [
             {
               id: 'floor_jp_text',
-              type: 'Text',
+              type: COMPONENT_NAMES.Text,
               data: { content: '敬请期待...', align: 'center', color: 'text-gray-400' }
             }
           ]

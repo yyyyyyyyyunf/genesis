@@ -1,95 +1,95 @@
-# Hercules Component Library for Agents
+# Hercules Agent 组件库手册
 
-Use this reference to generate the JSON configuration for the marketing page.
+请参考此文档来生成营销页面的 JSON 配置。
 
-## Component: Text
+## 组件: Text
 
-### Properties
+### 属性 (Properties)
 
-- **content** (Required)
-  - Type: `string`
-  - Description: The actual text content to display
+- **content** (必填)
+  - 类型: `string`
+  - 描述: 要显示的实际文本内容
 
-- **align** (Optional)
-  - Type: `enum`
-  - Options: `left`, `center`, `right`
-  - Default: `"left"`
-  - Description: Text alignment
+- **align** (可选)
+  - 类型: `enum`
+  - 选项: `left`, `center`, `right`
+  - 默认值: `"left"`
+  - 描述: 文本对齐方式
 
-- **size** (Optional)
-  - Type: `enum`
-  - Options: `sm`, `base`, `lg`, `xl`, `2xl`
-  - Default: `"base"`
-  - Description: Font size
+- **size** (可选)
+  - 类型: `enum`
+  - 选项: `sm`, `base`, `lg`, `xl`, `2xl`
+  - 默认值: `"base"`
+  - 描述: 字体大小
 
-- **color** (Optional)
-  - Type: `string`
-  - Default: `"text-black"`
-  - Description: Text color (hex or tailwind class)
-
----
-
-## Component: Shelf
-
-### Properties
-
-- **layout** (Required)
-  - Type: `enum`
-  - Options: `grid`, `scroll`
-  - Description: Layout mode: grid (2 columns) or scroll (horizontal scroll)
-
-- **title** (Optional)
-  - Type: `string`
-  - Description: Optional title for the shelf
-
-- **products** (Required)
-  - Type: `array`
-  - Description: List of products to display
+- **color** (可选)
+  - 类型: `string`
+  - 默认值: `"text-black"`
+  - 描述: 文本颜色 (Hex 或 Tailwind 类)
 
 ---
 
-## Component: Tab
+## 组件: Shelf
 
-### Properties
+### 属性 (Properties)
 
-- **items** (Required)
-  - Type: `array`
-  - Description: List of tab items
+- **layout** (必填)
+  - 类型: `enum`
+  - 选项: `grid`, `scroll`
+  - 描述: 布局模式：grid (双列网格) 或 scroll (横向滚动)
 
-- **defaultActiveKey** (Optional)
-  - Type: `string`
-  - Description: Key of the initially active tab
+- **title** (可选)
+  - 类型: `string`
+  - 描述: 货架的可选标题
+
+- **products** (必填)
+  - 类型: `array`
+  - 描述: 要展示的商品列表
 
 ---
 
-## Component: Image
+## 组件: Tab
 
-### Properties
+### 属性 (Properties)
 
-- **src** (Required)
-  - Type: `string`
-  - Description: Image URL
+- **items** (必填)
+  - 类型: `array`
+  - 描述: Tab 列表项
 
-- **alt** (Optional)
-  - Type: `string`
-  - Default: `""`
-  - Description: Alt text for accessibility
+- **defaultActiveKey** (可选)
+  - 类型: `string`
+  - 描述: 默认激活的 Tab Key
 
-- **aspectRatio** (Optional)
-  - Type: `enum`
-  - Options: `16/9`, `4/3`, `1/1`, `auto`
-  - Default: `"auto"`
-  - Description: Aspect ratio of the image wrapper
+---
 
-- **objectFit** (Optional)
-  - Type: `enum`
-  - Options: `cover`, `contain`, `fill`
-  - Default: `"cover"`
-  - Description: CSS object-fit property
+## 组件: Image
 
-- **clickUrl** (Optional)
-  - Type: `string`
-  - Description: URL to navigate to when clicked
+### 属性 (Properties)
+
+- **src** (必填)
+  - 类型: `string`
+  - 描述: 图片链接地址
+
+- **alt** (可选)
+  - 类型: `string`
+  - 默认值: `""`
+  - 描述: 无障碍替代文本
+
+- **aspectRatio** (可选)
+  - 类型: `enum`
+  - 选项: `16/9`, `4/3`, `1/1`, `auto`
+  - 默认值: `"auto"`
+  - 描述: 图片容器的宽高比
+
+- **objectFit** (可选)
+  - 类型: `enum`
+  - 选项: `cover`, `contain`, `fill`
+  - 默认值: `"cover"`
+  - 描述: CSS object-fit 属性
+
+- **clickUrl** (可选)
+  - 类型: `string`
+  - 描述: 点击跳转链接
 
 ---
 

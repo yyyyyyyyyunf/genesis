@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { ZodType, ZodObject, ZodEnum, ZodOptional, ZodDefault, ZodString, ZodNumber, ZodBoolean, ZodArray } from 'zod';
 import { SchemaRegistry } from '../src/widgets/schemas';
+import { COMPONENT_NAMES } from '../src/lib/engine/component-map';
 
 const OUTPUT_FILE = path.join(process.cwd(), 'knowledge/agent-manual.md');
 
@@ -72,9 +73,11 @@ function getDefault(schema: ZodType): unknown {
 function generateDocs() {
   let markdown = '# Hercules Agent 组件库手册\n\n';
   markdown += '请参考此文档来生成营销页面的 JSON 配置。\n\n';
+  markdown += '> **注意**: `type` 字段现在使用数字 ID (Type ID)。请务必使用对应的数字。\n\n';
 
   for (const [name, schema] of Object.entries(SchemaRegistry)) {
-    markdown += `## 组件: ${name}\n\n`;
+    const typeId = COMPONENT_NAMES[name];
+    markdown += `## 组件: ${name} (Type ID: ${typeId})\n\n`;
     
     if (!(schema instanceof ZodObject)) {
       markdown += `(复杂 Schema: ${getType(schema as ZodType)})\n\n`;

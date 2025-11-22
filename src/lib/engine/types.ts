@@ -5,7 +5,7 @@ export interface FloorComponentProps<T = unknown> {
 
 export interface Floor {
   id: string;
-  type: string;
+  type: number; // Changed from string to number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
 }

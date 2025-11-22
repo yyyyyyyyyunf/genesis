@@ -4,7 +4,7 @@
     "type": 1,
     "alias": "主标题",
     "data": {
-      "content": "双十一全球好物节开始",
+      "content": "双十一全球好物节开始喽",
       "align": "center",
       "size": "2xl",
       "color": "text-red-600 font-bold"
@@ -15,7 +15,7 @@
     "type": 2,
     "alias": "活动Banner",
     "data": {
-      "src": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&auto=format&fit=crop&q=60",
+      "src": "https://placehold.co/800x450/2563eb/ffffff?text=Sale+Banner",
       "alt": "Sale Banner",
       "aspectRatio": "16/9",
       "objectFit": "cover",
@@ -63,25 +63,25 @@
                     "id": "p1",
                     "name": "Sulwhasoo Set",
                     "price": "¥899",
-                    "imageUrl": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300&q=80"
+                    "imageUrl": "https://placehold.co/300x300/orange/white?text=Sulwhasoo"
                   },
                   {
                     "id": "p2",
                     "name": "Laneige Mask",
                     "price": "¥199",
-                    "imageUrl": "https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?w=300&q=80"
+                    "imageUrl": "https://placehold.co/300x300/blue/white?text=Laneige"
                   },
                   {
                     "id": "p3",
                     "name": "Innisfree Cream",
                     "price": "¥120",
-                    "imageUrl": "https://images.unsplash.com/photo-1556228552-e3a708957b92?w=300&q=80"
+                    "imageUrl": "https://placehold.co/300x300/green/white?text=Innisfree"
                   },
                   {
                     "id": "p4",
                     "name": "Etude House",
                     "price": "¥89",
-                    "imageUrl": "https://images.unsplash.com/photo-1571781535014-53bd13016e8e?w=300&q=80"
+                    "imageUrl": "https://placehold.co/300x300/pink/white?text=Etude"
                   }
                 ]
               }
@@ -112,19 +112,19 @@
                     "id": "c1",
                     "name": "Florasis Lipstick",
                     "price": "¥219",
-                    "imageUrl": "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300&q=80"
+                    "imageUrl": "https://placehold.co/300x300/red/white?text=Florasis"
                   },
                   {
                     "id": "c2",
                     "name": "Perfect Diary",
                     "price": "¥109",
-                    "imageUrl": "https://images.unsplash.com/photo-1596462502278-27bfdd403348?w=300&q=80"
+                    "imageUrl": "https://placehold.co/300x300/black/white?text=Diary"
                   },
                   {
                     "id": "c3",
                     "name": "Colorkey",
                     "price": "¥69",
-                    "imageUrl": "https://images.unsplash.com/photo-1625093742435-6fa192b6fb10?w=300&q=80"
+                    "imageUrl": "https://placehold.co/300x300/purple/white?text=Colorkey"
                   }
                 ]
               }

@@ -18,7 +18,7 @@ export const Text = ({ data }: { data: TextProps }) => {
     <div className={cn('w-full p-4', `text-${align}`)}>
       <p className={cn(sizeMap[size || 'base'], color)}>
         {content}
-        {/* Demonstrating Context usage inside an RSC via a Client Component slot */}
+        {/* 演示在 RSC 内部通过 Client Component 插槽使用 Context */}
         <LocaleBadge />
       </p>
     </div>

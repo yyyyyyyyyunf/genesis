@@ -9,12 +9,12 @@ interface ClientClickTrackerProps {
 
 export const ClientClickTracker = ({ clickUrl, children }: ClientClickTrackerProps) => {
   const handleClick = (e: React.MouseEvent) => {
-    // Prevent default if it's not an anchor tag, or handle logic before navigation
-    // Since we wrap with <a>, the browser will navigate automatically.
-    // We just want to track it.
+    // 如果不是 anchor 标签，阻止默认行为，或者在导航前处理逻辑
+    // 由于我们用 <a> 包装，浏览器会自动导航。
+    // 我们只想在这里进行埋点。
     console.log(`[Analytics] Click tracked for URL: ${clickUrl}`);
     
-    // In a real app, you might send a beacon:
+    // 在真实应用中，你可能会发送 beacon:
     // navigator.sendBeacon('/api/track', JSON.stringify({ url: clickUrl }));
   };
 

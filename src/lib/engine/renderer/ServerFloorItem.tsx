@@ -4,13 +4,13 @@ import { ClientRegistry } from '@/widgets/client-registry';
 import { Floor } from '../types';
 
 export const ServerFloorItem = ({ floor }: { floor: Floor }) => {
-  // 1. Try Server Registry first (RSC Preference)
+  // 1. 优先尝试 Server Registry (RSC 优先)
   const ServerComponent = ServerRegistry[floor.type];
   if (ServerComponent) {
     return <ServerComponent data={floor.data} />;
   }
 
-  // 2. Try Client Registry
+  // 2. 尝试 Client Registry
   const ClientComponent = ClientRegistry[floor.type];
   if (ClientComponent) {
     return (
@@ -20,12 +20,11 @@ export const ServerFloorItem = ({ floor }: { floor: Floor }) => {
     );
   }
 
-  // 3. Fallback
-  console.warn(`Unknown component type: ${floor.type}`);
+  // 3. 兜底处理
+  console.warn(`未知的组件类型: ${floor.type}`);
   return (
     <div className="p-4 border border-red-200 bg-red-50 text-red-600">
-      Unknown Component: {floor.type}
+      未知组件: {floor.type}
     </div>
   );
 };
-

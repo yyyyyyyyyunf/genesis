@@ -7,9 +7,9 @@ export default function Home() {
     <div className="min-h-screen bg-gray-100 py-10">
       <h1 className="text-center text-2xl font-bold mb-8">Next.js Low-Code Agent Platform Demo</h1>
       {/* 
-        This is now a Server Component iterating over the floors.
-        It will statically render Text and Image on the server.
-        It will hydrate Tab and Shelf on the client.
+        现在这是一个遍历楼层的 Server Component。
+        它将在服务器端静态渲染 Text 和 Image 组件。
+        它将在客户端水合 (Hydrate) Tab 和 Shelf 组件。
       */}
       <Providers>
         <ServerRecursiveRenderer floors={mockPageConfig} />

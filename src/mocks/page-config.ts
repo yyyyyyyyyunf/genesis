@@ -1,5 +1,5 @@
-// Mock Page Configuration (DSL)
-// This is what the database or Agent would return.
+// 模拟页面配置数据 (DSL)
+// 这是数据库或 Agent 返回的结构。
 export const mockPageConfig = [
   {
     id: 'floor_1',
@@ -19,7 +19,7 @@ export const mockPageConfig = [
       alt: 'Sale Banner',
       aspectRatio: '16/9',
       objectFit: 'cover',
-      clickUrl: 'https://www.google.com' // Testing the Client Wrapper
+      clickUrl: 'https://www.google.com' // 测试 Client Wrapper 交互功能
     }
   },
   {
@@ -89,7 +89,7 @@ export const mockPageConfig = [
           label: '日本',
           key: 'japan',
           children: [
-             {
+            {
               id: 'floor_jp_text',
               type: 'Text',
               data: { content: '敬请期待...', align: 'center', color: 'text-gray-400' }
@@ -100,4 +100,3 @@ export const mockPageConfig = [
     }
   }
 ];
-

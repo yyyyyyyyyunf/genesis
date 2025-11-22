@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-// We define a minimal structure for children here to avoid circular dependencies
-// In a real app, we might use z.lazy() to reference the full Floor schema
+// 这里定义一个最小化的子组件结构以避免循环依赖
+// 在实际应用中，我们可以使用 z.lazy() 来引用完整的 Floor 架构
 const FloorStub = z.object({
   id: z.string(),
   type: z.string(),
@@ -11,13 +11,12 @@ const FloorStub = z.object({
 export const TabSchema = z.object({
   items: z.array(
     z.object({
-      label: z.string().describe('Tab label (e.g. Korea, China)'),
-      key: z.string().describe('Unique key for the tab'),
-      children: z.array(FloorStub).default([]).describe('List of components to render inside this tab'),
+      label: z.string().describe('Tab 标签 (例如：韩国、中国)'),
+      key: z.string().describe('Tab 的唯一标识 Key'),
+      children: z.array(FloorStub).default([]).describe('该 Tab 下要渲染的组件列表'),
     })
-  ).describe('List of tab items'),
-  defaultActiveKey: z.string().optional().describe('Key of the initially active tab'),
+  ).describe('Tab 列表项'),
+  defaultActiveKey: z.string().optional().describe('默认激活的 Tab Key'),
 });
 
 export type TabProps = z.infer<typeof TabSchema>;
-

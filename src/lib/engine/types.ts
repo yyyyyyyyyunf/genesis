@@ -1,4 +1,4 @@
-// Define a generic props interface for all floor components
+// 定义所有楼层组件的通用 Props 接口
 export interface FloorComponentProps<T = unknown> {
   data: T;
 }

@@ -19,7 +19,7 @@ export const ClientRecursiveRenderer = ({ floors }: ClientRecursiveRendererProps
         if (!Component) {
           return (
             <div key={floor.id} className="p-4 border border-red-200 bg-red-50 text-red-600">
-              Unknown Component: {floor.type}
+              未知组件: {floor.type}
             </div>
           );
         }

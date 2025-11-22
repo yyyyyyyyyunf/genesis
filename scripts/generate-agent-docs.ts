@@ -1,7 +1,8 @@
+// 知识库生成器脚本
 import fs from 'fs';
 import path from 'path';
 import { ZodType, ZodObject, ZodEnum, ZodOptional, ZodDefault, ZodString, ZodNumber, ZodBoolean, ZodArray } from 'zod';
-import { SchemaRegistry } from '../widgets/schemas';
+import { SchemaRegistry } from '../src/widgets/schemas';
 
 const OUTPUT_FILE = path.join(process.cwd(), 'knowledge/agent-manual.md');
 
@@ -69,18 +70,18 @@ function getDefault(schema: ZodType): unknown {
 }
 
 function generateDocs() {
-  let markdown = '# Hercules Component Library for Agents\n\n';
-  markdown += 'Use this reference to generate the JSON configuration for the marketing page.\n\n';
+  let markdown = '# Hercules Agent 组件库手册\n\n';
+  markdown += '请参考此文档来生成营销页面的 JSON 配置。\n\n';
 
   for (const [name, schema] of Object.entries(SchemaRegistry)) {
-    markdown += `## Component: ${name}\n\n`;
+    markdown += `## 组件: ${name}\n\n`;
     
     if (!(schema instanceof ZodObject)) {
-      markdown += `(Complex Schema: ${getType(schema as ZodType)})\n\n`;
+      markdown += `(复杂 Schema: ${getType(schema as ZodType)})\n\n`;
       continue;
     }
 
-    markdown += `### Properties\n\n`;
+    markdown += `### 属性 (Properties)\n\n`;
 
     const shape = schema.shape;
 
@@ -93,19 +94,19 @@ function generateDocs() {
       const required = isRequired(fieldSchema);
       const defaultValue = getDefault(fieldSchema);
 
-      markdown += `- **${propName}** ${required ? '(Required)' : '(Optional)'}\n`;
-      markdown += `  - Type: \`${type}\`\n`;
+      markdown += `- **${propName}** ${required ? '(必填)' : '(可选)'}\n`;
+      markdown += `  - 类型: \`${type}\`\n`;
       
       if (options) {
-        markdown += `  - Options: ${options.map((o: string) => `\`${o}\``).join(', ')}\n`;
+        markdown += `  - 选项: ${options.map((o: string) => `\`${o}\``).join(', ')}\n`;
       }
 
       if (defaultValue !== undefined) {
-        markdown += `  - Default: \`${JSON.stringify(defaultValue)}\`\n`;
+        markdown += `  - 默认值: \`${JSON.stringify(defaultValue)}\`\n`;
       }
 
       if (description) {
-        markdown += `  - Description: ${description}\n`;
+        markdown += `  - 描述: ${description}\n`;
       }
       
       markdown += '\n';
@@ -115,7 +116,7 @@ function generateDocs() {
   }
 
   fs.writeFileSync(OUTPUT_FILE, markdown);
-  console.log(`Documentation generated at ${OUTPUT_FILE}`);
+  console.log(`文档已生成至 ${OUTPUT_FILE}`);
 }
 
 generateDocs();

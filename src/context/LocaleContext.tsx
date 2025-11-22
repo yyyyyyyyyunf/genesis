@@ -8,7 +8,7 @@ interface LocaleContextType {
   locale: Locale;
 }
 
-// Default to 'en' as requested
+// 默认为 'en'，如请求所示
 const LocaleContext = createContext<LocaleContextType>({
   locale: 'en',
 });
@@ -17,7 +17,7 @@ export const useLocale = () => useContext(LocaleContext);
 
 interface LocaleProviderProps {
   children: ReactNode;
-  // In a real app, this might be passed from a Server Component that detected the request locale
+  // 在真实应用中，这可能由检测到请求语言环境的 Server Component 传递
   locale?: Locale;
 }
 

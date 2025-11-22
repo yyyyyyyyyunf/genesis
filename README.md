@@ -1,61 +1,61 @@
-# Hercules: Next.js Low-Code Agent Platform
+# Hercules: Next.js 低代码 Agent 平台
 
-A modern, hybrid rendering architecture for generative UI, designed to be Agent-friendly and performant.
+一个现代化的生成式 UI 混合渲染架构，专为 Agent 友好性和高性能而设计。
 
-## Architecture Highlights
+## 架构亮点
 
-This project implements a **Hybrid Rendering Strategy** that leverages React Server Components (RSC) to minimize Client Bundle size.
+本项目采用了 **混合渲染策略 (Hybrid Rendering Strategy)**，充分利用 React Server Components (RSC) 来最小化客户端 Bundle 体积。
 
-### 1. Engine vs Widgets
-We strictly separate the "Engine" (Core Logic) from "Widgets" (Business Components).
-- **`lib/engine`**: Contains the recursive rendering logic, type definitions, and registry helpers. It is agnostic to specific business logic.
-- **`widgets/`**: Contains the actual UI components (Text, Image, Tab, etc.) as top-level citizens.
+### 1. 引擎 (Engine) vs 组件 (Widgets)
+我们将 "引擎" (核心逻辑) 与 "组件" (业务组件) 严格分离。
+- **`src/lib/engine`**: 包含递归渲染逻辑、类型定义和注册表辅助函数。它对具体的业务逻辑一无所知。
+- **`src/widgets`**: 包含实际的 UI 组件 (Text, Image, Tab 等) 作为一等公民。
 
-### 2. Dual Registry System
-We split the component registry into two parts to enforce separation of concerns:
+### 2. 双注册系统 (Dual Registry System)
+我们将组件注册表分为两部分，以强制分离关注点：
 
-- **`widgets/server-registry.tsx`**: Contains stateless RSCs (Text, Image). These are rendered as static HTML on the server.
-- **`widgets/client-registry.tsx`**: Contains interactive Client Components (Tab, Shelf). These are hydrated on the client.
+- **`widgets/server-registry.tsx`**: 包含无状态的 RSC (Text, Image)。这些组件在服务器上渲染为静态 HTML。除了交互包装器外，不会向客户端发送任何 JS。
+- **`widgets/client-registry.tsx`**: 包含交互式 Client Components (Tab, Shelf)。这些组件在客户端进行水合 (Hydrate)。
 
-### 3. Recursive Rendering Engine
-- **`ServerRecursiveRenderer`**: The root entry point (RSC).
-- **`ClientRecursiveRenderer`**: Used inside interactive containers (Tab) to render nested children dynamically.
+### 3. 递归渲染引擎 (Recursive Rendering Engine)
+- **`ServerRecursiveRenderer`**: 根入口点 (RSC)。
+- **`ClientRecursiveRenderer`**: 用于交互式容器 (如 Tab) 内部，在浏览器中动态渲染嵌套子组件。
 
-### 4. State Management (Context)
-- **Business Contexts**: Located in `context/` (e.g. `LocaleContext`).
-- **Providers**: Grouped in `providers/index.tsx` to avoid cluttering `page.tsx`.
-- **RSC Consumption**: Server Components cannot directly consume Context. Use the **Client Wrapper Pattern** (like `LocaleBadge` inside `Text`) to inject context-dependent UI into static Server Components.
+### 4. 状态管理 (Context)
+- **业务上下文**: 位于 `src/context/` (例如 `LocaleContext`)。
+- **Providers**: 集中在 `src/providers/index.tsx` 中，避免弄乱 `page.tsx`。
+- **RSC 消费**: Server Components 不能直接消费 Context。使用 **客户端包装器模式 (Client Wrapper Pattern)** (如 `Text` 内部的 `LocaleBadge`) 将依赖 Context 的 UI 注入到静态 Server Components 中。
 
-### 5. Code-to-Agent Pipeline
-We treat **Code as the Single Source of Truth**.
-- Run `pnpm run gen:docs` to scan Zod Schemas.
-- It generates `knowledge/agent-manual.md`, a perfect documentation file to feed into LLM Agents (Dify/GPT).
+### 5. 代码即 Agent 管道 (Code-to-Agent Pipeline)
+我们将 **代码视为唯一的真理来源 (Single Source of Truth)**。
+- 运行 `pnpm run gen:docs` 扫描 Zod Schemas。
+- 它会生成 `knowledge/agent-manual.md`，这是一份完美的文档文件，可直接喂给 LLM Agents (Dify/GPT)。
 
-## Usage
+## 使用方法
 
-### Development
+### 开发环境
 ```bash
 pnpm dev
 ```
 
-### Generate Agent Docs
+### 生成 Agent 文档
 ```bash
 pnpm run gen:docs
 ```
 
-## Directory Structure
+## 目录结构
 ```
 src/
   app/                    # Next.js App Router
   lib/
-    engine/               # Core Low-Code Engine
+    engine/               # 核心低代码引擎
       renderer/
         ServerRecursiveRenderer.tsx
         ClientRecursiveRenderer.tsx
         ServerFloorItem.tsx
       types.ts
       utils.tsx
-  widgets/                # Business Components (Top Level)
+  widgets/                # 业务组件 (顶层)
     Image/
     Text/
     Tab/
@@ -63,10 +63,10 @@ src/
     server-registry.tsx
     client-registry.tsx
     full-registry.ts
-  context/                # Global Contexts (Locale, Theme)
-  providers/              # Application Providers
-knowledge/                # AI Knowledge Base (Generated)
+  context/                # 全局上下文 (语言, 主题)
+  providers/              # 应用层 Providers
+knowledge/                # AI 知识库 (自动生成)
   agent-manual.md
 scripts/
-  generate-agent-docs.ts  # Knowledge Base Generator
+  generate-agent-docs.ts  # 知识库生成器
 ```

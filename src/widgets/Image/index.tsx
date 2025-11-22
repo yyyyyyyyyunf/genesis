@@ -19,7 +19,7 @@ export const Image = ({ data }: { data: ImageProps }) => {
     fill: 'object-fill',
   };
 
-  // This is purely static HTML generated on the server
+  // 这完全是在服务器上生成的静态 HTML
   const ImageContent = (
     // eslint-disable-next-line @next/next/no-img-element
     <img
@@ -31,7 +31,7 @@ export const Image = ({ data }: { data: ImageProps }) => {
 
   const wrapperClass = cn('block w-full overflow-hidden', ratioMap[aspectRatio || 'auto']);
 
-  // If there's a click URL, wrap it in the Client Component
+  // 如果有点击链接，则用 Client Component 包装
   if (clickUrl) {
     return (
       <div className={wrapperClass}>
@@ -42,7 +42,7 @@ export const Image = ({ data }: { data: ImageProps }) => {
     );
   }
 
-  // Otherwise return static HTML
+  // 否则返回静态 HTML
   return (
     <div className={wrapperClass}>
       {ImageContent}

@@ -9,7 +9,7 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    // In a real app, locale might be passed as a prop from the server
+    // 在真实应用中，locale 可能会作为 prop 从服务器传递
     <LocaleProvider locale="zh">
       {children}
     </LocaleProvider>

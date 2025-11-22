@@ -101,11 +101,25 @@ function generateDocs() {
       
       const type = getType(fieldSchema);
       const options = getOptions(fieldSchema);
-      const description = getDescription(fieldSchema);
+      const rawDescription = getDescription(fieldSchema);
       const required = isRequired(fieldSchema);
       const defaultValue = getDefault(fieldSchema);
 
+      let description = rawDescription;
+      let label = '';
+
+      if (rawDescription && rawDescription.includes(': ')) {
+        const parts = rawDescription.split(': ');
+        if (parts.length > 1) {
+            label = parts[0];
+            description = parts.slice(1).join(': ');
+        }
+      }
+
       markdown += `- **${propName}** ${required ? '(必填)' : '(可选)'}\n`;
+      if (label) {
+        markdown += `  - **中文名**: ${label}\n`;
+      }
       markdown += `  - 类型: \`${type}\`\n`;
       
       if (options) {

@@ -5,7 +5,7 @@ import { z } from 'zod';
 export const BaseFloorSchema = z.object({
   id: z.string().describe('楼层实例的唯一标识符'),
   type: z.number().describe('组件的数字类型 ID'),
-  alias: z.string().optional().describe('用户定义的楼层别名 (例如 "主标题", "活动 Banner")'),
+  alias: z.string().optional().describe('别名: 用户定义的楼层别名 (例如 "主标题", "活动 Banner")'),
 });
 
 // Floor 应该是 BaseFloorSchema 加上 data: any (具体由组件决定)

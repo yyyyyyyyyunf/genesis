@@ -4,7 +4,7 @@ import { ZodObject, ZodString, ZodEnum, ZodType, ZodArray, ZodOptional, ZodDefau
 import { Plus, Trash2 } from 'lucide-react';
 
 // 解包 ZodOptional 和 ZodDefault 以获取底层类型
-function unwrapSchema(schema: ZodType): ZodType {
+export function unwrapSchema(schema: ZodType): ZodType {
   if (schema instanceof ZodOptional) {
     return unwrapSchema(schema.unwrap() as ZodType);
   }
@@ -12,6 +12,32 @@ function unwrapSchema(schema: ZodType): ZodType {
     return unwrapSchema(schema.removeDefault() as ZodType);
   }
   return schema;
+}
+
+function getLabelFromSchema(schema: ZodType, defaultLabel?: string): string | undefined {
+  let current: ZodType | null = schema;
+  
+  while (current) {
+      // Check if current layer has description
+      if (current.description) {
+        const parts = current.description.split(': ');
+        if (parts.length > 1) {
+          return parts[0];
+        }
+      }
+
+      // Unwrap one layer
+      if (current instanceof ZodOptional) {
+        current = current.unwrap();
+      } else if (current instanceof ZodDefault) {
+        current = current.removeDefault();
+      } else {
+        // Not a wrapper we know how to unwrap, stop
+        current = null;
+      }
+  }
+  
+  return defaultLabel;
 }
 
 interface AutoFormProps {
@@ -24,12 +50,13 @@ interface AutoFormProps {
 
 export function AutoForm({ schema, data, onChange, label, level = 0 }: AutoFormProps) {
   const unwrappedSchema = unwrapSchema(schema);
+  const displayLabel = getLabelFromSchema(schema, label);
 
   // 1. 处理对象 (ZodObject)
   if (unwrappedSchema instanceof ZodObject) {
     return (
       <div className={`space-y-3 ${level > 0 ? 'pl-3 border-l-2 border-gray-100 ml-1' : ''}`}>
-        {label && <div className="text-xs font-semibold text-gray-800 mb-2">{label}</div>}
+        {displayLabel && <div className="text-xs font-semibold text-gray-800 mb-2">{displayLabel}</div>}
         {Object.entries(unwrappedSchema.shape).map(([key, fieldSchema]) => (
           <AutoForm
             key={key}
@@ -52,7 +79,7 @@ export function AutoForm({ schema, data, onChange, label, level = 0 }: AutoFormP
     return (
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-medium text-gray-700 capitalize">{label}</label>
+          <label className="text-xs font-medium text-gray-700 capitalize">{displayLabel}</label>
           <button
             type="button"
             onClick={() => {
@@ -163,7 +190,7 @@ export function AutoForm({ schema, data, onChange, label, level = 0 }: AutoFormP
 
   return (
     <div className="mb-3">
-      {label && <label className="block text-xs font-medium text-gray-700 mb-1 capitalize">{label}</label>}
+      {displayLabel && <label className="block text-xs font-medium text-gray-700 mb-1 capitalize">{displayLabel}</label>}
       {fieldContent}
     </div>
   );

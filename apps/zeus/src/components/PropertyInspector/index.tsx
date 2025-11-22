@@ -3,9 +3,10 @@
 import React from 'react';
 import { useEditorStore } from '@/lib/store';
 import { SchemaRegistry } from '@genesis/hercules/schemas';
+import { BaseFloorSchema } from '@genesis/hercules/types';
 import { getComponentKey } from '@genesis/hercules/component-map';
 import { ZodObject } from 'zod';
-import { AutoForm } from './AutoForm';
+import { AutoForm, unwrapSchema } from './AutoForm';
 
 import { Trash2 } from 'lucide-react';
 
@@ -20,6 +21,25 @@ export function PropertyInspector() {
 
   const componentName = getComponentKey(selectedFloor.type);
   const schema = componentName ? (SchemaRegistry as any)[componentName] : null;
+
+  const getAliasLabel = () => {
+      const aliasSchema = BaseFloorSchema.shape.alias;
+      // 尝试直接获取 description
+      let description = aliasSchema.description;
+      
+      // 如果没有，尝试 unwrap
+      if (!description) {
+         const unwrapped = unwrapSchema(aliasSchema);
+         description = unwrapped.description;
+      }
+
+      if (description && description.includes(': ')) {
+          return description.split(': ')[0];
+      }
+      // 使用明确的 Fallback 以区分
+      return description || 'Alias'; 
+  };
+  const aliasLabel = getAliasLabel();
 
   const handleUpdate = (newData: Record<string, any>) => {
     updateFloor(selectedFloor.id, newData);
@@ -46,7 +66,7 @@ export function PropertyInspector() {
         <input disabled value={selectedFloor.id} className="w-full p-2 bg-gray-100 border rounded text-sm text-gray-500" />
       </div>
       <div className="mb-4">
-         <label className="block text-xs font-medium text-gray-700 mb-1">别名</label>
+         <label className="block text-xs font-medium text-gray-700 mb-1">{aliasLabel}</label>
          <input 
             value={selectedFloor.alias || ''} 
             onChange={(e) => { updateFloor(selectedFloor.id, undefined, e.target.value); }} 

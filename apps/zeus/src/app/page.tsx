@@ -8,9 +8,9 @@ import { PropertyInspector } from '@/components/PropertyInspector';
 import { ChatPanel } from '@/components/ChatPanel';
 import { ComponentToolbar } from '@/components/ComponentToolbar';
 import { usePageConfig, useSavePageConfig } from '@/query/page-config';
-import { DndContext, DragEndEvent, DragOverlay, useSensor, useSensors, PointerSensor, closestCenter, Active } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragOverlay, useSensor, useSensors, PointerSensor, Active } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
-import { PanelLeftClose, PanelLeftOpen, Layout, MessageSquare } from 'lucide-react';
+import { Layout, MessageSquare } from 'lucide-react';
 import { ComponentItem } from '@/components/ComponentToolbar';
 
 export default function Home() {
@@ -113,7 +113,7 @@ export default function Home() {
         </div>
 
         {/* 3. 右侧面板：编辑器和 AI */}
-        <div className="w-[400px] h-full flex flex-col flex-none border-l border-gray-200 bg-white transition-all duration-300 ease-in-out">
+        <div className="w-[800px] h-full flex flex-col flex-none border-l border-gray-200 bg-white transition-all duration-300 ease-in-out">
           
           {/* 顶部标题栏 & 工具栏 */}
           <div className="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-4 flex-none">

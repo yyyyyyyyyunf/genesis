@@ -2,7 +2,9 @@
 
 请参考此文档来生成营销页面的 JSON 配置。
 
-## 组件: Text
+> **注意**: `type` 字段现在使用数字 ID (Type ID)。请务必使用对应的数字。
+
+## 组件: Text (Type ID: 1)
 
 ### 属性 (Properties)
 
@@ -29,7 +31,7 @@
 
 ---
 
-## 组件: Shelf
+## 组件: Shelf (Type ID: 3)
 
 ### 属性 (Properties)
 
@@ -48,7 +50,7 @@
 
 ---
 
-## 组件: Tab
+## 组件: Tab (Type ID: 4)
 
 ### 属性 (Properties)
 
@@ -62,7 +64,7 @@
 
 ---
 
-## 组件: Image
+## 组件: Image (Type ID: 2)
 
 ### 属性 (Properties)
 

@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { ZodType, ZodObject, ZodEnum, ZodOptional, ZodDefault, ZodString, ZodNumber, ZodBoolean, ZodArray } from 'zod';
 import { SchemaRegistry } from '../src/widgets/schemas';
-import { COMPONENT_NAMES } from '../src/lib/engine/component-map';
+import { COMPONENT_NAMES } from '../src/widgets/component-map';
 
 const OUTPUT_FILE = path.join(process.cwd(), 'knowledge/agent-manual.md');
 

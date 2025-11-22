@@ -3,7 +3,7 @@
 import React, { Suspense } from 'react';
 import { FullRegistry } from '@/widgets/full-registry';
 import { Floor } from '../types';
-import { getComponentKey } from '../component-map';
+import { getComponentKey } from '@/widgets/component-map';
 
 interface ClientRecursiveRendererProps {
   floors: Floor[];

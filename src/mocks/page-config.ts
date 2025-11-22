@@ -1,4 +1,4 @@
-import { COMPONENT_NAMES } from '@/lib/engine/component-map';
+import { COMPONENT_NAMES } from '@/widgets/component-map';
 
 // 模拟页面配置数据 (DSL)
 // 这是数据库或 Agent 返回的结构。

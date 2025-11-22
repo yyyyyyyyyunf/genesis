@@ -8,7 +8,7 @@ This project implements a **Hybrid Rendering Strategy** that leverages React Ser
 
 ### 1. Engine vs Widgets
 We strictly separate the "Engine" (Core Logic) from "Widgets" (Business Components).
-- **`lib/engine`**: Contains the recursive rendering logic, type definitions, and registry helpers. It is agnostic to specific business logic.
+- **`lib/engine`**: Contains the recursive rendering logic, type definitions, context, and registry helpers. It is agnostic to specific business logic.
 - **`components/widgets`**: Contains the actual UI components (Text, Image, Tab, etc.).
 
 ### 2. Dual Registry System
@@ -21,7 +21,11 @@ We split the component registry into two parts to enforce separation of concerns
 - **`ServerRecursiveRenderer`**: The root entry point (RSC).
 - **`ClientRecursiveRenderer`**: Used inside interactive containers (Tab) to render nested children dynamically.
 
-### 4. Code-to-Agent Pipeline
+### 4. State Management (Context)
+- **Global Contexts**: Located in `lib/engine/context` (e.g. `LocaleContext`).
+- **RSC Consumption**: Server Components cannot directly consume Context. Use the **Client Wrapper Pattern** (like `LocaleBadge` inside `Text`) to inject context-dependent UI into static Server Components.
+
+### 5. Code-to-Agent Pipeline
 We treat **Code as the Single Source of Truth**.
 - Run `pnpm run gen:docs` to scan Zod Schemas.
 - It generates `agent-manual.md`, a perfect documentation file to feed into LLM Agents (Dify/GPT).
@@ -42,6 +46,7 @@ pnpm run gen:docs
 ```
 lib/
   engine/               # Core Low-Code Engine
+    context/            # Global Contexts (Locale, Theme)
     renderer/
       ServerRecursiveRenderer.tsx
       ClientRecursiveRenderer.tsx

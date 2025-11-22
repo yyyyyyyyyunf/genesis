@@ -29,7 +29,7 @@ We split the component registry into two parts to enforce separation of concerns
 ### 5. Code-to-Agent Pipeline
 We treat **Code as the Single Source of Truth**.
 - Run `pnpm run gen:docs` to scan Zod Schemas.
-- It generates `agent-manual.md`, a perfect documentation file to feed into LLM Agents (Dify/GPT).
+- It generates `knowledge/agent-manual.md`, a perfect documentation file to feed into LLM Agents (Dify/GPT).
 
 ## Usage
 
@@ -45,25 +45,28 @@ pnpm run gen:docs
 
 ## Directory Structure
 ```
-app/                    # Next.js App Router
-lib/
-  engine/               # Core Low-Code Engine
-    renderer/
-      ServerRecursiveRenderer.tsx
-      ClientRecursiveRenderer.tsx
-      ServerFloorItem.tsx
-    types.ts
-    utils.tsx
-widgets/                # Business Components (Top Level)
-  Image/
-  Text/
-  Tab/
-  Shelf/
-  server-registry.tsx
-  client-registry.tsx
-  full-registry.ts
-context/                # Global Contexts (Locale, Theme)
-providers/              # Application Providers
+src/
+  app/                    # Next.js App Router
+  lib/
+    engine/               # Core Low-Code Engine
+      renderer/
+        ServerRecursiveRenderer.tsx
+        ClientRecursiveRenderer.tsx
+        ServerFloorItem.tsx
+      types.ts
+      utils.tsx
+  widgets/                # Business Components (Top Level)
+    Image/
+    Text/
+    Tab/
+    Shelf/
+    server-registry.tsx
+    client-registry.tsx
+    full-registry.ts
+  context/                # Global Contexts (Locale, Theme)
+  providers/              # Application Providers
+knowledge/                # AI Knowledge Base (Generated)
+  agent-manual.md
 scripts/
   generate-agent-docs.ts  # Knowledge Base Generator
 ```

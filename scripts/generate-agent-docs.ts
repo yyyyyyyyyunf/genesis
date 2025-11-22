@@ -3,7 +3,7 @@ import path from 'path';
 import { ZodType, ZodObject, ZodEnum, ZodOptional, ZodDefault, ZodString, ZodNumber, ZodBoolean, ZodArray } from 'zod';
 import { SchemaRegistry } from '../widgets/schemas';
 
-const OUTPUT_FILE = path.join(process.cwd(), 'agent-manual.md');
+const OUTPUT_FILE = path.join(process.cwd(), 'knowledge/agent-manual.md');
 
 function getType(schema: ZodType): string {
   if (schema instanceof ZodString) return 'string';

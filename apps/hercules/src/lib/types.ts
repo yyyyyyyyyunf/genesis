@@ -8,13 +8,9 @@ export const BaseFloorSchema = z.object({
   alias: z.string().optional().describe('用户定义的楼层别名 (例如 "主标题", "活动 Banner")'),
 });
 
-// 2. 页面 Schema
-// 页面只是楼层的集合。
-export const PageSchema = z.object({
-  id: z.string(),
-  title: z.string().optional(),
-  floors: z.array(z.any()), // 这里暂时用 any，稍后我们会细化组件 schema
-});
+// Floor 应该是 BaseFloorSchema 加上 data: any (具体由组件决定)
+export type Floor = z.infer<typeof BaseFloorSchema> & { data: any };
 
-export type PageConfig = z.infer<typeof PageSchema>;
-
+// 2. 页面配置类型
+// 直接定义为楼层数组，简化使用
+export type PageConfig = Floor[];

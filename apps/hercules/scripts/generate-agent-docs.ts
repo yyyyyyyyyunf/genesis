@@ -5,7 +5,7 @@ import { ZodType, ZodObject, ZodEnum, ZodOptional, ZodDefault, ZodString, ZodNum
 import { SchemaRegistry } from '../src/widgets/schemas';
 import { COMPONENT_NAMES } from '../src/widgets/component-map';
 
-const OUTPUT_FILE = path.join(process.cwd(), 'knowledge/agent-manual.md');
+const OUTPUT_FILE = path.join(process.cwd(), '../../knowledge/agent-manual.md');
 
 function getType(schema: ZodType): string {
   if (schema instanceof ZodString) return 'string';

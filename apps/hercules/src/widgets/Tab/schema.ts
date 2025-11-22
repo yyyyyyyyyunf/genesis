@@ -4,7 +4,8 @@ import { z } from 'zod';
 // 在实际应用中，我们可以使用 z.lazy() 来引用完整的 Floor 架构
 const FloorStub = z.object({
   id: z.string(),
-  type: z.string(),
+  type: z.number(), // Changed from string to number
+  alias: z.string().optional(), // Added optional alias
   data: z.any(),
 });
 

@@ -1,11 +1,13 @@
 {
-  "name": "hercules-lowcode-platform",
+  "name": "genesis-platform",
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@8.0.0",
+  "packageManager": "pnpm@10.16.0",
   "scripts": {
+    "gen:docs": "pnpm --filter hercules gen:docs",
     "dev:hercules": "pnpm --filter hercules dev",
     "dev:zeus": "pnpm --filter zeus dev",
+    "dev:all": "pnpm --parallel --filter hercules --filter zeus dev",
     "build": "pnpm -r build",
     "test": "pnpm -r test"
   }

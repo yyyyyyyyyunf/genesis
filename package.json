@@ -5,11 +5,15 @@
   "packageManager": "pnpm@10.16.0",
   "scripts": {
     "gen:docs": "pnpm --filter hercules gen:docs",
+    "verify:registry": "pnpm --filter hercules verify:registry",
     "dev:hercules": "pnpm --filter hercules dev",
     "dev:zeus": "pnpm --filter zeus dev",
     "dev:jarvis": "pnpm --filter jarvis dev",
     "dev:all": "pnpm --parallel --filter hercules --filter zeus --filter jarvis dev",
     "build": "pnpm -r build",
     "test": "pnpm -r test"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.6"
   }
 }

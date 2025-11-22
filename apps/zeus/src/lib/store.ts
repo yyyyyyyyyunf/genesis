@@ -6,11 +6,23 @@ interface EditorState {
   draftConfig: PageConfig | null;
   selectedFloorId: string | null;
   
+  // UI State
+  isManualEditorOpen: boolean;
+  isChatPanelOpen: boolean;
+
   setDraftConfig: (config: PageConfig | null) => void;
   commitDraft: () => void;
   rejectDraft: () => void;
   selectFloor: (id: string | null) => void;
-  updateFloor: (floorId: string, data: any) => void;
+  updateFloor: (floorId: string, data?: any, alias?: string) => void;
+  
+  // Floor Management
+  addFloor: (type: number, index?: number) => void;
+  removeFloor: (id: string) => void;
+
+  // UI Actions
+  toggleManualEditor: () => void;
+  toggleChatPanel: () => void;
   
   // 初始加载
   loadConfig: (config: PageConfig) => void;
@@ -30,6 +42,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   currentConfig: [],
   draftConfig: null,
   selectedFloorId: null,
+  isManualEditorOpen: true,
+  isChatPanelOpen: true,
 
   setDraftConfig: (config) => set({ draftConfig: config }),
 
@@ -44,13 +58,20 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 
   selectFloor: (id) => set({ selectedFloorId: id }),
 
-  updateFloor: (floorId, data) => {
+  updateFloor: (floorId, data, alias) => {
     const { currentConfig, draftConfig } = get();
     const targetConfig = draftConfig || currentConfig;
     
-    const newConfig = targetConfig.map(floor => 
-      floor.id === floorId ? { ...floor, data: { ...floor.data, ...data } } : floor
-    );
+    const newConfig = targetConfig.map(floor => {
+      if (floor.id === floorId) {
+        return {
+          ...floor,
+          ...(data ? { data: { ...floor.data, ...data } } : {}),
+          ...(alias !== undefined ? { alias } : {}),
+        };
+      }
+      return floor;
+    });
 
     if (draftConfig) {
       set({ draftConfig: newConfig });
@@ -58,6 +79,36 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       set({ currentConfig: newConfig });
     }
   },
+
+  addFloor: (type, index) => {
+    const { currentConfig } = get();
+    const newFloor = {
+      id: `floor_${type}_${Date.now()}`,
+      type,
+      data: {}, // 默认空数据，后续可能需要根据类型提供默认值
+    };
+
+    const newConfig = [...currentConfig];
+    if (typeof index === 'number' && index >= 0 && index <= newConfig.length) {
+      newConfig.splice(index, 0, newFloor);
+    } else {
+      newConfig.push(newFloor);
+    }
+
+    set({ currentConfig: newConfig, selectedFloorId: newFloor.id });
+  },
+
+  removeFloor: (id) => {
+    const { currentConfig, draftConfig } = get();
+    if (draftConfig) {
+      set({ draftConfig: draftConfig.filter(f => f.id !== id) });
+    } else {
+      set({ currentConfig: currentConfig.filter(f => f.id !== id) });
+    }
+  },
+
+  toggleManualEditor: () => set((state) => ({ isManualEditorOpen: !state.isManualEditorOpen })),
+  toggleChatPanel: () => set((state) => ({ isChatPanelOpen: !state.isChatPanelOpen })),
 
   loadConfig: (config) => set({ currentConfig: config }),
 }));

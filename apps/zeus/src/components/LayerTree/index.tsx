@@ -3,66 +3,43 @@
 import React from 'react';
 import { useEditorStore } from '@/lib/store';
 import {
-  DndContext, 
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent
+  useDroppable, // Import useDroppable
 } from '@dnd-kit/core';
 import {
-  arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { SortableItem } from './SortableItem';
 
 export function LayerTree() {
-  const { currentConfig, draftConfig, loadConfig } = useEditorStore();
+  const { currentConfig, draftConfig } = useEditorStore();
   const displayConfig = draftConfig || currentConfig;
   
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  // Make LayerTree a droppable zone for adding new components
+  const { setNodeRef } = useDroppable({
+    id: 'layer-tree-droppable',
+  });
 
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-
-    if (over && active.id !== over.id) {
-      const oldIndex = displayConfig.findIndex((item) => item.id === active.id);
-      const newIndex = displayConfig.findIndex((item) => item.id === over.id);
-      
-      const newOrder = arrayMove(displayConfig, oldIndex, newIndex);
-      loadConfig(newOrder); // 应该在 store 中使用专门的 reorder action，这里暂用 loadConfig
-    }
-  }
+  // The parent DndContext in page.tsx handles the sensors and onDragEnd logic now.
+  // We just render the SortableContext here.
 
   return (
-    <div className="flex flex-col h-full p-4 overflow-y-auto">
+    <div className="flex flex-col h-full p-4 overflow-y-auto" ref={setNodeRef}>
       <h3 className="text-lg font-bold mb-4">页面搭建</h3>
-      <DndContext 
-        sensors={sensors} 
-        collisionDetection={closestCenter} 
-        onDragEnd={handleDragEnd}
+      <SortableContext 
+        items={displayConfig.map(f => f.id)}
+        strategy={verticalListSortingStrategy}
       >
-        <SortableContext 
-          items={displayConfig.map(f => f.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          {displayConfig.map((floor) => (
-            <SortableItem key={floor.id} id={floor.id} floor={floor} />
-          ))}
-        </SortableContext>
-      </DndContext>
+        {displayConfig.map((floor) => (
+          <SortableItem key={floor.id} id={floor.id} floor={floor} />
+        ))}
+        {/* Placeholder for empty state if needed */}
+        {displayConfig.length === 0 && (
+          <div className="p-4 text-center text-gray-400 text-sm border border-dashed rounded">
+            暂无楼层，请从左侧拖拽组件添加
+          </div>
+        )}
+      </SortableContext>
     </div>
   );
 }

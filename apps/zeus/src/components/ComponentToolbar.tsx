@@ -1,0 +1,84 @@
+"use client";
+
+import React from 'react';
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
+import { COMPONENT_MAP } from '@genesis/hercules/component-map';
+import { Type, Image as ImageIcon, LayoutGrid, Columns, Box } from 'lucide-react';
+
+// Icon mapping based on component names (keys in COMPONENT_MAP values)
+const NAME_TO_ICON: Record<string, React.ElementType> = {
+  'Text': Type,
+  'Image': ImageIcon,
+  'Shelf': LayoutGrid,
+  'Tab': Columns,
+};
+
+function getIconForComponent(name: string): React.ElementType {
+  return NAME_TO_ICON[name] || Box; // Default to Box icon if no match found
+}
+
+interface ComponentItemProps {
+  label: string; // Chinese label
+  componentName: string; // English name for icon lookup
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+export function ComponentItem({ label, componentName, className, style }: ComponentItemProps) {
+  const Icon = getIconForComponent(componentName);
+  return (
+    <div
+      style={style}
+      className={`flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg cursor-move hover:bg-gray-50 hover:shadow-sm transition-all ${className || ''}`}
+    >
+      <Icon className="w-6 h-6 mb-2 text-gray-600" />
+      <span className="text-xs font-medium text-gray-700">{label}</span>
+    </div>
+  );
+}
+
+interface ComponentCardProps {
+  type: number;
+  name: string; // English name
+  label: string; // Chinese label
+}
+
+function ComponentCard({ type, name, label }: ComponentCardProps) {
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: `new_component_${type}`,
+    data: {
+      type: 'new_component',
+      componentType: type,
+      label, // Passing Chinese label for overlay
+      componentName: name, // Passing English name for icon lookup
+    },
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+    >
+      <ComponentItem label={label} componentName={name} />
+    </div>
+  );
+}
+
+export function ComponentToolbar() {
+  return (
+    <div className="w-20 h-full bg-gray-100 border-r border-gray-200 flex flex-col p-2 gap-3 overflow-y-auto flex-none">
+      <div className="text-xs font-bold text-gray-400 text-center mb-2">组件库</div>
+      {Object.entries(COMPONENT_MAP).map(([code, { name, label }]) => (
+        <ComponentCard 
+          key={code} 
+          type={Number(code)} 
+          name={name}
+          label={label} 
+        />
+      ))}
+    </div>
+  );
+}
+

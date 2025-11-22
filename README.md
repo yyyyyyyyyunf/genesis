@@ -9,7 +9,7 @@ This project implements a **Hybrid Rendering Strategy** that leverages React Ser
 ### 1. Engine vs Widgets
 We strictly separate the "Engine" (Core Logic) from "Widgets" (Business Components).
 - **`lib/engine`**: Contains the recursive rendering logic, type definitions, and registry helpers. It is agnostic to specific business logic.
-- **`components/widgets`**: Contains the actual UI components (Text, Image, Tab, etc.).
+- **`widgets/`**: Contains the actual UI components (Text, Image, Tab, etc.) as top-level citizens.
 
 ### 2. Dual Registry System
 We split the component registry into two parts to enforce separation of concerns:
@@ -22,8 +22,8 @@ We split the component registry into two parts to enforce separation of concerns
 - **`ClientRecursiveRenderer`**: Used inside interactive containers (Tab) to render nested children dynamically.
 
 ### 4. State Management (Context)
-- **Business Contexts**: Located in `components/context` (e.g. `LocaleContext`).
-- **Providers**: Grouped in `components/providers/index.tsx` to avoid cluttering `page.tsx`.
+- **Business Contexts**: Located in `context/` (e.g. `LocaleContext`).
+- **Providers**: Grouped in `providers/index.tsx` to avoid cluttering `page.tsx`.
 - **RSC Consumption**: Server Components cannot directly consume Context. Use the **Client Wrapper Pattern** (like `LocaleBadge` inside `Text`) to inject context-dependent UI into static Server Components.
 
 ### 5. Code-to-Agent Pipeline
@@ -45,6 +45,7 @@ pnpm run gen:docs
 
 ## Directory Structure
 ```
+app/                    # Next.js App Router
 lib/
   engine/               # Core Low-Code Engine
     renderer/
@@ -53,17 +54,16 @@ lib/
       ServerFloorItem.tsx
     types.ts
     utils.tsx
-components/
-  context/              # Business Contexts (Locale, Theme)
-  providers/            # Application Providers
-  widgets/              # Business Components
-    Image/
-    Text/
-    Tab/
-    Shelf/
-    server-registry.tsx
-    client-registry.tsx
-    full-registry.ts
+widgets/                # Business Components (Top Level)
+  Image/
+  Text/
+  Tab/
+  Shelf/
+  server-registry.tsx
+  client-registry.tsx
+  full-registry.ts
+context/                # Global Contexts (Locale, Theme)
+providers/              # Application Providers
 scripts/
   generate-agent-docs.ts  # Knowledge Base Generator
 ```

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import { FullRegistry } from '@/components/widgets/full-registry';
+import { FullRegistry } from '@/widgets/full-registry';
 import { Floor } from '../types';
 
 interface ClientRecursiveRendererProps {

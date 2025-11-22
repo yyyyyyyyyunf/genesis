@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
-import { ServerRegistry } from '@/components/widgets/server-registry';
-import { ClientRegistry } from '@/components/widgets/client-registry';
+import { ServerRegistry } from '@/widgets/server-registry';
+import { ClientRegistry } from '@/widgets/client-registry';
 import { Floor } from '../types';
 
 export const ServerFloorItem = ({ floor }: { floor: Floor }) => {

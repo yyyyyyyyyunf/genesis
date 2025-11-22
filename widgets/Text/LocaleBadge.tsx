@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useLocale } from '@/components/context/LocaleContext';
+import { useLocale } from '@/context/LocaleContext';
 
 export const LocaleBadge = () => {
   const { locale } = useLocale();

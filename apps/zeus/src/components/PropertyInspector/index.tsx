@@ -19,19 +19,19 @@ export function PropertyInspector() {
   const componentName = getComponentKey(selectedFloor.type);
   const schema = componentName ? (SchemaRegistry as any)[componentName] : null;
 
-  const handleUpdate = (key: string, value: any) => {
-    updateFloor(selectedFloor.id, { [key]: value });
+  const handleUpdate = (newData: Record<string, any>) => {
+    updateFloor(selectedFloor.id, newData);
   };
 
   return (
     <div className="h-full flex flex-col p-4 overflow-y-auto">
-      <h3 className="text-lg font-bold mb-4">Properties</h3>
+      <h3 className="text-lg font-bold mb-4">属性面板</h3>
       <div className="mb-4">
         <label className="block text-xs font-medium text-gray-700 mb-1">ID</label>
         <input disabled value={selectedFloor.id} className="w-full p-2 bg-gray-100 border rounded text-sm text-gray-500" />
       </div>
       <div className="mb-4">
-         <label className="block text-xs font-medium text-gray-700 mb-1">Alias</label>
+         <label className="block text-xs font-medium text-gray-700 mb-1">别名</label>
          <input 
             value={selectedFloor.alias || ''} 
             onChange={(e) => { /* 需要更新楼层别名，而不是数据 */ }} 
@@ -49,4 +49,3 @@ export function PropertyInspector() {
     </div>
   );
 }
-

@@ -48,7 +48,7 @@ export function ChatPanel() {
         </div>
       )}
 
-      <div className="flex-1 p-4 overflow-y-auto">
+          <div className="flex-1 p-4 overflow-y-auto">
         <div className="text-center text-gray-400 text-sm mt-4">
             请让 Agent 修改页面...
         </div>
@@ -61,14 +61,14 @@ export function ChatPanel() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="e.g., 'Make the banner larger'"
+            placeholder="例如：'把 Banner 变大一点'"
             className="flex-1 p-2 border rounded text-sm"
           />
           <button 
             onClick={handleSend}
             className="px-4 py-2 bg-black text-white rounded text-sm font-medium"
           >
-            Send
+            发送
           </button>
         </div>
       </div>

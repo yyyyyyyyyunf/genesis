@@ -66,7 +66,7 @@ export function AutoForm({ schema, data, onChange, label, level = 0 }: AutoFormP
               onChange([...items, defaultValue]);
             }}
             className="p-1 hover:bg-gray-100 rounded text-blue-600"
-            title="Add Item"
+            title="添加项"
           >
             <Plus size={14} />
           </button>
@@ -159,7 +159,7 @@ export function AutoForm({ schema, data, onChange, label, level = 0 }: AutoFormP
           );
         }
 
-        return <div className="text-xs text-red-400">Unsupported type</div>;
+        return <div className="text-xs text-red-400">不支持的类型</div>;
       })()}
     </div>
   );

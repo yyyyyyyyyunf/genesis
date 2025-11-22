@@ -26,7 +26,7 @@ export function PreviewFrame() {
     <div className="w-full h-full bg-gray-100 flex items-center justify-center overflow-hidden">
       <iframe
         ref={iframeRef}
-        src={HERCULES_URL}
+        src={`${HERCULES_URL}?mode=preview`}
         className="w-full h-full border-none bg-white shadow-lg"
         style={{ maxWidth: '100%', maxHeight: '100%' }}
         title="Hercules Preview"

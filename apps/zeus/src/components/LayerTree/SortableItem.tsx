@@ -32,7 +32,7 @@ export function SortableItem({ id, floor }: { id: string, floor: any }) {
       className={`p-3 mb-2 rounded border cursor-pointer hover:bg-gray-50 ${selectedFloorId === id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white'}`}
     >
       <div className="font-medium text-sm">{floor.alias || floor.id}</div>
-      <div className="text-xs text-gray-500">{COMPONENT_CODES[floor.type] || 'Unknown Component'}</div>
+      <div className="text-xs text-gray-500">{COMPONENT_CODES[floor.type] || '未知组件'}</div>
     </div>
   );
 }

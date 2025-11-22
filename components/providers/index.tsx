@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LocaleProvider } from '@/lib/context/LocaleContext';
+import { LocaleProvider } from '@/components/context/LocaleContext';
 
 interface ProvidersProps {
   children: React.ReactNode;

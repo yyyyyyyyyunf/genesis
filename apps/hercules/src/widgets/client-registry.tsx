@@ -12,4 +12,7 @@ export const ClientRegistry: Record<string, React.ComponentType<FloorComponentPr
 
   // Carousel 使用 Swiper (Hooks)，必须是客户端组件
   Carousel: dynamicClientFloor(() => import('./Carousel').then(mod => mod.Carousel)),
+
+  // Button 为了支持 onClick 交互（如弹窗），必须是客户端组件
+  Button: dynamicClientFloor(() => import('./Button').then(mod => mod.Button)),
 };

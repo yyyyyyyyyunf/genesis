@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text } from './Text';
 import { Image } from './Image';
-import { Button } from './Button';
 import { Video } from './Video';
 import { Spacer } from './Spacer';
 import { FloorComponentProps } from '@/lib/engine/types';
@@ -18,7 +17,6 @@ import { FloorComponentProps } from '@/lib/engine/types';
 export const ServerRegistry: Record<string, React.ComponentType<FloorComponentProps<any>>> = {
   Text,
   Image,
-  Button,
   Video,
   Spacer,
 };

@@ -2,7 +2,8 @@ import { z } from 'zod';
 
 export const ButtonSchema = z.object({
   text: z.string().describe('按钮文本: 按钮上显示的文字').default('点击我'),
-  link: z.string().optional().describe('跳转链接: 点击按钮后的跳转地址'),
+  link: z.string().optional().describe('跳转链接: 点击按钮后的跳转地址 (优先级高于点击提示)'),
+  clickMessage: z.string().optional().describe('点击提示: 点击按钮时弹出的提示文字 (仅在无跳转链接时生效)'),
   variant: z.enum(['solid', 'outline', 'ghost']).optional().describe('样式变体: 按钮的视觉样式').default('solid'),
   size: z.enum(['sm', 'base', 'lg']).optional().describe('尺寸: 按钮的大小').default('base'),
   color: z.string().optional().describe('颜色主题: 按钮的主题颜色 (Tailwind 类或 Hex)').default('bg-blue-600'),

@@ -3,6 +3,10 @@ export const COMPONENT_MAP: Record<number, { name: string; label: string }> = {
   2: { name: 'Image', label: '图片' },
   3: { name: 'Shelf', label: '货架' },
   4: { name: 'Tab', label: '标签页' },
+  5: { name: 'Button', label: '按钮' },
+  6: { name: 'Video', label: '视频' },
+  7: { name: 'Carousel', label: '轮播图' },
+  8: { name: 'Spacer', label: '间距' },
 };
 
 export const COMPONENT_CODES: Record<number, string> = Object.entries(COMPONENT_MAP).reduce((acc, [code, { name }]) => {
@@ -31,4 +35,3 @@ export function getComponentCode(name: string): number | undefined {
 export function getComponentLabel(code: number): string | undefined {
   return COMPONENT_MAP[code]?.label;
 }
-

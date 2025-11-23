@@ -169,5 +169,57 @@
         }
       ]
     }
+  },
+  {
+    "id": "floor_video_promo",
+    "type": 6,
+    "alias": "宣传视频",
+    "data": {
+      "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "poster": "https://placehold.co/800x450/000000/ffffff?text=Video+Poster",
+      "controls": true,
+      "autoplay": false,
+      "aspectRatio": "16/9"
+    }
+  },
+  {
+    "id": "floor_spacer_promo",
+    "type": 8,
+    "alias": "间距 20px",
+    "data": {
+      "height": 20,
+      "backgroundColor": "bg-gray-100"
+    }
+  },
+  {
+    "id": "floor_action_btn",
+    "type": 5,
+    "alias": "主要行动按钮",
+    "data": {
+      "text": "立即预订",
+      "variant": "solid",
+      "size": "lg",
+      "color": "bg-blue-600",
+      "radius": "full",
+      "fullWidth": false,
+      "link": "https://www.trip.com"
+    }
+  },
+  {
+    "id": "floor_rec_carousel",
+    "type": 7,
+    "alias": "推荐轮播",
+    "data": {
+      "aspectRatio": "3/1",
+      "autoplay": true,
+      "interval": 4000,
+      "showArrows": true,
+      "showDots": true,
+      "items": [
+        { "image": "https://placehold.co/800x266/ff9900/ffffff?text=Spring+Sale", "alt": "Spring Sale" },
+        { "image": "https://placehold.co/800x266/00cc99/ffffff?text=New+Routes", "alt": "New Routes" },
+        { "image": "https://placehold.co/800x266/cc33ff/ffffff?text=VIP+Lounge", "alt": "VIP Lounge" }
+      ]
+    }
   }
 ]

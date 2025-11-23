@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { ZodType, ZodObject, ZodEnum, ZodOptional, ZodDefault, ZodString, ZodNumber, ZodBoolean, ZodArray } from 'zod';
 import { SchemaRegistry } from '../src/widgets/schemas';
-import { COMPONENT_NAMES } from '../src/widgets/component-map';
+import { COMPONENT_NAMES, COMPONENT_LABELS } from '../src/widgets/component-map';
 
 const OUTPUT_FILE = path.join(process.cwd(), '../../knowledge/agent-manual.md');
 
@@ -85,7 +85,8 @@ function generateDocs() {
 
   for (const [name, schema] of Object.entries(SchemaRegistry)) {
     const typeId = COMPONENT_NAMES[name];
-    markdown += `## 组件: ${name} (Type ID: ${typeId})\n\n`;
+    const label = COMPONENT_LABELS[name] || name;
+    markdown += `## 组件: ${name} - ${label} (Type ID: ${typeId})\n\n`;
     
     if (!(schema instanceof ZodObject)) {
       markdown += `(复杂 Schema: ${getType(schema as ZodType)})\n\n`;

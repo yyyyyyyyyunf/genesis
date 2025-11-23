@@ -24,6 +24,7 @@
     "nuqs": "^2.8.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "swiper": "^12.0.3",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.1.12",
     "zod-to-json-schema": "^3.25.0",

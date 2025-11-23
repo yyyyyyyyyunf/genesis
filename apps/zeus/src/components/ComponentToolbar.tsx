@@ -4,7 +4,7 @@ import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { COMPONENT_MAP } from '@genesis/hercules/component-map';
-import { Type, Image as ImageIcon, LayoutGrid, Columns, Box } from 'lucide-react';
+import { Type, Image as ImageIcon, LayoutGrid, Columns, Box, MousePointerClick, Video, GalleryHorizontal, MoveVertical } from 'lucide-react';
 
 // 基于组件名称的图标映射 (COMPONENT_MAP 值的 keys)
 const NAME_TO_ICON: Record<string, React.ElementType> = {
@@ -12,6 +12,10 @@ const NAME_TO_ICON: Record<string, React.ElementType> = {
   'Image': ImageIcon,
   'Shelf': LayoutGrid,
   'Tab': Columns,
+  'Button': MousePointerClick,
+  'Video': Video,
+  'Carousel': GalleryHorizontal,
+  'Spacer': MoveVertical,
 };
 
 function getIconForComponent(name: string): React.ElementType {

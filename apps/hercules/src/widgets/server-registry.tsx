@@ -1,6 +1,9 @@
 import React from 'react';
 import { Text } from './Text';
 import { Image } from './Image';
+import { Button } from './Button';
+import { Video } from './Video';
+import { Spacer } from './Spacer';
 import { FloorComponentProps } from '@/lib/engine/types';
 
 // Server Registry - 用于可以作为 RSC 渲染的组件
@@ -15,4 +18,7 @@ import { FloorComponentProps } from '@/lib/engine/types';
 export const ServerRegistry: Record<string, React.ComponentType<FloorComponentProps<any>>> = {
   Text,
   Image,
+  Button,
+  Video,
+  Spacer,
 };

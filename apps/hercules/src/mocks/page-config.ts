@@ -120,5 +120,54 @@ export const mockPageConfig = [
         }
       ]
     }
+  },
+  {
+    id: 'floor_video_intro',
+    type: COMPONENT_NAMES.Video,
+    alias: '宣传视频',
+    data: {
+      src: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+      poster: 'https://images.unsplash.com/photo-1490750967868-58cb75062ed0?w=800&q=80',
+      controls: true,
+      autoplay: false,
+      aspectRatio: '16/9'
+    }
+  },
+  {
+    id: 'floor_spacer_1',
+    type: COMPONENT_NAMES.Spacer,
+    alias: '间距 20px',
+    data: {
+      height: 20,
+      backgroundColor: 'bg-gray-50'
+    }
+  },
+  {
+    id: 'floor_actions',
+    type: COMPONENT_NAMES.Button,
+    alias: '行动按钮',
+    data: {
+      text: '立即抢购',
+      variant: 'solid',
+      size: 'lg',
+      color: 'bg-red-600',
+      radius: 'full',
+      fullWidth: false
+    }
+  },
+  {
+    id: 'floor_carousel',
+    type: COMPONENT_NAMES.Carousel,
+    alias: '推荐轮播',
+    data: {
+      aspectRatio: '3/1',
+      autoplay: true,
+      interval: 3000,
+      items: [
+        { image: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800&q=80', alt: 'Slide 1' },
+        { image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80', alt: 'Slide 2' },
+        { image: 'https://images.unsplash.com/photo-1513118172236-88b6f9902a09?w=800&q=80', alt: 'Slide 3' }
+      ]
+    }
   }
 ];

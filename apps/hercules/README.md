@@ -60,6 +60,10 @@ src/
     Text/
     Tab/
     Shelf/
+    Button/
+    Video/
+    Carousel/
+    Spacer/
     server-registry.tsx
     client-registry.tsx
     full-registry.ts

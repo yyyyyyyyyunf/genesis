@@ -60,6 +60,40 @@ import { ClientRegistry } from '@/widgets/client-registry';
 
 ---
 
+### 3. AI 校验基础设施 (Validator Infrastructure)
+
+为了支持 AI Agent 生成和修改页面配置，我们在 `src/lib/engine/validator.ts` 中构建了一套专门的校验系统。
+
+#### 核心逻辑
+Validator 充当了 AI 和渲染引擎之间的**防火墙**。
+
+1.  **输入**: 接收组件 `type` 和 `data`。
+2.  **校验**: 根据 `component-map` 找到对应的 `schema.ts`，运行 `zod.safeParse(data)`。
+3.  **输出**:
+    *   **成功**: 返回经过清洗和默认值填充的 `data`。
+    *   **失败**: 返回一个 AI 可读的中文错误报告。
+
+#### AI 反馈闭环 (Feedback Loop)
+
+这个模块最关键的功能是将代码层面的错误（如 Zod Error）翻译成自然语言，从而允许 AI 进行自我修正。
+
+```typescript
+import { validateFloorConfig } from '@/lib/engine/validator';
+
+// 模拟 AI 生成的错误配置
+const aiInput = { type: 19, data: { action: 'jump' } };
+
+const result = validateFloorConfig(aiInput.type, aiInput.data);
+
+if (!result.success) {
+  // result.report: "配置校验失败 (FloatButton): 字段 'action' 无效: 期望 'backToTop' | 'link' | 'custom'，实际收到 'jump'"
+  // 将此 report 返回给 AI，它就能知道如何修正。
+  return askAiToFix(result.report);
+}
+```
+
+---
+
 ## 开发指南：如何新增一个组件？
 
 当你开发一个新的组件（例如 `NewWidget`）时，你需要遵循以下步骤：
@@ -109,4 +143,3 @@ A: 页面首屏 (SSR) 看起来是正常的，但控制台会报 Hydration Misma
 
 **Q: 为什么 ClientRegistry 全是 dynamic import？**
 A: 性能优化。如果用户访问的页面只有 `Text` 和 `Image`，我们不希望他们下载 `Carousel` (包含 Swiper 库) 或 `CodeBlock` (包含 Shiki 库) 的代码。
-

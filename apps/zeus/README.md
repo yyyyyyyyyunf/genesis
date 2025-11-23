@@ -1,52 +1,33 @@
-# Zeus 编辑器 (Zeus Editor)
+# Zeus (可视化编辑器)
 
-Zeus 是一个可视化的低代码营销页面编辑器。它允许运营人员通过拖放组件、编辑属性以及与 AI Agent 对话来构建页面。
+Zeus 是 Genesis 平台的所见即所得 (WYSIWYG) 编辑器，专为运营人员和 AI Agent 设计。
 
-## 功能特点
+## 核心能力
 
-- **可视化预览**: 通过 Iframe 嵌入 Hercules 渲染引擎，确保所见即所得。
-- **组件管理**: 
-  - **图层树 (Layer Tree)**: 支持拖拽排序的楼层管理。
-  - **属性检查器 (Property Inspector)**: 基于 Zod Schema 自动生成的表单，用于编辑组件属性。
-- **AI 辅助**: 集成 AI Chat Panel，允许通过自然语言指令修改页面配置 (Mock)。
-- **实时同步**: 编辑器的状态更改会实时同步到预览区域。
+1.  **可视化编排**: 支持拖拽组件、调整顺序、实时预览。
+2.  **动态属性面板**: 基于 Hercules 定义的 Zod Schema，自动生成对应的编辑表单（AutoForm）。这意味着新增组件时，无需修改编辑器代码，表单会自动适配。
+3.  **AI 辅助生成**: (Coming Soon) 集成大模型能力，支持通过自然语言对话生成和修改页面配置。
 
-## 技术栈
+## 工作原理
 
-- **框架**: Next.js 16 (App Router)
-- **状态管理**: Zustand
-- **拖拽库**: @dnd-kit
-- **样式**: Tailwind CSS
-- **通信**: `window.postMessage` (与 Hercules 通信)
+### 1. 渲染通信
+Zeus 通过 `iframe` 嵌入 Hercules 渲染端。二者通过 `postMessage` 进行双向通信：
+- **Zeus -> Hercules**: 发送最新的页面配置 JSON。
+- **Hercules -> Zeus**: 发送组件选中、点击等交互事件。
 
-## 快速开始
-
-在项目根目录下运行以下命令启动开发服务器：
-
-```bash
-pnpm dev:all
-```
-
-该命令会同时启动：
-- **Zeus (编辑器)**: http://localhost:3000
-- **Hercules (渲染端)**: http://localhost:3001
-
-## 架构概览
-
-Zeus 作为宿主应用 (Host)，通过 Iframe 加载 Hercules 作为子应用 (Remote)。
-
-1.  **状态源**: 页面配置数据 (`PageConfig`) 存储在 Zeus 的 Zustand Store 中。
-2.  **通信桥接**: `src/lib/host-bridge.ts` 负责监听状态变化，并通过 `postMessage` 将最新的配置发送给 Hercules。
-3.  **预览**: `src/components/PreviewFrame.tsx` 封装了 Iframe 和通信逻辑。
+### 2. Schema 共享
+Zeus 直接引用 Hercules 的组件 Schema 定义。这确保了编辑器生成的配置数据与渲染端所需的格式 **100% 一致**，从源头杜绝了配置错误。
 
 ## 目录结构
 
-- `src/app`: Next.js 页面路由。
-- `src/components`: UI 组件。
-  - `LayerTree`: 图层管理组件。
-  - `PropertyInspector`: 属性编辑组件。
-  - `ChatPanel`: AI 对话组件。
-  - `PreviewFrame`: 预览容器。
-- `src/lib`: 工具函数和状态管理。
-  - `store.ts`: 全局状态定义。
-  - `host-bridge.ts`: 跨应用通信逻辑。
+```bash
+src/
+├── components/
+│   ├── FloorTree/         # 楼层树状图 (拖拽排序)
+│   ├── PropertyInspector/ # 属性检查器 (AutoForm 表单生成)
+│   ├── PreviewFrame.tsx   # 渲染端 Iframe 容器
+│   └── ChatPanel.tsx      # AI 对话面板
+├── lib/
+│   ├── store.ts           # 编辑器状态管理 (Zustand)
+│   └── host-bridge.ts     # Iframe 通信桥接
+```

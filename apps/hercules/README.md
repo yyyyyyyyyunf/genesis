@@ -1,76 +1,39 @@
-# Hercules: Next.js 低代码 Agent 平台
+# Hercules (渲染引擎)
 
-一个现代化的生成式 UI 混合渲染架构，专为 Agent 友好性和高性能而设计。
+Hercules 是 Genesis 平台的渲染核心，负责将后端下发的 JSON 配置 (DSL) 转化为高性能的 React 页面。
+
+## 核心职责
+
+1.  **SSR 服务端渲染**: 利用 Next.js App Router 和 React Server Components (RSC) 技术，直接在服务端生成首屏 HTML，确保极佳的 SEO 和加载速度。
+2.  **实时预览服务**: 为 Zeus 编辑器提供实时渲染能力，支持通过 `postMessage` 接收配置变更并即时更新视图。
+3.  **AI 校验网关**: 内置智能校验器，拦截并修正 AI 生成的错误配置。
 
 ## 架构亮点
 
-本项目采用了 **混合渲染策略 (Hybrid Rendering Strategy)**，充分利用 React Server Components (RSC) 来最小化客户端 Bundle 体积。
+### 1. 双注册表模式 (Dual Registry)
 
-### 1. 引擎 (Engine) vs 组件 (Widgets)
-我们将 "引擎" (核心逻辑) 与 "组件" (业务组件) 严格分离。
-- **`src/lib/engine`**: 包含递归渲染逻辑、类型定义和注册表辅助函数。它对具体的业务逻辑一无所知。
-- **`src/widgets`**: 包含实际的 UI 组件 (Text, Image, Tab 等) 作为一等公民。
+为了平衡 RSC 的高性能与 Client Component 的交互性，我们将组件注册表分为两部分：
 
-### 2. 双注册系统 (Dual Registry System)
-我们将组件注册表分为两部分，以强制分离关注点：
+-   **ServerRegistry**: 包含 RSC 组件（如 Markdown、CodeBlock），在服务端执行重逻辑（文件读取、语法高亮），输出纯 HTML。
+-   **ClientRegistry**: 包含交互组件（如 Carousel、Tab）和 RSC 的客户端回退（Fallback），通过 `next/dynamic` 动态加载，减小 Bundle 体积。
 
-- **`widgets/server-registry.tsx`**: 包含无状态的 RSC (Text, Image)。这些组件在服务器上渲染为静态 HTML。除了交互包装器外，不会向客户端发送任何 JS。
-- **`widgets/client-registry.tsx`**: 包含交互式 Client Components (Tab, Shelf)。这些组件在客户端进行水合 (Hydrate)。
+### 2. Zod Schema 驱动
 
-### 3. 递归渲染引擎 (Recursive Rendering Engine)
-- **`ServerRecursiveRenderer`**: 根入口点 (RSC)。
-- **`ClientRecursiveRenderer`**: 用于交互式容器 (如 Tab) 内部，在浏览器中动态渲染嵌套子组件。
+每个组件都必须定义严格的 `schema.ts`。这不仅用于运行时校验，还用于生成 AI 操作手册 (`agent-manual.md`) 和编辑器表单。
 
-### 4. 状态管理 (Context)
-- **业务上下文**: 位于 `src/context/` (例如 `LocaleContext`)。
-- **Providers**: 集中在 `src/providers/index.tsx` 中，避免弄乱 `page.tsx`。
-- **RSC 消费**: Server Components 不能直接消费 Context。使用 **客户端包装器模式 (Client Wrapper Pattern)** (如 `Text` 内部的 `LocaleBadge`) 将依赖 Context 的 UI 注入到静态 Server Components 中。
+### 3. AI 反馈闭环
 
-### 5. 代码即 Agent 管道 (Code-to-Agent Pipeline)
-我们将 **代码视为唯一的真理来源 (Single Source of Truth)**。
-- 运行 `pnpm run gen:docs` 扫描 Zod Schemas。
-- 它会生成 `knowledge/agent-manual.md`，这是一份完美的文档文件，可直接喂给 LLM Agents (Dify/GPT)。
-
-## 使用方法
-
-### 开发环境
-```bash
-pnpm dev
-```
-
-### 生成 Agent 文档
-```bash
-pnpm run gen:docs
-```
+内置 `validator.ts` 工具，能够将配置错误转化为 AI 可读的中文报告（例如：`字段 'color' 无效: 期望字符串...`），从而支持 AI Agent 的自我修正流程。
 
 ## 目录结构
-```
+
+```bash
 src/
-  app/                    # Next.js App Router
-  lib/
-    engine/               # 核心低代码引擎
-      renderer/
-        ServerRecursiveRenderer.tsx
-        ClientRecursiveRenderer.tsx
-        ServerFloorItem.tsx
-      types.ts
-      utils.tsx
-  widgets/                # 业务组件 (顶层)
-    Image/
-    Text/
-    Tab/
-    Shelf/
-    Button/
-    Video/
-    Carousel/
-    Spacer/
-    server-registry.tsx
-    client-registry.tsx
-    full-registry.ts
-  context/                # 全局上下文 (语言, 主题)
-  providers/              # 应用层 Providers
-knowledge/                # AI 知识库 (自动生成)
-  agent-manual.md
-scripts/
-  generate-agent-docs.ts  # 知识库生成器
+├── widgets/           # 组件库 (每个组件包含 index.tsx 和 schema.ts)
+├── lib/
+│   ├── engine/        # 渲染引擎核心
+│   │   ├── renderer/  # 递归渲染器 (Client/Server)
+│   │   └── validator.ts # AI 配置校验器
+├── context/           # 依赖注入上下文
+└── app/               # Next.js 路由
 ```

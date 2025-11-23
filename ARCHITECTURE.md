@@ -46,6 +46,16 @@ Genesis 不仅仅是一个前端组件库，它是一套专为 **Server-Driven U
     *   这使得 AI 能够进行“自我修正”，从而实现真正意义上的智能自动化配置。
     *   **基础设施支持**: 我们在 `src/lib/engine/validator.ts` 中内置了专用的校验工具 `validateFloorConfig`，它能生成 AI 可读的中文错误报告（例如：`字段 'action' 无效: 期望 'backToTop'，实际收到 'jump'`），直接作为 Prompt 反馈给 Agent。
 
+### 4. 编辑器引擎：Schema-Driven AutoForm
+
+Zeus 编辑器的核心引擎 `AutoForm` 是本架构灵活性的集大成者。它将“写编辑器 UI”这个繁琐的命令式编程工作，转化为了“定义数据结构”的声明式工作。
+
+*   **开发效率倍增**: 每当我们想增加一个新组件，只需要在 Hercules 中定义一次 Zod Schema。Zeus 编辑器会自动根据 Schema 生成对应的属性编辑面板。无需任何额外的 React 表单代码。
+*   **完美的人机协同**:
+    *   `AutoForm` 证明了我们的架构是完全基于结构化数据的。
+    *   AI 生成的 JSON 可以直接被 AutoForm 渲染回显；人类在 AutoForm 里的修改也能生成符合 Schema 的 JSON。
+    *   这为 **"AI 初稿 -> 人工微调"** 的高效工作流提供了坚实的技术基础。
+
 ---
 
 ## 总结

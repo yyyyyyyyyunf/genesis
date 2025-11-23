@@ -58,6 +58,17 @@ Zeus 编辑器的核心引擎 `AutoForm` 是本架构灵活性的集大成者。
 
 ---
 
+## 子系统架构详解 (Sub-system Architecture)
+
+为了更深入地了解各个子系统的具体实现细节，请查阅以下专门文档：
+
+*   **Hercules (渲染引擎)**: [Hercules Architecture Guide](./apps/hercules/ARCHITECTURE.md)
+    *   包含：双注册表模式 (Dual Registry Pattern)、混合渲染策略、Validator 基础设施细节。
+*   **Zeus (可视化编辑器)**: [Zeus Architecture Guide](./apps/zeus/ARCHITECTURE.md)
+    *   包含：AutoForm 引擎内部原理、Host Bridge 通信协议、编辑器状态管理模式。
+
+---
+
 ## 总结
 
 Genesis 架构通过将 **TypeScript 类型安全**、**React Server Components 性能优势** 与 **AI Agent 的生成能力** 深度融合，构建了一个既适合人类工程师维护，又适合 AI 智能操作的下一代前端平台。

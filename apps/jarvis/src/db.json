@@ -23,6 +23,17 @@
     }
   },
   {
+    "id": "floor_countdown_section",
+    "type": 12,
+    "alias": "活动倒计时",
+    "data": {
+      "targetDate": "2025-12-31T23:59:59.000Z",
+      "textColor": "text-red-600",
+      "backgroundColor": "bg-yellow-50",
+      "endMessage": "本期特惠已结束"
+    }
+  },
+  {
     "id": "floor_2",
     "type": 1,
     "alias": "副标题",
@@ -144,7 +155,7 @@
                 "color": "text-red-600"
               }
             },
-             {
+            {
               "id": "floor_cn_shelf",
               "type": 3,
               "data": {
@@ -183,26 +194,36 @@
     }
   },
   {
-    "id": "floor_spacer_promo",
-    "type": 8,
-    "alias": "间距 20px",
+    "id": "floor_divider_1",
+    "type": 14,
+    "alias": "分割线",
     "data": {
-      "height": 20,
-      "backgroundColor": "bg-gray-100"
+      "style": "dashed",
+      "color": "border-gray-300",
+      "thickness": 2,
+      "margin": 24
     }
   },
   {
-    "id": "floor_action_btn",
-    "type": 5,
-    "alias": "主要行动按钮",
+    "id": "floor_accordion_faq",
+    "type": 10,
+    "alias": "常见问题",
     "data": {
-      "text": "立即预订",
-      "variant": "solid",
-      "size": "lg",
-      "color": "bg-blue-600",
-      "radius": "full",
-      "fullWidth": false,
-      "link": "https://www.trip.com"
+      "allowMultiple": false,
+      "items": [
+        {
+          "title": "如何预订机票？",
+          "content": "您可以在我们的首页输入出发地和目的地，选择日期后点击搜索即可。"
+        },
+        {
+          "title": "退改签政策是怎样的？",
+          "content": "不同的机票有不同的退改签规则，请在预订详情页查看具体条款。"
+        },
+        {
+          "title": "能否预订接送机服务？",
+          "content": "可以，在订单填写页面您可以勾选接送机服务选项。"
+        }
+      ]
     }
   },
   {
@@ -216,10 +237,137 @@
       "showArrows": true,
       "showDots": true,
       "items": [
-        { "image": "https://placehold.co/800x266/ff9900/ffffff?text=Spring+Sale", "alt": "Spring Sale" },
-        { "image": "https://placehold.co/800x266/00cc99/ffffff?text=New+Routes", "alt": "New Routes" },
-        { "image": "https://placehold.co/800x266/cc33ff/ffffff?text=VIP+Lounge", "alt": "VIP Lounge" }
+        {
+          "image": "https://placehold.co/800x266/ff9900/ffffff?text=Spring+Sale",
+          "alt": "Spring Sale"
+        },
+        {
+          "image": "https://placehold.co/800x266/00cc99/ffffff?text=New+Routes",
+          "alt": "New Routes"
+        },
+        {
+          "image": "https://placehold.co/800x266/cc33ff/ffffff?text=VIP+Lounge",
+          "alt": "VIP Lounge"
+        }
       ]
+    }
+  },
+  {
+    "id": "floor_users_title",
+    "type": 1,
+    "alias": "用户标题",
+    "data": {
+      "content": "超过 10,000+ 用户选择了我们",
+      "align": "center",
+      "size": "lg",
+      "color": "text-gray-700"
+    }
+  },
+  {
+    "id": "floor_avatar_group",
+    "type": 13,
+    "alias": "用户头像组",
+    "data": {
+      "images": [
+        "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
+        "https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka",
+        "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
+        "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+        "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
+        "https://api.dicebear.com/7.x/avataaars/svg?seed=Frank"
+      ],
+      "size": "md",
+      "max": 5
+    }
+  },
+  {
+    "id": "floor_divider_2",
+    "type": 14,
+    "alias": "底部分割线",
+    "data": {
+      "style": "solid",
+      "color": "border-gray-200",
+      "thickness": 1,
+      "margin": 32
+    }
+  },
+  {
+    "id": "floor_contact_form",
+    "type": 11,
+    "alias": "联系表单",
+    "data": {
+      "title": "订阅我们的最新信息",
+      "description": "获取最新的旅游资讯和独家优惠。",
+      "submitText": "立即订阅",
+      "successMessage": "订阅成功！感谢您的关注。",
+      "fields": [
+        {
+          "label": "您的称呼",
+          "name": "name",
+          "type": "text",
+          "placeholder": "怎么称呼您？",
+          "required": true
+        },
+        {
+          "label": "电子邮箱",
+          "name": "email",
+          "type": "email",
+          "placeholder": "your@email.com",
+          "required": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "floor_8_1763869537136",
+    "type": 8,
+    "data": {
+      "height": 40
+    },
+    "alias": "间隔"
+  },
+  {
+    "id": "floor_bottom_nav",
+    "type": 18,
+    "alias": "底部导航",
+    "data": {
+      "activeColor": "text-purple-600",
+      "backgroundColor": "bg-white",
+      "items": [
+        {
+          "label": "首页",
+          "icon": "Home",
+          "link": "#home",
+          "activeIcon": "Home"
+        },
+        {
+          "label": "分类",
+          "icon": "LayoutGrid",
+          "link": "#category"
+        },
+        {
+          "label": "购物车",
+          "icon": "ShoppingCart",
+          "link": "#cart"
+        },
+        {
+          "label": "我的",
+          "icon": "User",
+          "link": "#profile"
+        }
+      ]
+    }
+  },
+  {
+    "id": "floor_back_to_top",
+    "type": 19,
+    "alias": "回到顶部",
+    "data": {
+      "icon": "ArrowUp",
+      "action": "backToTop",
+      "position": "bottom-right",
+      "bottomOffset": 80,
+      "color": "bg-orange-500 text-white shadow-orange-200"
     }
   }
 ]

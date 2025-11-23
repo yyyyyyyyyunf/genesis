@@ -15,6 +15,8 @@ import { DividerSchema } from './Divider/schema';
 import { MarkdownSchema } from './Markdown/schema';
 import { CodeBlockSchema } from './CodeBlock/schema';
 import { StaticChartSchema } from './StaticChart/schema';
+import { BottomNavigationSchema } from './BottomNavigation/schema';
+import { FloatButtonSchema } from './FloatButton/schema';
 
 export const SchemaRegistry = {
   Text: TextSchema,
@@ -34,4 +36,6 @@ export const SchemaRegistry = {
   Markdown: MarkdownSchema,
   CodeBlock: CodeBlockSchema,
   StaticChart: StaticChartSchema,
+  BottomNavigation: BottomNavigationSchema,
+  FloatButton: FloatButtonSchema,
 };

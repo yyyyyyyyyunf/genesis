@@ -139,14 +139,19 @@
 - **link** (可选)
   - **中文名**: 跳转链接
   - 类型: `string`
-  - 描述: 点击按钮后的跳转地址
+  - 描述: 点击按钮后的跳转地址 (优先级高于点击提示)
+
+- **clickMessage** (可选)
+  - **中文名**: 点击提示
+  - 类型: `string`
+  - 描述: 点击按钮时弹出的提示文字 (仅在无跳转链接时生效)
 
 - **variant** (可选)
   - **中文名**: 样式变体
   - 类型: `enum`
-  - 选项: `solid`, `outline`, `ghost`
+  - 选项: `solid`, `outline`, `ghost`, `link`
   - 默认值: `"solid"`
-  - 描述: 按钮的视觉样式
+  - 描述: solid(实心), outline(描边), ghost(幽灵), link(链接)
 
 - **size** (可选)
   - **中文名**: 尺寸
@@ -173,6 +178,12 @@
   - 类型: `boolean`
   - 默认值: `false`
   - 描述: 是否占满容器宽度
+
+- **showArrow** (可选)
+  - **中文名**: 显示箭头
+  - 类型: `boolean`
+  - 默认值: `false`
+  - 描述: 是否在文字后显示箭头图标
 
 ---
 
@@ -280,6 +291,302 @@
   - 类型: `string`
   - 默认值: `"bg-transparent"`
   - 描述: 间距的背景颜色 (Hex 或 Tailwind 类)
+
+---
+
+## 组件: Feed - 信息流 (Type ID: 9)
+
+### 属性 (Properties)
+
+- **items** (必填)
+  - **中文名**: 内容列表
+  - 类型: `array`
+  - 描述: 信息流中的内容项列表
+
+- **layout** (可选)
+  - **中文名**: 布局模式
+  - 类型: `enum`
+  - 选项: `list`, `card`
+  - 默认值: `"list"`
+  - 描述: 展示方式，list (列表) 或 card (卡片)
+
+- **columns** (可选)
+  - **中文名**: 列数
+  - 类型: `number`
+  - 默认值: `2`
+  - 描述: 卡片布局下的列数 (仅在 layout="card" 时生效)
+
+---
+
+## 组件: Accordion - 折叠面板 (Type ID: 10)
+
+### 属性 (Properties)
+
+- **items** (可选)
+  - 类型: `array`
+  - 默认值: `[{"title":"FAQ 1","content":"Answer to FAQ 1"}]`
+  - 描述: 折叠项列表
+
+- **allowMultiple** (可选)
+  - 类型: `boolean`
+  - 默认值: `false`
+  - 描述: 允许多个展开
+
+---
+
+## 组件: Form - 表单 (Type ID: 11)
+
+### 属性 (Properties)
+
+- **title** (可选)
+  - 类型: `string`
+  - 默认值: `"联系我们"`
+  - 描述: 表单标题
+
+- **description** (可选)
+  - 类型: `string`
+  - 描述: 表单描述
+
+- **fields** (可选)
+  - 类型: `array`
+  - 默认值: `[{"label":"姓名","name":"name","type":"text","placeholder":"请输入您的姓名","required":true},{"label":"邮箱","name":"email","type":"email","placeholder":"请输入您的邮箱","required":true}]`
+  - 描述: 字段列表
+
+- **submitText** (可选)
+  - 类型: `string`
+  - 默认值: `"提交"`
+  - 描述: 提交按钮文案
+
+- **successMessage** (可选)
+  - 类型: `string`
+  - 默认值: `"提交成功！我们会尽快联系您。"`
+  - 描述: 提交成功提示
+
+---
+
+## 组件: Countdown - 倒计时 (Type ID: 12)
+
+### 属性 (Properties)
+
+- **targetDate** (可选)
+  - 类型: `string`
+  - 默认值: `"2025-11-24T03:51:47.696Z"`
+  - 描述: 目标时间 (ISO格式)
+
+- **textColor** (可选)
+  - 类型: `string`
+  - 默认值: `"text-gray-900"`
+  - 描述: 文字颜色 (Tailwind 类)
+
+- **backgroundColor** (可选)
+  - 类型: `string`
+  - 默认值: `"bg-white"`
+  - 描述: 背景颜色 (Tailwind 类)
+
+- **endMessage** (可选)
+  - 类型: `string`
+  - 默认值: `"活动已结束"`
+  - 描述: 结束文案
+
+---
+
+## 组件: AvatarGroup - 头像组 (Type ID: 13)
+
+### 属性 (Properties)
+
+- **images** (可选)
+  - 类型: `array`
+  - 默认值: `["https://api.dicebear.com/7.x/avataaars/svg?seed=Felix","https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka","https://api.dicebear.com/7.x/avataaars/svg?seed=Bob"]`
+  - 描述: 头像链接列表
+
+- **size** (可选)
+  - 类型: `enum`
+  - 选项: `sm`, `md`, `lg`
+  - 默认值: `"md"`
+  - 描述: 尺寸
+
+- **max** (可选)
+  - 类型: `number`
+  - 默认值: `5`
+  - 描述: 最大显示数量
+
+---
+
+## 组件: Divider - 分割线 (Type ID: 14)
+
+### 属性 (Properties)
+
+- **style** (可选)
+  - 类型: `enum`
+  - 选项: `solid`, `dashed`, `dotted`
+  - 默认值: `"solid"`
+  - 描述: 样式
+
+- **color** (可选)
+  - 类型: `string`
+  - 默认值: `"border-gray-200"`
+  - 描述: 颜色 (Tailwind 类)
+
+- **thickness** (可选)
+  - 类型: `number`
+  - 默认值: `1`
+  - 描述: 粗细 (px)
+
+- **margin** (可选)
+  - 类型: `number`
+  - 默认值: `20`
+  - 描述: 上下间距 (px)
+
+---
+
+## 组件: Markdown - Markdown (Type ID: 15)
+
+### 属性 (Properties)
+
+- **content** (可选)
+  - **中文名**: 内容
+  - 类型: `string`
+  - 默认值: `"# 你好\n这是一个 Markdown 组件示例。"`
+  - 描述: Markdown 格式的文本内容
+
+- **className** (可选)
+  - **中文名**: 样式类名
+  - 类型: `string`
+  - 默认值: `"prose prose-slate max-w-none"`
+  - 描述: 额外的 CSS 类名
+
+---
+
+## 组件: CodeBlock - 代码块 (Type ID: 16)
+
+### 属性 (Properties)
+
+- **code** (可选)
+  - **中文名**: 代码
+  - 类型: `string`
+  - 默认值: `"console.log(\"Hello World\");"`
+  - 描述: 需要高亮的代码内容
+
+- **language** (可选)
+  - **中文名**: 语言
+  - 类型: `string`
+  - 默认值: `"typescript"`
+  - 描述: 代码语言 (如 typescript, python, html)
+
+- **theme** (可选)
+  - **中文名**: 主题
+  - 类型: `string`
+  - 默认值: `"github-dark"`
+  - 描述: 代码高亮主题 (如 github-dark, dracula)
+
+---
+
+## 组件: StaticChart - 静态图表 (Type ID: 17)
+
+### 属性 (Properties)
+
+- **title** (可选)
+  - **中文名**: 标题
+  - 类型: `string`
+  - 默认值: `"月度数据"`
+  - 描述: 图表标题
+
+- **type** (可选)
+  - **中文名**: 类型
+  - 类型: `enum`
+  - 选项: `bar`, `line`
+  - 默认值: `"bar"`
+  - 描述: 图表类型 (柱状图/折线图)
+
+- **data** (可选)
+  - **中文名**: 数据
+  - 类型: `array`
+  - 默认值: `[10,25,15,30,45,20]`
+  - 描述: 数值数组
+
+- **labels** (可选)
+  - **中文名**: 标签
+  - 类型: `array`
+  - 默认值: `["1月","2月","3月","4月","5月","6月"]`
+  - 描述: X轴标签数组
+
+- **color** (可选)
+  - **中文名**: 颜色
+  - 类型: `string`
+  - 默认值: `"#3b82f6"`
+  - 描述: 图表颜色 (Hex)
+
+- **height** (可选)
+  - **中文名**: 高度
+  - 类型: `number`
+  - 默认值: `200`
+  - 描述: 图表高度 (px)
+
+---
+
+## 组件: BottomNavigation - 底部导航 (Type ID: 18)
+
+### 属性 (Properties)
+
+- **items** (必填)
+  - **中文名**: 导航项
+  - 类型: `array`
+  - 描述: 底部导航按钮列表
+
+- **activeColor** (可选)
+  - **中文名**: 选中颜色
+  - 类型: `string`
+  - 默认值: `"text-blue-600"`
+  - 描述: 选中状态的颜色 (Tailwind类)
+
+- **backgroundColor** (可选)
+  - **中文名**: 背景颜色
+  - 类型: `string`
+  - 默认值: `"bg-white"`
+  - 描述: 导航栏背景颜色 (Tailwind类)
+
+---
+
+## 组件: FloatButton - 悬浮按钮 (Type ID: 19)
+
+### 属性 (Properties)
+
+- **icon** (可选)
+  - **中文名**: 图标
+  - 类型: `string`
+  - 默认值: `"ArrowUp"`
+  - 描述: Lucide图标名称
+
+- **action** (可选)
+  - **中文名**: 动作
+  - 类型: `enum`
+  - 选项: `backToTop`, `link`, `custom`
+  - 默认值: `"backToTop"`
+  - 描述: 点击按钮触发的行为
+
+- **link** (可选)
+  - **中文名**: 链接
+  - 类型: `string`
+  - 描述: 跳转地址 (仅action=link时生效)
+
+- **position** (可选)
+  - **中文名**: 位置
+  - 类型: `enum`
+  - 选项: `bottom-right`, `bottom-left`
+  - 默认值: `"bottom-right"`
+  - 描述: 按钮位置
+
+- **bottomOffset** (可选)
+  - **中文名**: 底部偏移
+  - 类型: `number`
+  - 默认值: `100`
+  - 描述: 距离底部的距离 (px)
+
+- **color** (可选)
+  - **中文名**: 颜色
+  - 类型: `string`
+  - 默认值: `"bg-blue-600 text-white"`
+  - 描述: 按钮颜色 (Tailwind类)
 
 ---
 

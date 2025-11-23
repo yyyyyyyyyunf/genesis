@@ -35,4 +35,7 @@ export const ClientRegistry: Record<string, React.ComponentType<FloorComponentPr
   // --- RSC Fallbacks (Client Versions) ---
   Markdown: dynamicClientFloor(() => import('./Markdown/client').then(mod => mod.MarkdownClient)),
   CodeBlock: dynamicClientFloor(() => import('./CodeBlock/client').then(mod => mod.CodeBlockClient)),
+
+  BottomNavigation: dynamicClientFloor(() => import('./BottomNavigation').then(mod => mod.BottomNavigation)),
+  FloatButton: dynamicClientFloor(() => import('./FloatButton').then(mod => mod.FloatButton)),
 };

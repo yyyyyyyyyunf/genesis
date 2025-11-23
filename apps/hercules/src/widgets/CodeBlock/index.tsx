@@ -15,8 +15,8 @@ export const CodeBlock = async ({ data }: { data: CodeBlockProps }) => {
       theme: theme
     });
   } catch (e) {
-    // Fallback if language is not supported or error occurs
-    console.error('Shiki highlighting error:', e);
+    // 如果语言不支持或发生错误，则回退到普通显示
+    console.error('Shiki 高亮错误:', e);
     html = `<pre><code>${code}</code></pre>`;
   }
 

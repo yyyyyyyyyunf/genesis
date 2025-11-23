@@ -11,7 +11,7 @@ export const StaticChart = ({ data }: { data: StaticChartProps }) => {
   const count = values.length;
   const padding = 20;
   const chartHeight = height - padding * 2;
-  const width = 600; // Fixed viewbox width
+  const width = 600; // 固定视图宽度
   const chartWidth = width - padding * 2;
   const barWidth = (chartWidth / count) * 0.6;
   const stepX = chartWidth / (count - 1 || 1);
@@ -25,7 +25,7 @@ export const StaticChart = ({ data }: { data: StaticChartProps }) => {
           className="w-full h-auto"
           preserveAspectRatio="none"
         >
-          {/* Grid lines */}
+          {/* 网格线 */}
           <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="#e5e7eb" strokeWidth="1" />
           <line x1={padding} y1={padding} x2={padding} y2={height - padding} stroke="#e5e7eb" strokeWidth="1" />
 

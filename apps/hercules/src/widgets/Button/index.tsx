@@ -49,23 +49,23 @@ export const Button = (props: { data: ButtonProps }) => {
   const radiusClass = radiusStyles[radius] || radiusStyles.md;
   const widthClass = fullWidth ? 'w-full flex' : '';
 
-  // Improved color handling
+  // 改进的颜色处理
   let colorClass = '';
   let borderClass = '';
   
-  // Extract base color name if possible (very basic heuristic)
+  // 尽可能提取基础颜色名称 (非常基础的启发式)
   const baseColorMatch = color.match(/(?:bg|text|border)-([a-z]+)-(\d+)/);
   const baseColorName = baseColorMatch ? baseColorMatch[1] : 'blue';
   
   if (variant === 'solid') {
-    colorClass = color; // Expecting bg-class
+    colorClass = color; // 期望是 bg- 类名
   } else if (variant === 'outline') {
-    // If input is bg-blue-600, we want text-blue-600 and border-blue-600
+    // 如果输入是 bg-blue-600，我们需要 text-blue-600 和 border-blue-600
     if (color.startsWith('bg-')) {
         const textColor = color.replace('bg-', 'text-');
         const borderColor = color.replace('bg-', 'border-');
         colorClass = `${textColor} ${borderColor}`;
-        // Add a subtle background on hover
+        // 添加鼠标悬停时的微弱背景色
         const hoverBg = `hover:bg-${baseColorName}-50`;
         colorClass += ` ${hoverBg}`;
     } else {

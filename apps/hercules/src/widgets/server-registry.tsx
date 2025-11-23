@@ -9,6 +9,8 @@ import { Divider } from './Divider';
 import { Markdown } from './Markdown';
 import { CodeBlock } from './CodeBlock';
 import { StaticChart } from './StaticChart';
+import { BottomNavigation } from './BottomNavigation';
+import { FloatButton } from './FloatButton';
 import { FloorComponentProps } from '@/lib/engine/types';
 
 // Server Registry - 用于可以作为 RSC 渲染的组件
@@ -28,4 +30,6 @@ export const ServerRegistry: Record<string, React.ComponentType<FloorComponentPr
   Markdown,
   CodeBlock,
   StaticChart,
+  BottomNavigation,
+  FloatButton,
 };

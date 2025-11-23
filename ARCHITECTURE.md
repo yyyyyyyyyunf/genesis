@@ -44,10 +44,10 @@ Genesis 不仅仅是一个前端组件库，它是一套专为 **Server-Driven U
 *   **闭环反馈 (Feedback Loop)**
     *   架构支持将运行时错误反馈给 AI。当 AI 生成了错误的 JSON 配置被 Zod 拦截时，系统可以将具体的错误信息（如 `data.color 格式不正确`）返回给 AI。
     *   这使得 AI 能够进行“自我修正”，从而实现真正意义上的智能自动化配置。
+    *   **基础设施支持**: 我们在 `src/lib/engine/validator.ts` 中内置了专用的校验工具 `validateFloorConfig`，它能生成 AI 可读的中文错误报告（例如：`字段 'action' 无效: 期望 'backToTop'，实际收到 'jump'`），直接作为 Prompt 反馈给 Agent。
 
 ---
 
 ## 总结
 
 Genesis 架构通过将 **TypeScript 类型安全**、**React Server Components 性能优势** 与 **AI Agent 的生成能力** 深度融合，构建了一个既适合人类工程师维护，又适合 AI 智能操作的下一代前端平台。
-

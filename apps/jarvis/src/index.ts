@@ -6,8 +6,12 @@ import path from 'node:path'
 
 const app = new Hono()
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',') 
+  : ['http://localhost:3000', 'http://localhost:3001'];
+
 app.use('/*', cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: allowedOrigins,
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
   exposeHeaders: ['Content-Length'],
@@ -47,11 +51,10 @@ app.post('/api/page-config', async (c) => {
   return c.json({ success: true, message: '配置保存成功' })
 })
 
-const port = 3002
+const port = Number(process.env.PORT) || 3002
 console.log(`服务运行在端口 ${port}`)
 
 serve({
   fetch: app.fetch,
   port
 })
-

@@ -12,6 +12,9 @@ import { FormSchema } from './Form/schema';
 import { CountdownSchema } from './Countdown/schema';
 import { AvatarGroupSchema } from './AvatarGroup/schema';
 import { DividerSchema } from './Divider/schema';
+import { MarkdownSchema } from './Markdown/schema';
+import { CodeBlockSchema } from './CodeBlock/schema';
+import { StaticChartSchema } from './StaticChart/schema';
 
 export const SchemaRegistry = {
   Text: TextSchema,
@@ -28,4 +31,7 @@ export const SchemaRegistry = {
   Countdown: CountdownSchema,
   AvatarGroup: AvatarGroupSchema,
   Divider: DividerSchema,
+  Markdown: MarkdownSchema,
+  CodeBlock: CodeBlockSchema,
+  StaticChart: StaticChartSchema,
 };

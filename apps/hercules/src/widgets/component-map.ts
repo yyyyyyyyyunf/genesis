@@ -13,6 +13,9 @@ export const COMPONENT_MAP: Record<number, { name: string; label: string }> = {
   12: { name: 'Countdown', label: '倒计时' },
   13: { name: 'AvatarGroup', label: '头像组' },
   14: { name: 'Divider', label: '分割线' },
+  15: { name: 'Markdown', label: 'Markdown' },
+  16: { name: 'CodeBlock', label: '代码块' },
+  17: { name: 'StaticChart', label: '静态图表' },
 };
 
 export const COMPONENT_CODES: Record<number, string> = Object.entries(COMPONENT_MAP).reduce((acc, [code, { name }]) => {

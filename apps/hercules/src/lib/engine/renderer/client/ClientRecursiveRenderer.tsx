@@ -1,22 +1,24 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import { FullRegistry } from '@/widgets/full-registry';
 import { Floor } from '../../types';
 import { getComponentKey } from '@/widgets/component-map';
+import { useRegistry } from '@/context/RegistryContext';
 
 interface ClientRecursiveRendererProps {
   floors: Floor[];
 }
 
 export const ClientRecursiveRenderer = ({ floors }: ClientRecursiveRendererProps) => {
+  const registry = useRegistry();
+
   if (!floors || floors.length === 0) return null;
 
   return (
     <>
       {floors.map((floor) => {
         const componentKey = getComponentKey(floor.type);
-        const Component = componentKey ? FullRegistry[componentKey] : undefined;
+        const Component = componentKey ? registry[componentKey] : undefined;
 
         if (!Component) {
           return (

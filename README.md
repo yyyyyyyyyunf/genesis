@@ -8,6 +8,7 @@ Genesis 架构通过将 **SDUI (Server-Driven UI)**、**React Server Components 
 
 - **健壮性 (Robustness)**: 基于 Zod Schema 的全链路强校验，彻底杜绝非法配置导致的页面崩溃。
 - **AI 友好性 (AI-Ready)**: 代码即文档 (Schema as Prompt)，自动生成 AI 操作手册；内置反馈闭环，让 AI 具备自我修正能力。
+- **研发效能 (Efficiency)**: "Schema 驱动一切"，一套类型定义同时生成校验逻辑、AI Prompt 和编辑器 UI (AutoForm)，新增组件零样板代码。
 - **高性能 (Performance)**: 创新的双注册表模式 (Dual Registry)，实现 RSC 服务端直出与客户端轻量交互的完美平衡。
 
 👉 *详细架构设计请参阅 [架构白皮书](./ARCHITECTURE.md)*

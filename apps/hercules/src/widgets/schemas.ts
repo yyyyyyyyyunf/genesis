@@ -6,6 +6,12 @@ import { ButtonSchema } from './Button/schema';
 import { VideoSchema } from './Video/schema';
 import { CarouselSchema } from './Carousel/schema';
 import { SpacerSchema } from './Spacer/schema';
+import { FeedSchema } from './Feed/schema';
+import { AccordionSchema } from './Accordion/schema';
+import { FormSchema } from './Form/schema';
+import { CountdownSchema } from './Countdown/schema';
+import { AvatarGroupSchema } from './AvatarGroup/schema';
+import { DividerSchema } from './Divider/schema';
 
 export const SchemaRegistry = {
   Text: TextSchema,
@@ -16,4 +22,10 @@ export const SchemaRegistry = {
   Video: VideoSchema,
   Carousel: CarouselSchema,
   Spacer: SpacerSchema,
+  Feed: FeedSchema,
+  Accordion: AccordionSchema,
+  Form: FormSchema,
+  Countdown: CountdownSchema,
+  AvatarGroup: AvatarGroupSchema,
+  Divider: DividerSchema,
 };

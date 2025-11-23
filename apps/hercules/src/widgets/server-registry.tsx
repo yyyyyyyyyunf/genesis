@@ -3,6 +3,9 @@ import { Text } from './Text';
 import { Image } from './Image';
 import { Video } from './Video';
 import { Spacer } from './Spacer';
+import { Feed } from './Feed';
+import { AvatarGroup } from './AvatarGroup';
+import { Divider } from './Divider';
 import { FloorComponentProps } from '@/lib/engine/types';
 
 // Server Registry - 用于可以作为 RSC 渲染的组件
@@ -19,4 +22,7 @@ export const ServerRegistry: Record<string, React.ComponentType<FloorComponentPr
   Image,
   Video,
   Spacer,
+  Feed,
+  AvatarGroup,
+  Divider,
 };

@@ -15,4 +15,10 @@ export const ClientRegistry: Record<string, React.ComponentType<FloorComponentPr
 
   // Button 为了支持 onClick 交互（如弹窗），必须是客户端组件
   Button: dynamicClientFloor(() => import('./Button').then(mod => mod.Button)),
+
+  Accordion: dynamicClientFloor(() => import('./Accordion').then(mod => mod.Accordion)),
+
+  Form: dynamicClientFloor(() => import('./Form').then(mod => mod.Form)),
+
+  Countdown: dynamicClientFloor(() => import('./Countdown').then(mod => mod.Countdown)),
 };

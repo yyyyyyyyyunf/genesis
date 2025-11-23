@@ -4,19 +4,21 @@ import React from 'react';
 import { z } from 'zod';
 import { ButtonSchema } from './schema';
 import { cn } from '@/lib/utils';
+import { ArrowRight } from 'lucide-react';
 
 type ButtonProps = z.infer<typeof ButtonSchema>;
 
 const variantStyles = {
-  solid: 'text-white border-transparent hover:opacity-90',
-  outline: 'bg-transparent border-2 hover:bg-gray-50',
-  ghost: 'bg-transparent border-transparent hover:bg-gray-100',
+  solid: 'text-white border-transparent hover:brightness-110 shadow-sm active:scale-[0.98]',
+  outline: 'bg-transparent border-2 hover:bg-opacity-10 active:scale-[0.98]',
+  ghost: 'bg-transparent border-transparent hover:bg-gray-100 hover:text-gray-900',
+  link: 'bg-transparent text-primary hover:underline underline-offset-4 p-0 h-auto',
 };
 
 const sizeStyles = {
-  sm: 'px-3 py-1.5 text-sm',
-  base: 'px-4 py-2 text-base',
-  lg: 'px-6 py-3 text-lg',
+  sm: 'px-4 py-2 text-sm gap-1.5',
+  base: 'px-6 py-3 text-base gap-2',
+  lg: 'px-8 py-4 text-lg font-semibold gap-2.5',
 };
 
 const radiusStyles = {
@@ -36,22 +38,45 @@ export const Button = (props: { data: ButtonProps }) => {
     size = 'base', 
     color = 'bg-blue-600', 
     radius = 'md', 
-    fullWidth = false 
+    fullWidth = false,
+    showArrow = false,
   } = props.data;
 
-  const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer';
+  const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer select-none';
 
-  const variantClass = variantStyles[variant];
-  const sizeClass = sizeStyles[size];
-  const radiusClass = radiusStyles[radius];
-  const widthClass = fullWidth ? 'w-full' : '';
+  const variantClass = variantStyles[variant as keyof typeof variantStyles] || variantStyles.solid;
+  const sizeClass = sizeStyles[size] || sizeStyles.base;
+  const radiusClass = radiusStyles[radius] || radiusStyles.md;
+  const widthClass = fullWidth ? 'w-full flex' : '';
 
-  let colorClass = color;
-  if (variant === 'outline' || variant === 'ghost') {
-      if (color.startsWith('bg-')) {
-          colorClass = color.replace('bg-', 'text-').replace('600', '600').replace('500', '600');
-          colorClass += ` border-${color.replace('bg-', '')}`;
-      }
+  // Improved color handling
+  let colorClass = '';
+  let borderClass = '';
+  
+  // Extract base color name if possible (very basic heuristic)
+  const baseColorMatch = color.match(/(?:bg|text|border)-([a-z]+)-(\d+)/);
+  const baseColorName = baseColorMatch ? baseColorMatch[1] : 'blue';
+  
+  if (variant === 'solid') {
+    colorClass = color; // Expecting bg-class
+  } else if (variant === 'outline') {
+    // If input is bg-blue-600, we want text-blue-600 and border-blue-600
+    if (color.startsWith('bg-')) {
+        const textColor = color.replace('bg-', 'text-');
+        const borderColor = color.replace('bg-', 'border-');
+        colorClass = `${textColor} ${borderColor}`;
+        // Add a subtle background on hover
+        const hoverBg = `hover:bg-${baseColorName}-50`;
+        colorClass += ` ${hoverBg}`;
+    } else {
+        colorClass = color;
+    }
+  } else if (variant === 'ghost') {
+     if (color.startsWith('bg-')) {
+        colorClass = color.replace('bg-', 'text-');
+     } else {
+        colorClass = color;
+     }
   }
 
   const className = cn(
@@ -59,9 +84,8 @@ export const Button = (props: { data: ButtonProps }) => {
     sizeClass,
     radiusClass,
     widthClass,
-    variant === 'solid' ? color : '',
-    variant !== 'solid' ? colorClass : '',
-    variantClass
+    variantClass,
+    colorClass
   );
 
   const handleClick = () => {
@@ -70,10 +94,17 @@ export const Button = (props: { data: ButtonProps }) => {
     }
   };
 
+  const Content = (
+    <>
+      <span>{text}</span>
+      {showArrow && <ArrowRight className="w-[1em] h-[1em]" />}
+    </>
+  );
+
   if (link) {
     return (
       <a href={link} className={className}>
-        {text}
+        {Content}
       </a>
     );
   }
@@ -84,7 +115,7 @@ export const Button = (props: { data: ButtonProps }) => {
       className={className}
       onClick={handleClick}
     >
-      {text}
+      {Content}
     </button>
   );
 };

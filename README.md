@@ -17,8 +17,8 @@ Genesis 架构通过将 **SDUI (Server-Driven UI)**、**React Server Components 
 
 本项目使用 pnpm workspace 管理，主要包含以下应用：
 
-- **apps/zeus**: 可视化编辑器 (Editor)。运营人员在此通过拖拽、配置和 AI 对话来构建页面。
-- **apps/hercules**: 渲染引擎 (Renderer)。负责将页面配置 (DSL) 渲染为最终的网页，同时提供给编辑器进行实时预览。
+- **apps/zeus**: 可视化编辑器 (Editor)。运营人员在此通过拖拽、配置和 AI 对话来构建页面，生成页面配置（DSL）。 ([📘 架构文档](./apps/zeus/ARCHITECTURE.md))
+- **apps/hercules**: 渲染引擎 (Renderer)。负责将页面配置 (DSL) 渲染为最终的网页，同时提供给编辑器进行实时预览。 ([📘 架构文档](./apps/hercules/ARCHITECTURE.md))
 - **apps/jarvis**: 后端服务 (Backend)。提供 API 接口、数据存储和 AI 代理能力。
 
 ## 环境要求

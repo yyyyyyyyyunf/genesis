@@ -6,7 +6,7 @@ export const FormSchema = z.object({
   fields: z.array(z.object({
     label: z.string().describe('字段标签'),
     name: z.string().describe('字段名(唯一标识)'),
-    type: z.enum(['text', 'email', 'tel', 'textarea']).describe('字段类型').default('text'),
+    type: z.enum(['text', 'email', 'tel', 'textarea']).describe('字段类型 @labels({"text":"文本", "email":"邮箱", "tel":"电话", "textarea":"长文本"})').default('text'),
     placeholder: z.string().optional().describe('占位符'),
     required: z.boolean().describe('是否必填').default(false),
   })).describe('字段列表').default([

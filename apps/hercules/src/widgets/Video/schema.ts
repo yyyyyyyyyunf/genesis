@@ -7,6 +7,6 @@ export const VideoSchema = z.object({
   controls: z.boolean().optional().describe('显示控制条: 是否显示播放控制条').default(true),
   loop: z.boolean().optional().describe('循环播放: 是否循环播放').default(false),
   muted: z.boolean().optional().describe('静音: 是否默认静音 (自动播放通常需要)').default(false),
-  aspectRatio: z.enum(['16/9', '4/3', '1/1', 'auto']).optional().describe('宽高比: 视频容器的宽高比').default('16/9'),
+  aspectRatio: z.enum(['16/9', '4/3', '1/1', 'auto']).optional().describe('宽高比: 视频容器的宽高比 @labels({"16/9":"宽屏", "4/3":"标准", "1/1":"方形", "auto":"自适应"})').default('16/9'),
 });
 

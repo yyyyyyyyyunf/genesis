@@ -3,14 +3,11 @@
 import React from 'react';
 import { useEditorStore } from '@/lib/store';
 import { SchemaRegistry } from '@genesis/hercules/schemas';
-import { BaseFloorSchema } from '@genesis/hercules/types';
 import { getComponentKey } from '@genesis/hercules/component-map';
-import { ZodObject } from 'zod';
-import { AutoForm, unwrapSchema } from './AutoForm';
-
+import { ZodObject, ZodDiscriminatedUnion } from 'zod';
+import { AutoForm } from './AutoForm';
 import { Trash2 } from 'lucide-react';
-
-import { findFloorNode } from '@/lib/utils';
+import { findFloorNode, getAliasLabel } from '@/lib/utils';
 
 export function PropertyInspector() {
   const { currentConfig, draftConfig, selectedFloorId, updateFloor, removeFloor } = useEditorStore();
@@ -24,23 +21,6 @@ export function PropertyInspector() {
   const componentName = getComponentKey(selectedFloor.type);
   const schema = componentName ? (SchemaRegistry as any)[componentName] : null;
 
-  const getAliasLabel = () => {
-      const aliasSchema = BaseFloorSchema.shape.alias;
-      // 尝试直接获取 description
-      let description = aliasSchema.description;
-      
-      // 如果没有，尝试 unwrap
-      if (!description) {
-         const unwrapped = unwrapSchema(aliasSchema);
-         description = unwrapped.description;
-      }
-
-      if (description && description.includes(': ')) {
-          return description.split(': ')[0];
-      }
-      // 使用明确的 Fallback 以区分
-      return description; 
-  };
   const aliasLabel = getAliasLabel();
 
   const handleUpdate = (newData: Record<string, any>) => {
@@ -78,7 +58,7 @@ export function PropertyInspector() {
       
       <hr className="my-4" />
       
-      {schema && schema instanceof ZodObject ? (
+      {schema && (schema instanceof ZodObject || schema instanceof ZodDiscriminatedUnion) ? (
         <AutoForm schema={schema} data={selectedFloor.data} onChange={handleUpdate} />
       ) : (
         <div className="text-yellow-600 text-sm">未找到 Schema 或 {componentName} 的 Schema 过于复杂</div>

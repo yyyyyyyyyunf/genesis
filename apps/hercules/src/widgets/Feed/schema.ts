@@ -11,7 +11,7 @@ export const FeedSchema = z.object({
       link: z.string().optional().describe('跳转链接: 点击内容后的跳转地址'),
     })
   ).describe('内容列表: 信息流中的内容项列表'),
-  layout: z.enum(['list', 'card']).describe('布局模式: 展示方式，list (列表) 或 card (卡片)').default('list'),
+  layout: z.enum(['list', 'card']).describe('布局模式: 展示方式，list (列表) 或 card (卡片) @labels({"list":"列表", "card":"卡片"})').default('list'),
   columns: z.number().min(1).max(4).optional().describe('列数: 卡片布局下的列数 (仅在 layout="card" 时生效)').default(2),
 });
 

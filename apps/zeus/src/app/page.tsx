@@ -113,7 +113,7 @@ export default function Home() {
         </div>
 
         {/* 3. 右侧面板：编辑器和 AI */}
-        <div className="w-[800px] h-full flex flex-col flex-none border-l border-gray-200 bg-white transition-all duration-300 ease-in-out">
+        <div className="w-[60vw] h-full flex flex-col flex-none border-l border-gray-200 bg-white transition-all duration-300 ease-in-out">
           
           {/* 顶部标题栏 & 工具栏 */}
           <div className="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-4 flex-none">

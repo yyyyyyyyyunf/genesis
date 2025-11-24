@@ -15,6 +15,7 @@
     "type": 2,
     "alias": "活动Banner",
     "data": {
+      "variant": "content",
       "src": "https://placehold.co/800x450/0ea5e9/ffffff?text=Summer+Vacation",
       "alt": "Summer Vacation Banner",
       "aspectRatio": "16/9",

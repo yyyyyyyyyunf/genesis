@@ -1,17 +1,172 @@
 
-import { PageConfig, Floor } from '@genesis/hercules/types';
+import { PageConfig, Floor, BaseFloorSchema } from '@genesis/hercules/types';
+import { ZodType, ZodOptional, ZodDefault } from 'zod';
 
 /**
- * 递归在配置树中通过 ID 查找楼层节点。
- * 如果找到则返回节点，否则返回 null。
- * 目前仅用于查找，也可以扩展为返回路径或父节点。
+ * 解包 ZodOptional 和 ZodDefault 以获取底层类型
+ */
+export function unwrapSchema(schema: ZodType): ZodType {
+  if (schema instanceof ZodOptional) {
+    return unwrapSchema(schema.unwrap() as ZodType);
+  }
+  if (schema instanceof ZodDefault) {
+    return unwrapSchema(schema.removeDefault() as ZodType);
+  }
+  return schema;
+}
+
+export interface SchemaMetadata {
+  label: string | undefined;
+  description: string | undefined;
+  unit: string | undefined;
+  enumLabels: Record<string, string> | undefined;
+  defaultValue: string | undefined;
+  literalLabels?: Record<string, string>; // Discriminated Union 的字面量选项标签
+}
+
+export function getSchemaMeta(schema: ZodType, defaultLabel?: string): SchemaMetadata {
+  let current: ZodType | null = schema;
+  let fullDescription: string | undefined;
+
+  while (current) {
+      if (current.description) {
+        fullDescription = current.description;
+        break; // 找到描述就停止，通常最外层的描述最准确
+      }
+
+      // 逐层解包
+      if (current instanceof ZodOptional) {
+        current = current.unwrap() as ZodType;
+      } else if (current instanceof ZodDefault) {
+        current = current.removeDefault() as ZodType;
+      } else {
+        current = null;
+      }
+  }
+
+  if (!fullDescription) {
+    return {
+      label: defaultLabel,
+      description: undefined,
+      unit: undefined,
+      enumLabels: undefined,
+      defaultValue: undefined,
+    };
+  }
+
+  // 解析元数据
+  let label = defaultLabel;
+  let description = fullDescription;
+  let unit: string | undefined;
+  let enumLabels: Record<string, string> | undefined;
+  let defaultValue: string | undefined;
+
+  // 1. 提取标签（冒号前的部分）
+  const parts = fullDescription.split(': ');
+  if (parts.length > 0) {
+    label = parts[0];
+    if (parts.length > 1) {
+        description = parts.slice(1).join(': ');
+    }
+  }
+
+  // 2. 解析 @unit(单位)
+  const unitMatch = description?.match(/@unit\(([^)]+)\)/);
+  if (unitMatch) {
+    unit = unitMatch[1];
+    description = description?.replace(unitMatch[0], '').trim();
+  }
+
+  // 3. 解析 @labels(JSON映射)
+  const labelsMatch = description?.match(/@labels\(([^)]+)\)/);
+  if (labelsMatch) {
+    try {
+      // 尝试解析 JSON，将单引号替换为双引号
+      const jsonStr = labelsMatch[1].replace(/'/g, '"');
+      enumLabels = JSON.parse(jsonStr);
+      description = description?.replace(labelsMatch[0], '').trim();
+    } catch {
+      console.warn('无法解析 @labels 元数据:', labelsMatch[1]);
+    }
+  }
+
+  // 4. 解析 @default(默认值)
+  const defaultMatch = description?.match(/@default\(([^)]+)\)/);
+  if (defaultMatch) {
+      defaultValue = defaultMatch[1];
+      description = description?.replace(defaultMatch[0], '').trim();
+  }
+
+  return {
+    label,
+    description,
+    unit,
+    enumLabels,
+    defaultValue,
+    literalLabels: undefined,
+  };
+}
+
+/**
+ * 从 discriminated union 的各个 literal schema 中提取标签
+ * 用于在属性检查器中显示友好的选项名称
+ */
+export function getLiteralLabelsFromUnion(
+  unionOptions: any[],
+  discriminator: string
+): Record<string, string> {
+  const labels: Record<string, string> = {};
+  
+  unionOptions.forEach(opt => {
+    const shape = opt.shape;
+    const discriminatorField = shape?.[discriminator];
+    
+    if (discriminatorField) {
+      // 获取 literal 的值
+      let value: string | undefined;
+      if ('value' in discriminatorField) {
+        value = discriminatorField.value as string;
+      } else if (discriminatorField._def?.value) {
+        value = discriminatorField._def.value as string;
+      }
+      
+      if (value) {
+        // 尝试从 description 中提取标签
+        const meta = getSchemaMeta(discriminatorField);
+        if (meta.label) {
+          labels[value] = meta.label;
+        }
+      }
+    }
+  });
+  
+  return labels;
+}
+
+// 保持向后兼容性，但在 AutoForm 中应优先使用 getSchemaMeta
+export function getLabelFromSchema(schema: ZodType, defaultLabel?: string): string | undefined {
+    return getSchemaMeta(schema, defaultLabel).label;
+}
+
+
+export const getAliasLabel = () => {
+    const aliasSchema = BaseFloorSchema.shape.alias;
+    const meta = getSchemaMeta(aliasSchema);
+    return meta.label;
+};
+
+/**
+ * 递归在配置树中通过 ID 查找楼层节点
+ * @param floors 页面配置数组
+ * @param targetId 目标楼层 ID
+ * @returns 找到的楼层节点，未找到则返回 null
  */
 export function findFloorNode(floors: PageConfig, targetId: string): Floor | null {
   for (const floor of floors) {
     if (floor.id === targetId) {
       return floor;
     }
-    // 检查 Tab 中的嵌套子项 (data.items[].children)
+    // 检查 Tab 组件中的嵌套子项 (data.items[].children)
     if (floor.data?.items && Array.isArray(floor.data.items)) {
       for (const item of floor.data.items) {
         if (item.children && Array.isArray(item.children)) {
@@ -20,7 +175,7 @@ export function findFloorNode(floors: PageConfig, targetId: string): Floor | nul
         }
       }
     }
-    // 通用子项检查（如果我们以后采用标准的 children 属性）
+    // 通用子项检查（为将来可能的标准 children 属性预留）
     if (floor.data?.children && Array.isArray(floor.data.children)) {
        const found = findFloorNode(floor.data.children, targetId);
        if (found) return found;
@@ -30,12 +185,15 @@ export function findFloorNode(floors: PageConfig, targetId: string): Floor | nul
 }
 
 /**
- * 递归通过 ID 更新楼层节点。
- * 返回一个新的配置数组（不可变更新）。
+ * 递归通过 ID 更新楼层节点
+ * @param floors 页面配置数组
+ * @param targetId 目标楼层 ID
+ * @param updates 要更新的字段
+ * @returns 新的配置数组（不可变更新）
  */
 export function updateFloorNode(floors: PageConfig, targetId: string, updates: { data?: any, alias?: string }): PageConfig {
   return floors.map(floor => {
-    // 找到匹配项
+    // 找到匹配的楼层
     if (floor.id === targetId) {
       return {
         ...floor,
@@ -44,11 +202,10 @@ export function updateFloorNode(floors: PageConfig, targetId: string, updates: {
       };
     }
 
-    // 在 Tab 项中递归查找并更新
+    // 在 Tab 组件的子项中递归查找并更新
     if (floor.data?.items && Array.isArray(floor.data.items)) {
       const newItems = floor.data.items.map((item: any) => {
         if (item.children && Array.isArray(item.children)) {
-          // 检查是否有子项需要更新
           const newChildren = updateFloorNode(item.children, targetId, updates);
           if (newChildren !== item.children) {
              return { ...item, children: newChildren };
@@ -57,18 +214,8 @@ export function updateFloorNode(floors: PageConfig, targetId: string, updates: {
         return item;
       });
       
-      // 如果 items 发生了变化，返回新的 floor 对象
-      // 检查引用相等性在没有深度比较或特定标志的情况下很难，
-      // 但由于 map 总是返回新数组，我们检查内容是否概念上发生了变化？
-      // 实际上，updateFloorNode 总是返回一个新数组。
-      // 我们应该检查 *内部是否有任何东西* 发生了变化。
-      // 为了简单起见：直接赋值 newItems。
-      // 优化：检查 newItems 是否与旧 items 不同（JSON.stringify 或专门检查）。
-      // 对于 React 状态，只要不无限循环，急切创建新对象是可以的。
-      // 更好做法：仅当 `newItems` 确实不同时才创建新的 `floor` 对象。
-      
-      // 让我们依赖这样一个事实：如果 updateFloorNode 没有找到任何东西，它会返回相同的数组引用（如果我们优化它）
-      // 或者我们就返回新结构。鉴于页面大小很小，完全重建是可以接受的。
+      // 如果 items 发生变化，返回新的 floor 对象
+      // 注意：由于页面配置较小，完全重建新对象是可接受的
       return {
           ...floor,
           data: { ...floor.data, items: newItems }
@@ -80,16 +227,19 @@ export function updateFloorNode(floors: PageConfig, targetId: string, updates: {
 }
 
 /**
- * 递归通过 ID 删除楼层节点。
+ * 递归通过 ID 删除楼层节点
+ * @param floors 页面配置数组
+ * @param targetId 要删除的楼层 ID
+ * @returns 新的配置数组（不可变删除）
  */
 export function removeFloorNode(floors: PageConfig, targetId: string): PageConfig {
   // 过滤当前层级
   const filtered = floors.filter(f => f.id !== targetId);
   if (filtered.length !== floors.length) {
-      return filtered; // 在此层级找到并移除
+      return filtered; // 在当前层级找到并移除
   }
 
-  // 递归
+  // 递归查找子级
   return floors.map(floor => {
     if (floor.data?.items && Array.isArray(floor.data.items)) {
        const newItems = floor.data.items.map((item: any) => {
@@ -104,4 +254,3 @@ export function removeFloorNode(floors: PageConfig, targetId: string): PageConfi
     return floor;
   });
 }
-

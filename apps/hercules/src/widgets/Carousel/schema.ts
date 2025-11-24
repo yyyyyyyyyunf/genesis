@@ -12,6 +12,6 @@ export const CarouselSchema = z.object({
   interval: z.number().optional().describe('轮播间隔: 自动轮播的时间间隔 (毫秒)').default(3000),
   showArrows: z.boolean().optional().describe('显示箭头: 是否显示左右切换箭头').default(true),
   showDots: z.boolean().optional().describe('显示指示点: 是否显示底部指示点').default(true),
-  aspectRatio: z.enum(['16/9', '4/3', '3/1', 'auto']).optional().describe('宽高比: 轮播容器的宽高比').default('16/9'),
+  aspectRatio: z.enum(['16/9', '4/3', '3/1', 'auto']).optional().describe('宽高比: 轮播容器的宽高比 @labels({"16/9":"宽屏", "4/3":"标准", "3/1":"全景", "auto":"自适应"})').default('16/9'),
 });
 

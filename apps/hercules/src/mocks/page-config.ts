@@ -20,6 +20,7 @@ export const mockPageConfig = [
     type: COMPONENT_NAMES.Image,
     alias: '活动Banner',
     data: {
+      variant: 'content',
       src: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&auto=format&fit=crop&q=60',
       alt: 'Sale Banner',
       aspectRatio: '16/9',
@@ -105,6 +106,7 @@ export const mockPageConfig = [
               id: 'floor_jp_banner',
               type: COMPONENT_NAMES.Image,
               data: {
+                  variant: 'content',
                   src: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=800&auto=format&fit=crop&q=60',
                   alt: 'Japan Vibe',
                   aspectRatio: '4/3',

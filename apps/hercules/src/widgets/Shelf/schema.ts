@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const ShelfSchema = z.object({
-  layout: z.enum(['grid', 'scroll']).describe('布局模式: 布局模式：grid (双列网格) 或 scroll (横向滚动)'),
+  layout: z.enum(['grid', 'scroll']).describe('布局模式: 布局模式：grid (双列网格) 或 scroll (横向滚动) @labels({"grid":"网格", "scroll":"滚动"})'),
   title: z.string().optional().describe('标题: 货架的可选标题'),
   products: z.array(
     z.object({

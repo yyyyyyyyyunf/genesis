@@ -33,14 +33,26 @@ graph TD
 这是 Zeus 最具魔力的部分。它负责将静态的 Schema 定义转化为动态的 UI 交互界面。
 
 ### 原理
-AutoForm 采用递归渲染策略。它遍历 Zod Schema 的结构，根据节点类型决定渲染哪个 React 组件。
+AutoForm 采用递归渲染策略。它遍历 Zod Schema 的结构，根据节点类型决定渲染哪个 React 组件。同时，它会解析 Schema 描述中的**元数据 (Metadata)** 来提供更丰富的交互体验。
 
-*   **ZodString** -> `<Input type="text" />`
+*   **Metadata Parsing**: 自动解析 `.describe()` 字符串中的特殊标记：
+    *   `@labels({"key":"value"})`: 为 Enum 提供中文显示名称。
+    *   `@unit(px)`: 为数值输入框添加自动单位处理（显示时去除单位，保存时追加单位）。
+    *   `@default(value)`: 为 Discriminated Union 指定默认选中的类型。
+*   **ZodString**:
+    *   默认渲染为 `<Input type="text" />`。
+    *   若检测到 `@unit` 元数据，渲染为带单位后缀的数字输入框。
 *   **ZodBoolean** -> `<Switch />`
-*   **ZodEnum** -> `<Select />`
+*   **ZodEnum**:
+    *   渲染为 `<Select />`。
+    *   优先使用 `@labels` 定义的中文名称作为选项显示，原始值作为实际值。
 *   **ZodNumber** -> `<Input type="number" />`
 *   **ZodObject** -> `<div className="group">...递归渲染子节点...</div>`
 *   **ZodArray** -> 渲染为一个可排序的列表，每个列表项包含删除按钮和递归渲染的子表单。
+*   **ZodDiscriminatedUnion**:
+    *   渲染为带类型选择器的嵌套表单。
+    *   支持多级嵌套（Nested Unions）。
+    *   支持通过 `@default` 指定默认选中项。
 
 ### 优势
 *   **零样板代码 (Zero Boilerplate)**: 新增组件无需修改编辑器代码。

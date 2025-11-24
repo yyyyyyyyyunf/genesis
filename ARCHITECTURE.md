@@ -51,6 +51,8 @@ Genesis 不仅仅是一个前端组件库，它是一套专为 **Server-Driven U
 Zeus 编辑器的核心引擎 `AutoForm` 是本架构灵活性的集大成者。它将“写编辑器 UI”这个繁琐的命令式编程工作，转化为了“定义数据结构”的声明式工作。
 
 *   **开发效率倍增**: 每当我们想增加一个新组件，只需要在 Hercules 中定义一次 Zod Schema。Zeus 编辑器会自动根据 Schema 生成对应的属性编辑面板。无需任何额外的 React 表单代码。
+*   **增强的语义元数据**:
+    *   通过解析 Schema 描述中的元数据（如 `@labels`, `@unit`, `@default`），AutoForm 能够渲染出更加友好、本地化的交互界面（如中文下拉选项、带单位的输入框）。
 *   **完美的人机协同**:
     *   `AutoForm` 证明了我们的架构是完全基于结构化数据的。
     *   AI 生成的 JSON 可以直接被 AutoForm 渲染回显；人类在 AutoForm 里的修改也能生成符合 Schema 的 JSON。

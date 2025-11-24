@@ -36,17 +36,19 @@ graph TD
 AutoForm 采用递归渲染策略。它遍历 Zod Schema 的结构，根据节点类型决定渲染哪个 React 组件。同时，它会解析 Schema 描述中的**元数据 (Metadata)** 来提供更丰富的交互体验。
 
 *   **Metadata Parsing**: 自动解析 `.describe()` 字符串中的特殊标记：
-    *   `@labels({"key":"value"})`: 为 Enum 提供中文显示名称。
-    *   `@unit(px)`: 为数值输入框添加自动单位处理（显示时去除单位，保存时追加单位）。
+    *   `@labels({"key":"value"})`: 为 Enum 和 Discriminated Union 的字面量提供中文显示名称。
+    *   `@unit(px)`: 为 **ZodString** 和 **ZodNumber** 类型的输入框添加单位后缀（如 `px`、`rem`）。
     *   `@default(value)`: 为 Discriminated Union 指定默认选中的类型。
 *   **ZodString**:
     *   默认渲染为 `<Input type="text" />`。
-    *   若检测到 `@unit` 元数据，渲染为带单位后缀的数字输入框。
+    *   若检测到 `@unit` 元数据，渲染为带单位后缀的输入框。
 *   **ZodBoolean** -> `<Switch />`
 *   **ZodEnum**:
     *   渲染为 `<Select />`。
     *   优先使用 `@labels` 定义的中文名称作为选项显示，原始值作为实际值。
-*   **ZodNumber** -> `<Input type="number" />`
+*   **ZodNumber**:
+    *   默认渲染为 `<Input type="number" />`。
+    *   若检测到 `@unit` 元数据，渲染为带单位后缀的数字输入框。
 *   **ZodObject** -> `<div className="group">...递归渲染子节点...</div>`
 *   **ZodArray** -> 渲染为一个可排序的列表，每个列表项包含删除按钮和递归渲染的子表单。
 *   **ZodDiscriminatedUnion**:
@@ -54,9 +56,77 @@ AutoForm 采用递归渲染策略。它遍历 Zod Schema 的结构，根据节�
     *   支持多级嵌套（Nested Unions）。
     *   支持通过 `@default` 指定默认选中项。
 
+### 元数据支持详解
+
+AutoForm 通过 `getSchemaMeta()` 函数（位于 `src/lib/utils.ts`）解析 Schema 描述中的元数据：
+
+#### @labels - 中文标签映射
+
+```typescript
+// Schema 定义
+align: z.enum(['left', 'center', 'right']).describe(
+  '对齐方式: 文本对齐方式 @labels({"left":"左对齐", "center":"居中", "right":"右对齐"})'
+)
+
+// AutoForm 渲染
+<select>
+  <option value="left">左对齐</option>
+  <option value="center">居中</option>
+  <option value="right">右对齐</option>
+</select>
+```
+
+对于 Discriminated Union，还支持为字面量（`z.literal`）提供标签。`getLiteralLabelsFromUnion()` 函数会提取每个联合选项的 discriminator 字段的描述：
+
+```typescript
+// Schema 定义
+variant: z.literal('content').describe('普通内容图片')
+
+// AutoForm 渲染
+<option value="content">普通内容图片</option>
+```
+
+#### @unit - 单位后缀
+
+支持 **ZodString** 和 **ZodNumber** 两种类型：
+
+```typescript
+// ZodNumber 示例
+height: z.number().describe('高度: 间距高度 @unit(px)')
+
+// AutoForm 渲染
+<div className="relative">
+  <input type="number" value={100} />
+  <span className="absolute right-2">px</span>
+</div>
+
+// ZodString 示例（CSS 属性）
+height: z.string().describe('高度: 容器高度 @unit(px)')
+
+// 渲染效果相同，但存储为字符串 "300px"
+```
+
+#### @default - 默认选中项
+
+仅用于 Discriminated Union：
+
+```typescript
+z.discriminatedUnion('variant', [...]).describe(
+  '图片类型: ... @default(content)'
+)
+
+// AutoForm 逻辑
+if (!currentValue || !options.includes(currentValue)) {
+  activeValue = defaultValue || options[0];
+}
+```
+
+> **详细文档**: 完整的元数据规范请参阅 [SCHEMA_GUIDE.md](../../SCHEMA_GUIDE.md)。
+
 ### 优势
 *   **零样板代码 (Zero Boilerplate)**: 新增组件无需修改编辑器代码。
 *   **类型安全**: 表单生成的数据严格符合 Schema 定义。
+*   **国际化友好**: 通过 `@labels` 提供中文标签，未来可扩展多语言支持。
 
 ---
 

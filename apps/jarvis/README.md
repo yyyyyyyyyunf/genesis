@@ -1,57 +1,34 @@
-# Jarvis (Backend Service)
+# Jarvis (后端服务)
 
 Jarvis 是 Genesis 平台的后端服务，提供数据存储和 API 接口支持。
 
-## 功能特性
+## 核心职责
 
-- **页面配置存储**: 提供页面配置 (Page Config) 的读写 API。
-- **文件存储**: (规划中) 处理图片上传和文件管理。
-- **AI 代理**: (规划中) 集成 LLM 能力，支持自然语言生成页面配置。
-
-## 技术栈
-
-- **Runtime**: Node.js
-- **Framework**: Hono
-- **Database**: JSON 文件存储 (开发阶段), 规划迁移至 SQLite/PostgreSQL
+1. **页面配置存储**: 提供页面配置 (Page Config) 的读写 API。
+2. **文件存储**: (规划中) 处理图片上传和文件管理。
+3. **AI 代理**: (规划中) 集成 Dify，支持自然语言生成页面配置。
 
 ## 快速开始
-
-### 安装依赖
-
-在根目录下运行：
-
-```bash
-pnpm install
-```
-
-### 启动服务
-
-单独启动 Jarvis：
 
 ```bash
 pnpm --filter jarvis dev
 ```
 
-或者在根目录启动所有服务：
+服务默认运行在 http://localhost:3002
 
-```bash
-pnpm dev:all
-```
+## 详细文档
 
-服务默认运行在 `http://localhost:3002`。
+- **[AI 集成规划](./AI_INTEGRATION.md)**: 未来的 AI Agent 集成方案
+- **[环境变量配置](../../ENVIRONMENT.md)**: 了解必要的环境变量
+- **[部署指南](../../DEPLOYMENT.md)**: 生产环境部署说明
+
+## 技术栈
+
+- **Framework**: Hono
+- **Database**: JSON 文件存储 (开发阶段)
+- **规划**: SQLite/PostgreSQL
 
 ## API 接口
 
-### GET /api/page-config
-
-获取当前的页面配置。
-
-- **Response**: `PageConfig` (JSON)
-
-### POST /api/page-config
-
-保存页面配置。
-
-- **Body**: `PageConfig` (JSON)
-- **Response**: `{ success: boolean, message: string }`
-
+- `GET /api/page-config`: 获取页面配置
+- `POST /api/page-config`: 保存页面配置

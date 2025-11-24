@@ -59,7 +59,11 @@
   "id": "floor_text_example",
   "type": 1,
   "data": {
-    "content": "示例content"
+    "content": "这是一段示例文本",
+    "align": "left",
+    "size": "base",
+    "color": "text-black",
+    "mode": "simple"
   }
 }
 ```
@@ -72,10 +76,10 @@
   "type": 1,
   "alias": "示例文本",
   "data": {
-    "content": "示例content",
-    "align": "left",
-    "size": "base",
-    "color": "text-black",
+    "content": "欢迎来到我们的电商平台，这里有最优质的商品和服务",
+    "align": "center",
+    "size": "xl",
+    "color": "text-gray-800",
     "mode": "simple"
   }
 }
@@ -127,7 +131,20 @@
   "type": 3,
   "data": {
     "layout": "grid",
-    "products": []
+    "products": [
+      {
+        "id": "prod_001",
+        "name": "经典款运动鞋",
+        "price": "¥299",
+        "imageUrl": "https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+      },
+      {
+        "id": "prod_002",
+        "name": "时尚休闲包",
+        "price": "¥199",
+        "imageUrl": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62"
+      }
+    ]
   }
 }
 ```
@@ -140,9 +157,34 @@
   "type": 3,
   "alias": "示例货架",
   "data": {
-    "layout": "grid",
-    "title": "示例title",
-    "products": []
+    "layout": "scroll",
+    "title": "热门推荐",
+    "products": [
+      {
+        "id": "prod_001",
+        "name": "经典款运动鞋",
+        "price": "¥299",
+        "imageUrl": "https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+      },
+      {
+        "id": "prod_002",
+        "name": "时尚休闲包",
+        "price": "¥199",
+        "imageUrl": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62"
+      },
+      {
+        "id": "prod_003",
+        "name": "蓝牙耳机",
+        "price": "¥399",
+        "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e"
+      },
+      {
+        "id": "prod_004",
+        "name": "智能手表",
+        "price": "¥899",
+        "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+      }
+    ]
   }
 }
 ```
@@ -190,7 +232,18 @@
   "id": "floor_tab_example",
   "type": 4,
   "data": {
-    "items": []
+    "items": [
+      {
+        "label": "推荐",
+        "key": "recommend",
+        "children": []
+      },
+      {
+        "label": "新品",
+        "key": "new",
+        "children": []
+      }
+    ]
   }
 }
 ```
@@ -203,8 +256,42 @@
   "type": 4,
   "alias": "示例标签页",
   "data": {
-    "items": [],
-    "defaultActiveKey": "示例defaultActiveKey"
+    "items": [
+      {
+        "label": "热门商品",
+        "key": "hot",
+        "children": [
+          {
+            "id": "floor_text_001",
+            "type": 1,
+            "data": {
+              "content": "这是热门商品分类",
+              "align": "center"
+            }
+          }
+        ]
+      },
+      {
+        "label": "新品上架",
+        "key": "new",
+        "children": [
+          {
+            "id": "floor_text_002",
+            "type": 1,
+            "data": {
+              "content": "这是新品分类",
+              "align": "center"
+            }
+          }
+        ]
+      },
+      {
+        "label": "特价促销",
+        "key": "sale",
+        "children": []
+      }
+    ],
+    "defaultActiveKey": "hot"
   }
 }
 ```
@@ -297,7 +384,13 @@
 {
   "id": "floor_image_example",
   "type": 2,
-  "data": {}
+  "data": {
+    "variant": "content",
+    "src": "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+    "alt": "",
+    "aspectRatio": "auto",
+    "objectFit": "cover"
+  }
 }
 ```
 
@@ -309,11 +402,11 @@
   "type": 2,
   "alias": "示例图片",
   "data": {
-    "src": "https://example.com/image.jpg",
-    "clickUrl": "https://example.com/image.jpg",
-    "alt": "",
     "variant": "content",
-    "aspectRatio": "auto",
+    "src": "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+    "clickUrl": "https://example.com/product/watch",
+    "alt": "精美手表产品图",
+    "aspectRatio": "16/9",
     "objectFit": "cover"
   }
 }
@@ -388,7 +481,9 @@
 {
   "id": "floor_button_example",
   "type": 5,
-  "data": {}
+  "data": {
+    "text": "立即购买"
+  }
 }
 ```
 
@@ -400,15 +495,14 @@
   "type": 5,
   "alias": "示例按钮",
   "data": {
-    "text": "点击我",
-    "link": "https://example.com/image.jpg",
-    "clickMessage": "示例clickMessage",
+    "text": "立即购买",
+    "link": "https://example.com/products",
     "variant": "solid",
-    "size": "base",
+    "size": "lg",
     "color": "bg-blue-600",
     "radius": "md",
     "fullWidth": false,
-    "showArrow": false
+    "showArrow": true
   }
 }
 ```
@@ -469,7 +563,7 @@
   "id": "floor_video_example",
   "type": 6,
   "data": {
-    "src": "https://example.com/image.jpg"
+    "src": "https://example.com/videos/product-demo.mp4"
   }
 }
 ```
@@ -482,8 +576,8 @@
   "type": 6,
   "alias": "示例视频",
   "data": {
-    "src": "https://example.com/image.jpg",
-    "poster": "示例poster",
+    "src": "https://example.com/videos/product-intro.mp4",
+    "poster": "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb",
     "autoplay": false,
     "controls": true,
     "loop": false,
@@ -561,7 +655,16 @@
   "id": "floor_carousel_example",
   "type": 7,
   "data": {
-    "items": []
+    "items": [
+      {
+        "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+        "link": "https://example.com/sale1"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+        "link": "https://example.com/sale2"
+      }
+    ]
   }
 }
 ```
@@ -574,7 +677,23 @@
   "type": 7,
   "alias": "示例轮播图",
   "data": {
-    "items": [],
+    "items": [
+      {
+        "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+        "link": "https://example.com/promotion/summer-sale",
+        "alt": "夏季大促销"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+        "link": "https://example.com/promotion/new-arrival",
+        "alt": "新品上市"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1445205170230-053b83016050",
+        "link": "https://example.com/promotion/clearance",
+        "alt": "清仓特惠"
+      }
+    ],
     "autoplay": true,
     "interval": 3000,
     "showArrows": true,
@@ -610,7 +729,9 @@
 {
   "id": "floor_spacer_example",
   "type": 8,
-  "data": {}
+  "data": {
+    "height": 20
+  }
 }
 ```
 
@@ -622,8 +743,8 @@
   "type": 8,
   "alias": "示例间距",
   "data": {
-    "height": 20,
-    "backgroundColor": "bg-transparent"
+    "height": 40,
+    "backgroundColor": "bg-gray-100"
   }
 }
 ```
@@ -693,7 +814,17 @@
   "id": "floor_feed_example",
   "type": 9,
   "data": {
-    "items": []
+    "items": [
+      {
+        "title": "春季新品发布",
+        "summary": "全新系列产品即将上市，敬请期待"
+      },
+      {
+        "title": "限时优惠活动",
+        "summary": "全场五折起，优惠多多"
+      }
+    ],
+    "layout": "list"
   }
 }
 ```
@@ -706,9 +837,34 @@
   "type": 9,
   "alias": "示例信息流",
   "data": {
-    "items": [],
-    "layout": "list",
-    "columns": 2
+    "items": [
+      {
+        "title": "2024春季新品发布会",
+        "summary": "全新系列产品即将上市，包含服装、配饰等多个品类，敬请期待",
+        "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+        "date": "2024-03-15",
+        "tag": "新品",
+        "link": "https://example.com/news/spring-collection"
+      },
+      {
+        "title": "周年庆限时优惠",
+        "summary": "全场五折起，优惠多多，精选商品低至3折",
+        "image": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da",
+        "date": "2024-03-10",
+        "tag": "促销",
+        "link": "https://example.com/promotion/anniversary"
+      },
+      {
+        "title": "品牌故事分享",
+        "summary": "了解我们的品牌理念和发展历程",
+        "image": "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1",
+        "date": "2024-03-05",
+        "tag": "品牌",
+        "link": "https://example.com/about/story"
+      }
+    ],
+    "layout": "card",
+    "columns": 3
   }
 }
 ```
@@ -737,7 +893,15 @@
 {
   "id": "floor_accordion_example",
   "type": 10,
-  "data": {}
+  "data": {
+    "items": [
+      {
+        "title": "如何下单购买？",
+        "content": "您可以浏览商品页面，点击\"加入购物车\"按钮，然后进入购物车结算。"
+      }
+    ],
+    "allowMultiple": false
+  }
 }
 ```
 
@@ -751,11 +915,23 @@
   "data": {
     "items": [
       {
-        "title": "FAQ 1",
-        "content": "Answer to FAQ 1"
+        "title": "如何下单购买？",
+        "content": "您可以浏览商品页面，点击\"加入购物车\"按钮，然后进入购物车结算。支持多种支付方式。"
+      },
+      {
+        "title": "配送时间需要多久？",
+        "content": "一般情况下，订单会在1-3个工作日内发货，具体配送时间取决于您所在的地区。"
+      },
+      {
+        "title": "支持哪些支付方式？",
+        "content": "我们支持支付宝、微信支付、银行卡等多种支付方式，您可以根据自己的需求选择。"
+      },
+      {
+        "title": "如何申请退换货？",
+        "content": "商品签收后7天内，如有质量问题可申请退换货。请在个人中心的订单页面提交申请。"
       }
     ],
-    "allowMultiple": false
+    "allowMultiple": true
   }
 }
 ```
@@ -798,7 +974,11 @@
 {
   "id": "floor_form_example",
   "type": 11,
-  "data": {}
+  "data": {
+    "title": "联系我们",
+    "submitText": "提交",
+    "successMessage": "提交成功！我们会尽快联系您。"
+  }
 }
 ```
 
@@ -810,8 +990,8 @@
   "type": 11,
   "alias": "示例表单",
   "data": {
-    "title": "联系我们",
-    "description": "示例description",
+    "title": "预约咨询",
+    "description": "请填写以下信息，我们的客服将在24小时内与您联系",
     "fields": [
       {
         "label": "姓名",
@@ -821,15 +1001,29 @@
         "required": true
       },
       {
+        "label": "手机号",
+        "name": "phone",
+        "type": "tel",
+        "placeholder": "请输入您的手机号",
+        "required": true
+      },
+      {
         "label": "邮箱",
         "name": "email",
         "type": "email",
         "placeholder": "请输入您的邮箱",
+        "required": false
+      },
+      {
+        "label": "咨询内容",
+        "name": "message",
+        "type": "textarea",
+        "placeholder": "请描述您的需求",
         "required": true
       }
     ],
-    "submitText": "提交",
-    "successMessage": "提交成功！我们会尽快联系您。"
+    "submitText": "立即预约",
+    "successMessage": "预约成功！我们会在24小时内与您联系。"
   }
 }
 ```
@@ -842,7 +1036,7 @@
 
 - **targetDate** (可选)
   - 类型: `string`
-  - 默认值: `"2025-11-25T11:29:22.954Z"`
+  - 默认值: `"2025-11-25T11:53:31.999Z"`
   - 描述: 目标时间 (ISO格式)
 
 - **textColor** (可选)
@@ -868,7 +1062,12 @@
 {
   "id": "floor_countdown_example",
   "type": 12,
-  "data": {}
+  "data": {
+    "targetDate": "2025-11-25T11:53:32.030Z",
+    "textColor": "text-gray-900",
+    "backgroundColor": "bg-white",
+    "endMessage": "活动已结束"
+  }
 }
 ```
 
@@ -880,10 +1079,10 @@
   "type": 12,
   "alias": "示例倒计时",
   "data": {
-    "targetDate": "2025-11-25T11:29:22.954Z",
-    "textColor": "text-gray-900",
-    "backgroundColor": "bg-white",
-    "endMessage": "活动已结束"
+    "targetDate": "2025-11-27T11:53:32.030Z",
+    "textColor": "text-white",
+    "backgroundColor": "bg-gradient-to-r from-red-500 to-pink-500",
+    "endMessage": "限时抢购已结束，敬请期待下次活动！"
   }
 }
 ```
@@ -918,7 +1117,15 @@
 {
   "id": "floor_avatargroup_example",
   "type": 13,
-  "data": {}
+  "data": {
+    "images": [
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka",
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob"
+    ],
+    "size": "md",
+    "max": 5
+  }
 }
 ```
 
@@ -933,9 +1140,13 @@
     "images": [
       "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
       "https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka",
-      "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob"
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=Frank"
     ],
-    "size": "md",
+    "size": "lg",
     "max": 5
   }
 }
@@ -977,7 +1188,12 @@
 {
   "id": "floor_divider_example",
   "type": 14,
-  "data": {}
+  "data": {
+    "style": "solid",
+    "color": "border-gray-200",
+    "thickness": 1,
+    "margin": 20
+  }
 }
 ```
 
@@ -989,10 +1205,10 @@
   "type": 14,
   "alias": "示例分割线",
   "data": {
-    "style": "solid",
-    "color": "border-gray-200",
-    "thickness": 1,
-    "margin": 20
+    "style": "dashed",
+    "color": "border-gray-300",
+    "thickness": 2,
+    "margin": 40
   }
 }
 ```
@@ -1023,7 +1239,10 @@
 {
   "id": "floor_markdown_example",
   "type": 15,
-  "data": {}
+  "data": {
+    "content": "# 欢迎\n\n这是一个简单的 Markdown 示例。",
+    "className": "prose prose-slate max-w-none"
+  }
 }
 ```
 
@@ -1035,7 +1254,7 @@
   "type": 15,
   "alias": "示例Markdown",
   "data": {
-    "content": "# 你好\n这是一个 Markdown 组件示例。",
+    "content": "# 产品使用指南\n\n欢迎使用我们的产品！本指南将帮助您快速上手。\n\n## 快速开始\n\n按照以下步骤开始使用：\n\n1. 注册账号\n2. 完善个人信息\n3. 浏览商品目录\n4. 添加商品到购物车\n5. 提交订单\n\n## 主要功能\n\n### 商品浏览\n\n- 支持分类筛选\n- 智能搜索推荐\n- 收藏喜欢的商品\n\n### 订单管理\n\n您可以在个人中心查看：\n\n- 待付款订单\n- 待发货订单\n- 已完成订单\n\n### 售后服务\n\n我们提供完善的售后服务：\n\n> 7天无理由退换货，让您购物无忧\n\n## 联系我们\n\n如有疑问，请联系客服：**400-123-4567**\n\n---\n\n*更新时间：2024年3月*",
     "className": "prose prose-slate max-w-none"
   }
 }
@@ -1073,7 +1292,11 @@
 {
   "id": "floor_codeblock_example",
   "type": 16,
-  "data": {}
+  "data": {
+    "code": "console.log(\"Hello World\");",
+    "language": "typescript",
+    "theme": "github-dark"
+  }
 }
 ```
 
@@ -1085,7 +1308,7 @@
   "type": 16,
   "alias": "示例代码块",
   "data": {
-    "code": "console.log(\"Hello World\");",
+    "code": "interface Product {\n  id: string;\n  name: string;\n  price: number;\n  description: string;\n}\n\nasync function fetchProducts(): Promise<Product[]> {\n  const response = await fetch('/api/products');\n  const data = await response.json();\n  return data;\n}\n\n// 使用示例\nconst products = await fetchProducts();\nconsole.log('商品列表:', products);",
     "language": "typescript",
     "theme": "github-dark"
   }
@@ -1143,7 +1366,17 @@
 {
   "id": "floor_staticchart_example",
   "type": 17,
-  "data": {}
+  "data": {
+    "type": "bar",
+    "data": [
+      10,
+      25,
+      15,
+      30,
+      45,
+      20
+    ]
+  }
 }
 ```
 
@@ -1155,15 +1388,21 @@
   "type": 17,
   "alias": "示例静态图表",
   "data": {
-    "title": "月度数据",
-    "type": "bar",
+    "title": "2024年销售业绩",
+    "type": "line",
     "data": [
-      10,
-      25,
-      15,
-      30,
-      45,
-      20
+      120,
+      250,
+      180,
+      320,
+      450,
+      280,
+      390,
+      510,
+      420,
+      560,
+      620,
+      700
     ],
     "labels": [
       "1月",
@@ -1171,10 +1410,16 @@
       "3月",
       "4月",
       "5月",
-      "6月"
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月"
     ],
     "color": "#3b82f6",
-    "height": 200
+    "height": 300
   }
 }
 ```
@@ -1234,7 +1479,25 @@
   "id": "floor_bottomnavigation_example",
   "type": 18,
   "data": {
-    "items": []
+    "items": [
+      {
+        "label": "首页",
+        "icon": "Home",
+        "link": "/"
+      },
+      {
+        "label": "分类",
+        "icon": "Grid",
+        "link": "/categories"
+      },
+      {
+        "label": "我的",
+        "icon": "User",
+        "link": "/profile"
+      }
+    ],
+    "activeColor": "text-blue-600",
+    "backgroundColor": "bg-white"
   }
 }
 ```
@@ -1247,7 +1510,38 @@
   "type": 18,
   "alias": "示例底部导航",
   "data": {
-    "items": [],
+    "items": [
+      {
+        "label": "首页",
+        "icon": "Home",
+        "activeIcon": "Home",
+        "link": "/"
+      },
+      {
+        "label": "分类",
+        "icon": "Grid",
+        "activeIcon": "Grid",
+        "link": "/categories"
+      },
+      {
+        "label": "购物车",
+        "icon": "ShoppingCart",
+        "activeIcon": "ShoppingCart",
+        "link": "/cart"
+      },
+      {
+        "label": "消息",
+        "icon": "Bell",
+        "activeIcon": "Bell",
+        "link": "/notifications"
+      },
+      {
+        "label": "我的",
+        "icon": "User",
+        "activeIcon": "User",
+        "link": "/profile"
+      }
+    ],
     "activeColor": "text-blue-600",
     "backgroundColor": "bg-white"
   }
@@ -1305,7 +1599,10 @@
 {
   "id": "floor_floatbutton_example",
   "type": 19,
-  "data": {}
+  "data": {
+    "icon": "ArrowUp",
+    "action": "backToTop"
+  }
 }
 ```
 
@@ -1317,12 +1614,12 @@
   "type": 19,
   "alias": "示例悬浮按钮",
   "data": {
-    "icon": "ArrowUp",
-    "action": "backToTop",
-    "link": "https://example.com/image.jpg",
+    "icon": "MessageCircle",
+    "action": "link",
+    "link": "https://example.com/contact",
     "position": "bottom-right",
     "bottomOffset": 100,
-    "color": "bg-blue-600 text-white"
+    "color": "bg-green-600 text-white"
   }
 }
 ```

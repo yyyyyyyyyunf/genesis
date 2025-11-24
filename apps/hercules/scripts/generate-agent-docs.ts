@@ -4,6 +4,7 @@ import path from 'path';
 import { ZodType, ZodObject, ZodEnum, ZodOptional, ZodDefault, ZodString, ZodNumber, ZodBoolean, ZodArray, ZodDiscriminatedUnion, ZodLiteral } from 'zod';
 import { SchemaRegistry } from '../src/widgets/schemas';
 import { COMPONENT_NAMES, COMPONENT_LABELS } from '../src/widgets/component-map';
+import { MockDatas } from '../src/widgets/mock-datas';
 
 const OUTPUT_FILE = path.join(process.cwd(), '../../knowledge/agent-manual.md');
 
@@ -241,15 +242,43 @@ function renderObjectProperties(schema: ZodObject<any>, level: number, skipField
 function generateExamples(name: string, schema: ZodType, typeId: number): string {
   let output = '### 配置示例\n\n';
   
-  // 生成最小示例（只包含必填字段）
-  output += '#### 最小配置\n\n```json\n';
-  output += generateMinimalExample(name, typeId, schema);
-  output += '\n```\n\n';
+  // 检查是否有预定义的 mock data
+  const mockData = MockDatas[name as keyof typeof MockDatas];
   
-  // 生成完整示例（包含所有常用字段）
-  output += '#### 完整配置\n\n```json\n';
-  output += generateCompleteExample(name, typeId, schema);
-  output += '\n```\n\n';
+  if (mockData) {
+    // 使用预定义的 mock data
+    const minimalExample = {
+      id: `floor_${name.toLowerCase()}_example`,
+      type: typeId,
+      data: mockData.minimal
+    };
+    
+    const completeExample = {
+      id: `floor_${name.toLowerCase()}_example`,
+      type: typeId,
+      alias: `示例${COMPONENT_LABELS[name] || name}`,
+      data: mockData.complete
+    };
+    
+    output += '#### 最小配置\n\n```json\n';
+    output += JSON.stringify(minimalExample, null, 2);
+    output += '\n```\n\n';
+    
+    output += '#### 完整配置\n\n```json\n';
+    output += JSON.stringify(completeExample, null, 2);
+    output += '\n```\n\n';
+  } else {
+    // 回退到自动生成（带警告）
+    console.warn(`⚠️  组件 ${name} 没有 mock-data.ts 文件，使用自动生成的示例`);
+    
+    output += '#### 最小配置\n\n```json\n';
+    output += generateMinimalExample(name, typeId, schema);
+    output += '\n```\n\n';
+    
+    output += '#### 完整配置\n\n```json\n';
+    output += generateCompleteExample(name, typeId, schema);
+    output += '\n```\n\n';
+  }
   
   return output;
 }

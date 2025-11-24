@@ -12,6 +12,7 @@ Hercules 使用 Next.js 构建，采用了一种基于配置驱动（Server-Driv
 *   **`src/widgets/<ComponentName>/schema.ts`**: 定义组件的数据结构（Zod Schema），**这对 AI Agent 至关重要**。
 *   **`src/widgets/component-map.ts`**: 定义组件的 ID (Type ID) 和名称映射。
 *   **`src/widgets/schemas.ts`**: 导出所有组件的 Schema。
+*   **`src/widgets/mock-datas.ts`**: 导出所有组件的示例配置数据（用于生成 AI Agent 文档）。
 *   **`src/widgets/server-registry.tsx`**: 注册服务端渲染组件 (RSC)。
 *   **`src/widgets/client-registry.tsx`**: 注册客户端交互组件 (Client Components)。
 
@@ -19,13 +20,14 @@ Hercules 使用 Next.js 构建，采用了一种基于配置驱动（Server-Driv
 
 ## 开发流程
 
-添加一个新组件通常需要以下 5 个步骤：
+添加一个新组件通常需要以下 6 个步骤：
 
 ### 1. 创建组件文件
 
-在 `src/widgets/` 下创建一个以组件名命名的目录（例如 `MyNewComponent`），包含两个文件：
+在 `src/widgets/` 下创建一个以组件名命名的目录（例如 `MyNewComponent`），包含三个文件：
 *   `index.tsx`: 组件的 React 实现。
 *   `schema.ts`: 组件的 Zod Schema 定义。
+*   `mock-data.ts`: 组件的示例配置数据。
 
 ### 2. 定义 Schema (`schema.ts`)
 
@@ -131,7 +133,62 @@ if (data.variant === 'background') {
 }
 ```
 
-### 3. 实现组件 (`index.tsx`)
+### 3. 创建示例数据 (`mock-data.ts`)
+
+为组件创建高质量的示例配置数据，用于生成 AI Agent 手册。这一步非常重要，因为它直接影响 AI Agent 理解和生成配置的准确性。
+
+**文件结构**：
+```typescript
+import { z } from 'zod';
+import { MyNewComponentSchema } from './schema';
+
+type MyNewComponentProps = z.infer<typeof MyNewComponentSchema>;
+
+export const MyNewComponentMockData: {
+  minimal: MyNewComponentProps;
+  complete: MyNewComponentProps;
+} = {
+  // 最小配置：只包含必填字段和默认值
+  minimal: {
+    title: '示例标题',
+    theme: 'light'
+  },
+  // 完整配置：展示所有常用字段的实际使用场景
+  complete: {
+    title: '产品特性介绍',
+    description: '这是一个功能强大的组件，支持多种主题切换',
+    theme: 'dark',
+    width: '800px'
+  }
+};
+```
+
+**最佳实践**：
+*   **真实场景**：使用贴近实际业务场景的数据，而不是 "test", "example" 这样的占位符。
+*   **类型安全**：利用 TypeScript 类型推导，确保示例数据符合 Schema 定义。
+*   **完整性**：`complete` 示例应包含所有可选字段，展示组件的完整功能。
+*   **正确的 URL**：
+    *   图片使用 `.jpg`, `.png` 等图片格式
+    *   视频使用 `.mp4`, `.webm` 等视频格式
+    *   使用 Unsplash 等真实图片服务而不是占位符
+
+**示例**：
+```typescript
+// ❌ 不好的示例
+minimal: {
+  src: 'https://example.com/image.jpg', // 视频组件却用了图片 URL
+  title: 'test'                          // 无意义的占位符
+}
+
+// ✅ 好的示例
+minimal: {
+  src: 'https://example.com/videos/product-demo.mp4', // 正确的视频 URL
+  poster: 'https://images.unsplash.com/photo-123',    // 正确的封面图片
+  title: '产品功能演示视频'                          // 有实际意义的标题
+}
+```
+
+### 4. 实现组件 (`index.tsx`)
 
 编写 React 组件。组件会接收一个 `data` 属性，其类型为你定义的 Schema。
 
@@ -156,7 +213,7 @@ export const MyNewComponent = (props: { data: MyNewComponentProps }) => {
 
 **注意**: 如果组件需要使用 `useState`, `useEffect` 或其他浏览器 API (如 `swiper`), 请在文件顶部添加 `'use client';` 并将其视为客户端组件。
 
-### 4. 注册组件
+### 5. 注册组件
 
 你需要修改以下几个文件来注册你的新组件：
 
@@ -204,7 +261,7 @@ export const SchemaRegistry = {
     };
     ```
 
-### 5. 更新文档
+### 6. 生成文档并测试
 
 运行以下命令重新生成 Agent 手册 (`knowledge/agent-manual.md`)：
 
@@ -218,11 +275,122 @@ pnpm gen:docs
 pnpm --filter hercules gen:docs
 ```
 
-检查生成的文档，确保你的新组件和属性描述都正确显示为中文。
+该命令会：
+*   解析你的 Schema 中的中文描述和元数据标签 (`@labels`, `@unit` 等)
+*   从 `mock-data.ts` 中提取示例配置
+*   自动生成包含最小配置和完整配置示例的文档
+
+检查生成的文档，确保：
+*   组件属性描述都正确显示为中文
+*   最小配置示例包含所有必填字段和默认值
+*   完整配置示例展示了组件的实际使用场景
+*   URL 格式正确（图片用 `.jpg`，视频用 `.mp4`）
 
 ---
 
-## 最佳实践
+## Mock Data 最佳实践
+
+### 为什么需要 Mock Data？
+
+Mock Data（示例配置数据）是 AI Agent 手册的重要组成部分。当 AI Agent 需要生成组件配置时，会参考这些示例来：
+1. 理解组件的实际使用场景
+2. 学习正确的数据格式和值类型
+3. 生成符合业务场景的配置
+
+### 编写高质量 Mock Data 的原则
+
+#### 1. 真实性
+使用贴近实际业务的数据，而不是测试占位符。
+
+```typescript
+// ❌ 不好
+{
+  title: 'Test Title',
+  content: 'Lorem ipsum dolor sit amet'
+}
+
+// ✅ 好
+{
+  title: '春季新品上市',
+  content: '全新系列产品现已发布，快来选购吧！'
+}
+```
+
+#### 2. URL 格式正确性
+确保 URL 使用正确的文件扩展名。
+
+```typescript
+// ❌ 不好：视频组件使用图片 URL
+{
+  src: 'https://example.com/image.jpg',
+  poster: 'example text'
+}
+
+// ✅ 好：使用正确的文件格式
+{
+  src: 'https://example.com/videos/product-demo.mp4',
+  poster: 'https://images.unsplash.com/photo-1234567890'
+}
+```
+
+#### 3. 完整性
+`complete` 示例应包含所有可选字段，展示组件的完整能力。
+
+```typescript
+export const VideoMockData = {
+  minimal: {
+    src: 'https://example.com/video.mp4'  // 只包含必填字段
+  },
+  complete: {
+    src: 'https://example.com/video.mp4',
+    poster: 'https://example.com/cover.jpg',
+    autoplay: false,
+    controls: true,
+    loop: false,
+    muted: false,
+    aspectRatio: '16/9'  // 展示所有可选字段
+  }
+};
+```
+
+#### 4. 类型安全
+利用 TypeScript 的类型系统确保示例数据正确。
+
+```typescript
+import { z } from 'zod';
+import { MyComponentSchema } from './schema';
+
+type MyComponentProps = z.infer<typeof MyComponentSchema>;
+
+// TypeScript 会检查这里的类型是否正确
+export const MyComponentMockData: {
+  minimal: MyComponentProps;
+  complete: MyComponentProps;
+} = {
+  // ...
+};
+```
+
+### Mock Data 注册流程
+
+创建完 mock-data.ts 后，需要在 `src/widgets/mock-datas.ts` 中注册：
+
+```typescript
+// 1. 导入
+import { MyNewComponentMockData } from './MyNewComponent/mock-data';
+
+// 2. 添加到注册表
+export const MockDatas = {
+  // ... 其他组件
+  MyNewComponent: MyNewComponentMockData,
+};
+```
+
+注册后，`generate-agent-docs.ts` 脚本会自动使用这些示例生成文档。
+
+---
+
+## 其他最佳实践
 
 1.  **详细的中文描述**: Agent 依赖 Schema 中的 `.describe()` 来理解每个字段的用途。描述越清晰（包括格式、单位、用途），Agent 生成的配置就越准确。
 2.  **提供默认值**: 尽量为非必填项提供 `.default()` 值，这样可以减少 Agent 的负担，也能保证组件在缺少配置时能正常渲染。

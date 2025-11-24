@@ -99,9 +99,54 @@ if (!result.success) {
 当你开发一个新的组件（例如 `NewWidget`）时，你需要遵循以下步骤：
 
 ### 1. 创建组件文件
-在 `src/widgets/NewWidget/` 下创建 `index.tsx` (实现) 和 `schema.ts` (定义)。
+在 `src/widgets/NewWidget/` 下创建以下文件：
+- `index.tsx` (实现): 组件的渲染逻辑。
+- `schema.ts` (定义): 使用 Zod 定义组件的 Props 类型和校验规则。
+- `mock-data.ts` (示例): 提供 `minimal` 和 `complete` 两种示例配置，用于文档生成。
 
-### 2. 注册到 Server Registry
+#### 示例：mock-data.ts
+
+```typescript
+import { z } from 'zod';
+import { NewWidgetSchema } from './schema';
+
+type NewWidgetProps = z.infer<typeof NewWidgetSchema>;
+
+export const NewWidgetMockData: {
+  minimal: NewWidgetProps;
+  complete: NewWidgetProps;
+} = {
+  minimal: {
+    // 只包含必填字段的最小配置
+    title: "标题文本"
+  },
+  complete: {
+    // 包含所有常用字段的完整配置
+    title: "完整示例标题",
+    description: "这是一个详细的描述信息",
+    variant: "primary",
+    enabled: true
+  }
+};
+```
+
+> **提示**: 确保示例数据真实有效（如图片 URL、视频 URL 格式正确），详见 [COMPONENT_GUIDE.md](./COMPONENT_GUIDE.md#3-提供示例配置-mock-datats)。
+
+### 2. 注册 Mock Data
+在 `src/widgets/mock-datas.ts` 中导入并注册你的 mock data：
+
+```typescript
+import { NewWidgetMockData } from './NewWidget/mock-data';
+
+export const MockDataRegistry: Record<string, { minimal: any; complete: any }> = {
+  // ... 其他组件
+  NewWidget: NewWidgetMockData,
+};
+```
+
+> **目的**: 让文档生成脚本能够为该组件生成准确的 JSON 配置示例。
+
+### 3. 注册到 Server Registry
 在 `src/widgets/server-registry.tsx` 中：
 ```typescript
 import { NewWidget } from './NewWidget';
@@ -113,7 +158,7 @@ export const ServerRegistry = {
 ```
 > **目的**: 让服务器能 SSR 出它的 HTML。
 
-### 3. 注册到 Client Registry
+### 4. 注册到 Client Registry
 在 `src/widgets/client-registry.tsx` 中：
 ```typescript
 import { dynamicClientFloor } from '@/lib/engine/utils';
@@ -126,8 +171,38 @@ export const ClientRegistry = {
 > **目的**: 让客户端能下载并激活它。
 > *注意*: 即使是 RSC (如 `Markdown`)，也必须在这里注册一个 **Client Fallback** (如 `MarkdownClient`)，否则在编辑器预览或客户端路由切换时会报错。
 
-### 4. 更新映射表
-在 `src/widgets/component-map.ts` 中分配一个 ID。
+### 5. 更新映射表和 Schema 注册表
+在 `src/widgets/component-map.ts` 中分配一个 ID，并在 `src/widgets/schemas.ts` 中导出 Schema：
+
+**component-map.ts**:
+```typescript
+export const COMPONENT_MAP: Record<number, ComponentInfo> = {
+  // ... 其他组件
+  99: { name: 'NewWidget', label: '新组件' },
+};
+```
+
+**schemas.ts**:
+```typescript
+import { NewWidgetSchema } from './NewWidget/schema';
+
+export const SchemaRegistry = {
+  // ... 其他 Schema
+  NewWidget: NewWidgetSchema,
+};
+```
+
+### 6. 生成文档
+运行文档生成命令，更新 AI 操作手册：
+
+```bash
+pnpm gen:docs
+```
+
+该命令会：
+- 解析所有组件的 Schema。
+- 使用 `mock-datas.ts` 中的示例生成 JSON 配置。
+- 更新 `knowledge/agent-manual.md` 文件。
 
 ---
 

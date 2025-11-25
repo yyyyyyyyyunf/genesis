@@ -19,7 +19,8 @@ Genesis 是一个现代化的低代码营销页面搭建平台。采用 Monorepo
 - **[嵌套组件开发](./apps/hercules/COMPONENT_GUIDE.md#5-嵌套组件开发指南)** - 容器组件（Tab、Accordion）的特殊处理
 
 ### AI 与自动化
-- **[AI Agent 集成规划 (apps/jarvis/AI_INTEGRATION.md)](./apps/jarvis/AI_INTEGRATION.md)** - Dify 集成和 agent-manual.md 使用
+- **[AI Agent 集成规划 (AI_INTEGRATION.md)](./AI_INTEGRATION.md)** - Dify 集成和 agent-manual.md 使用
+- **[AI 质量评估体系 (AI_EVAL.md)](./AI_EVAL.md)** - Eval 系统和 Self-Correction 机制
 - **[AI 操作手册 (knowledge/agent-manual.md)](./knowledge/agent-manual.md)** - 自动生成的组件文档（供 AI 使用）
 
 ### 部署与运维

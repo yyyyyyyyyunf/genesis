@@ -32,23 +32,55 @@ Hercules 使用 Next.js 构建，采用了一种基于配置驱动（Server-Driv
 ### 2. 定义 Schema (`schema.ts`)
 
 这是最关键的一步。我们需要使用 `zod` 定义组件接收的数据结构。
-**请务必使用中文描述 (`.describe()`)**，因为这些描述会被提取生成 Agent 手册，指导 AI 正确生成配置。
+**请使用 `withMeta()` 函数添加元数据**，这些元数据会被提取生成 Agent 手册，指导 AI 正确生成配置。
 
-此外，为了改善属性检查器 (Property Inspector) 的用户体验，你可以使用特殊的元数据标签：
+`withMeta()` 函数提供类型安全的元数据定义，不同类型的 Schema 可以使用不同的元数据字段：
 
-*   **`@labels({...})`**: 为 Enum 类型的选项提供中文显示名称。
-*   **`@unit(...)`**: 为字符串或数字类型的输入框添加单位后缀。
-*   **`@default(...)`**: 为 Discriminated Union 类型指定默认选中的子类型（例如 `@default(content)`）。
+*   **`label`**: 字段的中文名称（所有类型适用）
+*   **`description`**: 字段的详细说明（所有类型适用）
+*   **`labels`**: 为 Enum 类型的选项提供中文显示名称
+*   **`unit`**: 为 String/Number 类型添加单位后缀
+*   **`defaultValue`**: 为 Discriminated Union 指定默认选中的子类型
 
 ```typescript
 import { z } from 'zod';
+import { withMeta } from '@/lib/schema-utils';
 
 export const MyNewComponentSchema = z.object({
-  title: z.string().describe('标题: 组件的标题文本').default('新组件'),
-  description: z.string().optional().describe('描述: 组件的描述信息'),
-  theme: z.enum(['light', 'dark']).describe('主题: 组件的颜色主题 @labels({"light":"明亮", "dark":"暗黑"})').default('light'),
-  width: z.string().describe('宽度: 组件宽度 @unit(px)').default('100px'),
+  title: withMeta(z.string(), {
+    label: '标题',
+    description: '组件的标题文本',
+  }).default('新组件'),
+  description: withMeta(z.string(), {
+    label: '描述',
+    description: '组件的描述信息',
+  }).optional(),
+  theme: withMeta(z.enum(['light', 'dark']), {
+    label: '主题',
+    description: '组件的颜色主题',
+    labels: {
+      light: '明亮',
+      dark: '暗黑',
+    },
+  }).default('light'),
+  width: withMeta(z.string(), {
+    label: '宽度',
+    description: '组件宽度',
+    unit: 'px',
+  }).default('100px'),
 });
+```
+
+**💡 提示：灵活的调用顺序**
+
+`withMeta()` 支持两种调用方式：
+
+```typescript
+// ✅ 推荐：先 withMeta，后 .optional()
+withMeta(z.string(), { label: '标签' }).optional()
+
+// ✅ 也支持：先 .optional()，后 withMeta
+withMeta(z.string().optional(), { label: '标签' })
 ```
 
 #### 高级技巧：使用 Discriminated Union (可辨识联合)
@@ -62,31 +94,51 @@ export const MyNewComponentSchema = z.object({
 
 2.  **定义各形态的 Schema**：
     使用 `.extend()` 扩展基础 Schema，并添加一个字面量类型的 `variant` 字段作为辨识符（Discriminator）。
-    **重要**：为每个 literal 添加中文描述，这样属性检查器的下拉选项会显示友好的中文名称。
+    **重要**：为每个 literal 添加 `label`，这样属性检查器的下拉选项会显示友好的中文名称。
 
     ```typescript
+    import { withMeta } from '@/lib/schema-utils';
+    
     // 形态 1: 普通内容
     const ContentImageSchema = BaseImageSchema.extend({
-      variant: z.literal('content').describe('普通内容图片'), // 辨识符，describe 中的文字会显示在下拉选项中
-      aspectRatio: z.enum(['16/9', '4/3']).optional(), // 只有普通图片需要的字段
+      variant: withMeta(z.literal('content'), {
+        label: '普通内容图片', // label 会显示在下拉选项中
+      }),
+      aspectRatio: withMeta(z.enum(['16/9', '4/3']), {
+        label: '宽高比',
+      }).optional(), // 只有普通图片需要的字段
     });
 
     // 形态 2: 背景容器
     const BackgroundImageSchema = BaseImageSchema.extend({
-      variant: z.literal('background').describe('背景图片'), // 辨识符，describe 中的文字会显示在下拉选项中
-      height: z.string(), // 背景容器必须指定高度
-      backgroundPosition: z.enum(['center', 'top']).optional(),
+      variant: withMeta(z.literal('background'), {
+        label: '背景图片', // label 会显示在下拉选项中
+      }),
+      height: withMeta(z.string(), {
+        label: '高度',
+        unit: 'px',
+      }), // 背景容器必须指定高度
+      backgroundPosition: withMeta(z.enum(['center', 'top']), {
+        label: '背景位置',
+      }).optional(),
     });
     ```
 
 3.  **组合 Schema**：
-    可以通过 `@default` 标记指定默认使用哪种形态。
+    可以通过 `defaultValue` 指定默认使用哪种形态。
     
     ```typescript
-    export const ImageSchema = z.discriminatedUnion('variant', [
-      ContentImageSchema,
-      BackgroundImageSchema,
-    ]).describe('图片类型: 支持内容图片和背景图片两种模式 @default(content)');
+    export const ImageSchema = withMeta(
+      z.discriminatedUnion('variant', [
+        ContentImageSchema,
+        BackgroundImageSchema,
+      ]),
+      {
+        label: '图片类型',
+        description: '支持内容图片和背景图片两种模式',
+        defaultValue: 'content',
+      }
+    );
     ```
 
 **多级级联示例**：

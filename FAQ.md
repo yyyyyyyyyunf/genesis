@@ -224,43 +224,60 @@ pnpm --filter hercules dev
 
 ---
 
-### Q8: Schema 元数据注解 (@labels, @unit) 不生效？
+### Q8: Schema 元数据 (labels, unit) 不生效？
 
-**症状**: 在 Schema 中添加了 `@labels` 或 `@unit`，但 AutoForm 没有显示
+**症状**: 在 Schema 中使用了 `withMeta()` 添加元数据，但 AutoForm 没有显示
 
 **可能原因**:
-1. 注解语法错误
-2. 解析逻辑问题
+1. 忘记导入 `withMeta` 函数
+2. 元数据对象格式错误
+3. TypeScript 编译错误
 
 **解决方案**:
 
-**检查注解语法**（参考 [SCHEMA_GUIDE.md](./SCHEMA_GUIDE.md)）:
+**检查代码语法**（参考 [SCHEMA_GUIDE.md](./SCHEMA_GUIDE.md)）:
 ```typescript
 // ✅ 正确
-z.string().describe('图片地址 @unit(px)')
+import { withMeta } from '@/lib/schema-utils';
+
+withMeta(z.string(), {
+  label: '图片地址',
+  unit: 'px',
+})
 
 // ✅ 正确
-z.enum(['left', 'center', 'right']).describe('对齐方式 @labels({"left":"左对齐","center":"居中","right":"右对齐"})')
+withMeta(z.enum(['left', 'center', 'right']), {
+  label: '对齐方式',
+  labels: {
+    left: '左对齐',
+    center: '居中',
+    right: '右对齐',
+  },
+})
 
-// ❌ 错误 (缺少空格)
-z.string().describe('图片地址@unit(px)')
+// ❌ 错误 (忘记导入)
+withMeta(z.string(), { ... }) // ReferenceError: withMeta is not defined
 
-// ❌ 错误 (JSON 格式错误)
-z.enum(...).describe('@labels({left:"左对齐"})')  // 键名需要双引号
+// ❌ 错误 (Object 类型不能有 unit)
+withMeta(z.object({ ... }), {
+  label: '配置',
+  unit: 'px', // TypeScript 会报错
+})
 ```
 
 **调试技巧**:
 
-1. 在 `apps/zeus/src/lib/utils.ts` 的 `getSchemaMeta` 函数中添加 `console.log` 查看解析结果:
+1. 检查浏览器控制台是否有编译错误
+2. 在 `apps/zeus/src/lib/utils.ts` 的 `getSchemaMeta` 函数中添加 `console.log` 查看解析结果:
 ```typescript
 export function getSchemaMeta(schema: ZodType): SchemaMetadata {
-  const meta = // ...
-  console.log('Schema Meta:', meta); // 调试日志
-  return meta;
+  const metadata = (schema as any)._def?.metadata;
+  console.log('Schema Metadata:', metadata); // 调试日志
+  // ...
 }
 ```
 
-2. 检查浏览器控制台输出
+3. 确认 TypeScript 编译通过（`pnpm --filter hercules build`）
 
 ---
 

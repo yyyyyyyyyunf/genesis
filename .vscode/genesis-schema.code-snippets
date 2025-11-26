@@ -1,0 +1,145 @@
+{
+  "Zod String with Meta": {
+    "prefix": "zmeta-string",
+    "body": [
+      "withMeta(z.string(), {",
+      "  label: '${1:标签}',",
+      "  description: '${2:描述}',",
+      "})"
+    ],
+    "description": "创建带元数据的 Zod 字符串"
+  },
+  "Zod String with Unit": {
+    "prefix": "zmeta-string-unit",
+    "body": [
+      "withMeta(z.string(), {",
+      "  label: '${1:标签}',",
+      "  description: '${2:描述}',",
+      "  unit: '${3:px}',",
+      "})"
+    ],
+    "description": "创建带单位元数据的 Zod 字符串"
+  },
+  "Zod Number with Meta": {
+    "prefix": "zmeta-number",
+    "body": [
+      "withMeta(z.number(), {",
+      "  label: '${1:标签}',",
+      "  description: '${2:描述}',",
+      "})"
+    ],
+    "description": "创建带元数据的 Zod 数字"
+  },
+  "Zod Number with Unit": {
+    "prefix": "zmeta-number-unit",
+    "body": [
+      "withMeta(z.number(), {",
+      "  label: '${1:标签}',",
+      "  description: '${2:描述}',",
+      "  unit: '${3:px}',",
+      "})"
+    ],
+    "description": "创建带单位元数据的 Zod 数字"
+  },
+  "Zod Enum with Labels": {
+    "prefix": "zmeta-enum",
+    "body": [
+      "withMeta(z.enum(['${1:opt1}', '${2:opt2}', '${3:opt3}']), {",
+      "  label: '${4:标签}',",
+      "  description: '${5:描述}',",
+      "  labels: {",
+      "    ${1:opt1}: '${6:选项1}',",
+      "    ${2:opt2}: '${7:选项2}',",
+      "    ${3:opt3}: '${8:选项3}',",
+      "  },",
+      "})"
+    ],
+    "description": "创建带标签元数据的 Zod 枚举"
+  },
+  "Zod Boolean with Meta": {
+    "prefix": "zmeta-boolean",
+    "body": [
+      "withMeta(z.boolean(), {",
+      "  label: '${1:标签}',",
+      "  description: '${2:描述}',",
+      "})"
+    ],
+    "description": "创建带元数据的 Zod 布尔值"
+  },
+  "Zod Object with Meta": {
+    "prefix": "zmeta-object",
+    "body": [
+      "withMeta(z.object({",
+      "  $0",
+      "}), {",
+      "  label: '${1:标签}',",
+      "  description: '${2:描述}',",
+      "})"
+    ],
+    "description": "创建带元数据的 Zod 对象"
+  },
+  "Zod Array with Meta": {
+    "prefix": "zmeta-array",
+    "body": [
+      "withMeta(z.array(${1:z.string()}), {",
+      "  label: '${2:标签}',",
+      "  description: '${3:描述}',",
+      "})"
+    ],
+    "description": "创建带元数据的 Zod 数组"
+  },
+  "Zod Literal with Meta": {
+    "prefix": "zmeta-literal",
+    "body": [
+      "withMeta(z.literal('${1:value}'), {",
+      "  label: '${2:标签}',",
+      "})"
+    ],
+    "description": "创建带元数据的 Zod 字面量（用于辨识符）"
+  },
+  "Zod Discriminated Union with Meta": {
+    "prefix": "zmeta-union",
+    "body": [
+      "withMeta(",
+      "  z.discriminatedUnion('${1:variant}', [",
+      "    ${2:Schema1},",
+      "    ${3:Schema2},",
+      "  ]),",
+      "  {",
+      "    label: '${4:标签}',",
+      "    description: '${5:描述}',",
+      "    defaultValue: '${6:default}',",
+      "  }",
+      ")"
+    ],
+    "description": "创建带元数据的 Zod 可辨识联合类型"
+  },
+  "Complete Widget Schema": {
+    "prefix": "widget-schema",
+    "body": [
+      "import { z } from 'zod';",
+      "import { withMeta } from '@/lib/schema-utils';",
+      "",
+      "export const ${1:ComponentName}Schema = z.object({",
+      "  ${2:fieldName}: withMeta(z.string(), {",
+      "    label: '${3:标签}',",
+      "    description: '${4:描述}',",
+      "  }),",
+      "});",
+      "",
+      "export type ${1:ComponentName}Props = z.infer<typeof ${1:ComponentName}Schema>;"
+    ],
+    "description": "创建完整的 widget schema 文件"
+  },
+  "Optional with Default": {
+    "prefix": "zmeta-optional",
+    "body": [
+      "withMeta(z.${1:string}(), {",
+      "  label: '${2:标签}',",
+      "  description: '${3:描述}',",
+      "}).optional().default(${4:'defaultValue'})"
+    ],
+    "description": "创建带默认值的可选字段"
+  }
+}
+

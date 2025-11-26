@@ -1,27 +1,45 @@
 import { z } from 'zod';
+import { withMeta } from '@/lib/schema-utils';
 
 const BaseImageSchema = z.object({
-  src: z.string().describe('图片链接: 图片链接地址'),
-  clickUrl: z.string().optional().describe('跳转链接: 点击跳转链接'),
-  alt: z.string().optional().describe('替代文本: 无障碍替代文本').default(''),
+  src: withMeta(z.string(), { label: '图片链接', description: '图片链接地址' }),
+  clickUrl: withMeta(z.string(), { label: '跳转链接', description: '点击跳转链接' }).optional(),
+  alt: withMeta(z.string(), { label: '替代文本', description: '无障碍替代文本' }).optional().default(''),
 });
 
 const ContentImageSchema = BaseImageSchema.extend({
-  variant: z.literal('content').describe('普通内容图片'),
-  aspectRatio: z.enum(['16/9', '4/3', '1/1', 'auto']).optional().describe('宽高比: 图片容器的宽高比').default('auto'),
-  objectFit: z.enum(['cover', 'contain', 'fill']).optional().describe('填充模式: CSS object-fit 属性 @labels({"cover":"覆盖", "contain":"包含", "fill":"拉伸"})').default('cover'),
+  variant: withMeta(z.literal('content'), { label: '普通内容图片' }),
+  aspectRatio: withMeta(z.enum(['16/9', '4/3', '1/1', 'auto']), {
+    label: '宽高比',
+    description: '图片容器的宽高比'
+  }).optional().default('auto'),
+  objectFit: withMeta(z.enum(['cover', 'contain', 'fill']), {
+    label: '填充模式',
+    description: 'CSS object-fit 属性',
+    labels: { cover: '覆盖', contain: '包含', fill: '拉伸' }
+  }).optional().default('cover'),
 });
 
 const BackgroundImageSchema = BaseImageSchema.extend({
-  variant: z.literal('background').describe('背景图片'),
-  height: z.string().describe('高度: 容器高度 (如 300px, 20rem) @unit(px)'),
-  backgroundPosition: z.enum(['center', 'top', 'bottom', 'left', 'right']).optional().describe('背景位置: 在容器内的位置').default('center'),
-  backgroundSize: z.enum(['cover', 'contain']).optional().describe('背景大小: CSS background-size 属性').default('cover'),
+  variant: withMeta(z.literal('background'), { label: '背景图片' }),
+  height: withMeta(z.string(), { label: '高度', description: '容器高度 (如 300px, 20rem)', unit: 'px' }),
+  backgroundPosition: withMeta(z.enum(['center', 'top', 'bottom', 'left', 'right']), {
+    label: '背景位置',
+    description: '在容器内的位置'
+  }).optional().default('center'),
+  backgroundSize: withMeta(z.enum(['cover', 'contain']), {
+    label: '背景大小',
+    description: 'CSS background-size 属性'
+  }).optional().default('cover'),
 });
 
-export const ImageSchema = z.discriminatedUnion('variant', [
+export const ImageSchema = withMeta(z.discriminatedUnion('variant', [
   ContentImageSchema,
   BackgroundImageSchema,
-]).describe('图片类型: 支持内容图片和背景图片两种模式 @default(content)');
+]), {
+  label: '图片类型',
+  description: '支持内容图片和背景图片两种模式',
+  defaultValue: 'content'
+});
 
 export type ImageProps = z.infer<typeof ImageSchema>;

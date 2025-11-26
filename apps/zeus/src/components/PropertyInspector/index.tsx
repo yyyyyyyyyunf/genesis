@@ -7,7 +7,7 @@ import { getComponentKey } from '@genesis/hercules/component-map';
 import { ZodObject, ZodDiscriminatedUnion } from 'zod';
 import { AutoForm } from './AutoForm';
 import { Trash2 } from 'lucide-react';
-import { findFloorNode, getAliasLabel } from '@/lib/utils';
+import { findFloorNode, getAliasLabel } from '@/lib/schema-helpers';
 
 export function PropertyInspector() {
   const { currentConfig, draftConfig, selectedFloorId, updateFloor, removeFloor } = useEditorStore();

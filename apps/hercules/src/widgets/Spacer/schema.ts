@@ -1,7 +1,15 @@
 import { z } from 'zod';
+import { withMeta } from '@/lib/schema-utils';
 
 export const SpacerSchema = z.object({
-  height: z.number().describe('高度: 间距的高度 (px) @unit(px)').default(20),
-  backgroundColor: z.string().optional().describe('背景颜色: 间距的背景颜色 (Hex 或 Tailwind 类)').default('bg-transparent'),
+  height: withMeta(z.number(), {
+    label: '高度',
+    description: '间距的高度 (px)',
+    unit: 'px',
+  }).default(20),
+  backgroundColor: withMeta(z.string(), {
+    label: '背景颜色',
+    description: '间距的背景颜色 (Hex 或 Tailwind 类)',
+  }).optional().default('bg-transparent'),
 });
 

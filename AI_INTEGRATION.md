@@ -340,9 +340,20 @@ pnpm gen:docs
 
 ```typescript
 // apps/hercules/src/widgets/NewComponent/schema.ts
+import { z } from 'zod';
+import { withMeta } from '@/lib/schema-utils';
+
 export const NewComponentSchema = z.object({
-  title: z.string().describe('标题'),
-  type: z.enum(['A', 'B']).describe('类型 @labels({"A":"选项A","B":"选项B"})'),
+  title: withMeta(z.string(), {
+    label: '标题',
+  }),
+  type: withMeta(z.enum(['A', 'B']), {
+    label: '类型',
+    labels: {
+      A: '选项A',
+      B: '选项B',
+    },
+  }),
 });
 
 // apps/hercules/src/widgets/NewComponent/mock-data.ts
@@ -373,10 +384,15 @@ pnpm gen:docs
 
 ```typescript
 // ❌ 不好的描述
-z.string().describe('URL')
+withMeta(z.string(), {
+  label: 'URL',
+})
 
 // ✅ 好的描述
-z.string().describe('图片地址，需要是有效的 HTTPS URL，推荐使用 CDN 图片')
+withMeta(z.string(), {
+  label: '图片地址',
+  description: '需要是有效的 HTTPS URL，推荐使用 CDN 图片',
+})
 ```
 
 #### 方法2: 提供更多示例

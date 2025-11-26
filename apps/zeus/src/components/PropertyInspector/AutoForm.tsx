@@ -2,7 +2,7 @@
 
 import { ZodObject, ZodString, ZodEnum, ZodType, ZodArray, ZodNumber, ZodBoolean, ZodDiscriminatedUnion, ZodLiteral } from 'zod';
 import { Plus, Trash2 } from 'lucide-react';
-import { unwrapSchema, getSchemaMeta, getLiteralLabelsFromUnion } from '@/lib/utils';
+import { unwrapSchema, getSchemaMeta, getLiteralLabelsFromUnion } from '@/lib/schema-helpers';
 
 interface AutoFormProps {
   schema: ZodType;

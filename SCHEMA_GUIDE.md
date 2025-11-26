@@ -4,10 +4,15 @@
 
 - [概述](#概述)
 - [设计理念](#设计理念)
-- [元数据注解详解](#元数据注解详解)
-  - [@labels - 中文标签映射](#labels---中文标签映射)
-  - [@unit - 单位显示](#unit---单位显示)
-  - [@default - 默认选中项](#default---默认选中项)
+- [withMeta 函数使用](#withmeta-函数使用)
+  - [基础用法](#基础用法)
+  - [类型安全特性](#类型安全特性)
+- [元数据字段说明](#元数据字段说明)
+  - [label - 中文标签](#label---中文标签)
+  - [description - 描述信息](#description---描述信息)
+  - [labels - 枚举选项映射](#labels---枚举选项映射)
+  - [unit - 单位显示](#unit---单位显示)
+  - [defaultValue - 联合类型默认值](#defaultvalue---联合类型默认值)
 - [解析流程与实现](#解析流程与实现)
 - [错误处理与 Fallback](#错误处理与-fallback)
 - [实际示例](#实际示例)
@@ -17,30 +22,168 @@
 
 ## 概述
 
-Genesis 平台采用 **Zod Schema** 作为组件的数据结构定义标准。为了提升编辑器 (Zeus) 的用户体验，并为 AI Agent 提供更丰富的语义信息，我们在 Schema 的 `.describe()` 描述字符串中嵌入了**元数据注解**。
+Genesis 平台采用 **Zod Schema** 作为组件的数据结构定义标准。为了提升编辑器 (Zeus) 的用户体验，并为 AI Agent 提供更丰富的语义信息，我们使用 Zod 的 **`.meta()`** API 来附加结构化的元数据。
 
-这些元数据注解会被自动解析，并应用于：
+通过 `withMeta()` 辅助函数，开发者可以轻松地为 Schema 添加元数据，这些元数据会被自动解析并应用于：
 
 1. **属性编辑面板 (Property Inspector)**: 在 Zeus 编辑器中，AutoForm 会根据元数据渲染更友好的表单控件（如中文下拉选项、带单位的输入框）。
-2. **AI 操作手册 (agent-manual.md)**: 文档生成脚本会保留这些元数据，帮助 AI 更好地理解组件的配置选项。
+2. **AI 操作手册 (agent-manual.md)**: 文档生成脚本会提取这些元数据，帮助 AI 更好地理解组件的配置选项。
 
 ---
 
 ## 设计理念
 
-### 为什么需要元数据？
+## withMeta 函数使用
 
-Zod Schema 本身只能定义数据的**结构和类型**，但无法传达**语义和展示细节**。例如：
+### 基础用法
+
+`withMeta()` 是一个类型安全的辅助函数，用于为 Zod Schema 附加元数据。它接受两个参数：
+
+1. **schema**: Zod schema 实例
+2. **metadata**: 元数据对象
 
 ```typescript
-// ❌ 没有元数据：用户看到的是 'left' | 'center' | 'right'
-align: z.enum(['left', 'center', 'right'])
+import { z } from 'zod';
+import { withMeta } from '@/lib/schema-utils';
 
-// ✅ 有元数据：用户看到的是 '左对齐' | '居中' | '右对齐'
-align: z.enum(['left', 'center', 'right']).describe(
-  '对齐方式: 文本对齐方式 @labels({"left":"左对齐", "center":"居中", "right":"右对齐"})'
+// 基础示例
+const name = withMeta(z.string(), {
+  label: '姓名',
+  description: '用户的姓名',
+});
+
+// 带枚举标签
+const align = withMeta(z.enum(['left', 'center', 'right']), {
+  label: '对齐方式',
+  description: '文本对齐方式',
+  labels: {
+    left: '左对齐',
+    center: '居中',
+    right: '右对齐',
+  },
+});
+
+// 带单位
+const height = withMeta(z.number(), {
+  label: '高度',
+  description: '组件高度',
+  unit: 'px',
+});
+```
+
+### 类型安全特性
+
+`withMeta()` 使用 TypeScript 函数重载提供类型安全保障，不同的 Schema 类型只能使用对应的元数据字段：
+
+- **String/Number**: 可以使用 `unit` 字段
+- **Enum**: 可以使用 `labels` 字段
+- **DiscriminatedUnion**: 可以使用 `defaultValue` 字段
+- **Object/Array/Literal/Boolean**: 只能使用基础字段 (`label`, `description`)
+
+```typescript
+// ✅ 正确：String 可以有 unit
+withMeta(z.string(), {
+  label: '宽度',
+  unit: 'px',
+});
+
+// ❌ 错误：Object 不能有 unit（TypeScript 会报错）
+withMeta(z.object({ ... }), {
+  label: '配置',
+  unit: 'px', // Type error!
+});
+```
+
+## 元数据字段说明
+
+### label - 中文标签
+
+**类型**: `string`  
+**适用**: 所有 Schema 类型  
+**作用**: 为字段提供人类可读的中文名称
+
+```typescript
+withMeta(z.string(), {
+  label: '用户名',
+})
+```
+
+### description - 描述信息
+
+**类型**: `string`  
+**适用**: 所有 Schema 类型  
+**作用**: 为字段提供详细的说明文本
+
+```typescript
+withMeta(z.string(), {
+  label: '邮箱',
+  description: '用户的电子邮箱地址',
+})
+```
+
+### labels - 枚举选项映射
+
+**类型**: `Record<string, string>`  
+**适用**: `z.enum()`  
+**作用**: 为枚举值提供中文显示名称
+
+```typescript
+withMeta(z.enum(['sm', 'md', 'lg']), {
+  label: '尺寸',
+  labels: {
+    sm: '小',
+    md: '中',
+    lg: '大',
+  },
+})
+```
+
+**编辑器效果**: 下拉选项显示为 "小"、"中"、"大"，而实际保存的值仍是 `'sm'`、`'md'`、`'lg'`。
+
+### unit - 单位显示
+
+**类型**: `string`  
+**适用**: `z.string()`, `z.number()`  
+**作用**: 为数值或字符串输入框添加单位后缀（如 `px`, `rem`, `%`）
+
+```typescript
+// 数值类型
+withMeta(z.number(), {
+  label: '边距',
+  unit: 'px',
+})
+
+// 字符串类型（某些 CSS 属性需要带单位的字符串）
+withMeta(z.string(), {
+  label: '高度',
+  description: '容器高度 (如 300px, 20rem)',
+  unit: 'px',
+})
+```
+
+**编辑器效果**: 输入框右侧显示单位后缀。
+
+### defaultValue - 联合类型默认值
+
+**类型**: `string`  
+**适用**: `z.discriminatedUnion()`  
+**作用**: 为 Discriminated Union 指定默认选中的类型
+
+```typescript
+withMeta(
+  z.discriminatedUnion('variant', [
+    ContentImageSchema,
+    BackgroundImageSchema,
+  ]),
+  {
+    label: '图片类型',
+    description: '支持内容图片和背景图片两种模式',
+    defaultValue: 'content',
+  }
 )
 ```
+
+**编辑器效果**: 用户首次添加组件时，类型选择器默认选中 `'content'`。
 
 ### 单一事实来源 (Single Source of Truth)
 
@@ -415,25 +558,49 @@ function cleanDescription(rawDesc: string) {
 
 ```typescript
 import { z } from 'zod';
+import { withMeta } from '@/lib/schema-utils';
 
 export const TextSchema = z.object({
-  content: z.string().describe('文本内容: 要显示的实际文本内容'),
+  content: withMeta(z.string(), {
+    label: '文本内容',
+    description: '要显示的实际文本内容',
+  }),
   
-  align: z.enum(['left', 'center', 'right']).optional().describe(
-    '对齐方式: 文本对齐方式 @labels({"left":"左对齐", "center":"居中", "right":"右对齐"})'
-  ).default('left'),
+  align: withMeta(z.enum(['left', 'center', 'right']), {
+    label: '对齐方式',
+    description: '文本对齐方式',
+    labels: {
+      left: '左对齐',
+      center: '居中',
+      right: '右对齐',
+    },
+  }).optional().default('left'),
   
-  size: z.enum(['sm', 'base', 'lg', 'xl', '2xl']).optional().describe(
-    '字体大小: 字体大小 @labels({"sm":"小", "base":"标准", "lg":"大", "xl":"超大", "2xl":"特大"})'
-  ).default('base'),
+  size: withMeta(z.enum(['sm', 'base', 'lg', 'xl', '2xl']), {
+    label: '字体大小',
+    description: '字体大小',
+    labels: {
+      sm: '小',
+      base: '标准',
+      lg: '大',
+      xl: '超大',
+      '2xl': '特大',
+    },
+  }).optional().default('base'),
   
-  color: z.string().optional().describe(
-    '文本颜色: 文本颜色 (Hex 或 Tailwind 类)'
-  ).default('text-black'),
+  color: withMeta(z.string(), {
+    label: '文本颜色',
+    description: '文本颜色 (Hex 或 Tailwind 类)',
+  }).optional().default('text-black'),
   
-  mode: z.enum(['simple', 'with-locale']).optional().describe(
-    '显示模式: 显示模式 @labels({"simple":"标准模式", "with-locale":"多语言模式"})'
-  ).default('simple'),
+  mode: withMeta(z.enum(['simple', 'with-locale']), {
+    label: '显示模式',
+    description: '显示模式',
+    labels: {
+      simple: '标准模式',
+      'with-locale': '多语言模式',
+    },
+  }).optional().default('simple'),
 });
 ```
 
@@ -445,62 +612,98 @@ export const TextSchema = z.object({
 
 ---
 
-### 示例 2：Image 组件（Discriminated Union + @default）
+### 示例 2：Image 组件（Discriminated Union + defaultValue）
 
 **文件**：`apps/hercules/src/widgets/Image/schema.ts`
 
 ```typescript
 import { z } from 'zod';
+import { withMeta } from '@/lib/schema-utils';
 
 const BaseImageSchema = z.object({
-  src: z.string().describe('图片链接: 图片链接地址'),
-  clickUrl: z.string().optional().describe('跳转链接: 点击跳转链接'),
+  src: withMeta(z.string(), {
+    label: '图片链接',
+    description: '图片链接地址',
+  }),
+  clickUrl: withMeta(z.string(), {
+    label: '跳转链接',
+    description: '点击跳转链接',
+  }).optional(),
 });
 
 const ContentImageSchema = BaseImageSchema.extend({
-  variant: z.literal('content').describe('普通内容图片'),
-  aspectRatio: z.enum(['16/9', '4/3', '1/1', 'auto']).optional().describe(
-    '宽高比: 图片容器的宽高比'
-  ).default('auto'),
-  objectFit: z.enum(['cover', 'contain', 'fill']).optional().describe(
-    '填充模式: CSS object-fit 属性 @labels({"cover":"覆盖", "contain":"包含", "fill":"拉伸"})'
-  ).default('cover'),
+  variant: withMeta(z.literal('content'), {
+    label: '普通内容图片',
+  }),
+  aspectRatio: withMeta(z.enum(['16/9', '4/3', '1/1', 'auto']), {
+    label: '宽高比',
+    description: '图片容器的宽高比',
+  }).optional().default('auto'),
+  objectFit: withMeta(z.enum(['cover', 'contain', 'fill']), {
+    label: '填充模式',
+    description: 'CSS object-fit 属性',
+    labels: {
+      cover: '覆盖',
+      contain: '包含',
+      fill: '拉伸',
+    },
+  }).optional().default('cover'),
 });
 
 const BackgroundImageSchema = BaseImageSchema.extend({
-  variant: z.literal('background').describe('背景图片'),
-  height: z.string().describe('高度: 容器高度 (如 300px, 20rem) @unit(px)'),
-  backgroundPosition: z.enum(['center', 'top', 'bottom', 'left', 'right']).optional().describe(
-    '背景位置: 在容器内的位置'
-  ).default('center'),
+  variant: withMeta(z.literal('background'), {
+    label: '背景图片',
+  }),
+  height: withMeta(z.string(), {
+    label: '高度',
+    description: '容器高度 (如 300px, 20rem)',
+    unit: 'px',
+  }),
+  backgroundPosition: withMeta(z.enum(['center', 'top', 'bottom', 'left', 'right']), {
+    label: '背景位置',
+    description: '在容器内的位置',
+  }).optional().default('center'),
 });
 
-export const ImageSchema = z.discriminatedUnion('variant', [
-  ContentImageSchema,
-  BackgroundImageSchema,
-]).describe('图片类型: 支持内容图片和背景图片两种模式 @default(content)');
+export const ImageSchema = withMeta(
+  z.discriminatedUnion('variant', [
+    ContentImageSchema,
+    BackgroundImageSchema,
+  ]),
+  {
+    label: '图片类型',
+    description: '支持内容图片和背景图片两种模式',
+    defaultValue: 'content',
+  }
+);
 ```
 
 **编辑器效果**：
 
-- 类型选择器默认选中 "普通内容图片" (`@default(content)`)。
+- 类型选择器默认选中 "普通内容图片" (`defaultValue: 'content'`)。
 - 切换到 "背景图片" 时，`height` 输入框右侧显示 "px" 单位。
 - `objectFit` 下拉选项显示为 "覆盖"、"包含"、"拉伸"（而非 `'cover'`、`'contain'`、`'fill'`）。
 
 ---
 
-### 示例 3：Spacer 组件（ZodNumber + @unit）
+### 示例 3：Spacer 组件（ZodNumber + unit）
 
 **文件**：`apps/hercules/src/widgets/Spacer/schema.ts`
 
 ```typescript
 import { z } from 'zod';
+import { withMeta } from '@/lib/schema-utils';
 
 export const SpacerSchema = z.object({
-  height: z.number().describe('高度: 间距的高度 (px) @unit(px)').default(20),
-  backgroundColor: z.string().optional().describe(
-    '背景颜色: 间距的背景颜色 (Hex 或 Tailwind 类)'
-  ).default('bg-transparent'),
+  height: withMeta(z.number(), {
+    label: '高度',
+    description: '间距的高度 (px)',
+    unit: 'px',
+  }).default(20),
+  backgroundColor: withMeta(z.string(), {
+    label: '背景颜色',
+    description: '间距的背景颜色 (Hex 或 Tailwind 类)',
+  }).optional().default('bg-transparent'),
 });
 ```
 
@@ -513,56 +716,67 @@ export const SpacerSchema = z.object({
 
 ## 最佳实践
 
-### 1. 描述字符串格式规范
+### 1. 正确的调用顺序
 
-**推荐格式**：`标签: 详细描述 @元数据1 @元数据2`
+`withMeta()` 支持灵活的调用方式，您可以根据偏好选择：
 
 ```typescript
-// ✅ 好的格式
-height: z.number().describe('高度: 间距的高度 (px) @unit(px)')
+// ✅ 方式 1：先 withMeta，后 .optional()（推荐）
+withMeta(z.string(), {
+  label: '标签',
+}).optional()
 
-// ❌ 不好的格式（缺少冒号分隔）
-height: z.number().describe('高度 @unit(px)')
+// ✅ 方式 2：先 .optional()，后 withMeta（也支持！）
+withMeta(z.string().optional(), {
+  label: '标签',
+})
+
+// ✅ 支持 .default() 包装
+withMeta(z.string().default('默认值'), {
+  label: '标签',
+})
+
+// ✅ 完整示例：链式调用
+withMeta(z.enum(['left', 'center', 'right']), {
+  label: '对齐方式',
+  labels: {
+    left: '左对齐',
+    center: '居中',
+    right: '右对齐',
+  },
+}).optional().default('left')
 ```
 
-**为什么**：`getSchemaMeta()` 使用 `: ` 分割标签和描述。缺少冒号会导致标签为整个字符串。
+**推荐**：建议使用方式 1（先 `withMeta`，后 `.optional()`），这样代码结构更清晰。
 
 ---
 
-### 2. @labels 必须使用双引号
+### 2. 为枚举类型提供完整的 labels 映射
 
 ```typescript
-// ✅ 正确（双引号）
-@labels({"left":"左对齐", "center":"居中"})
+// ✅ 好：所有选项都有中文标签
+withMeta(z.enum(['left', 'center', 'right']), {
+  label: '对齐方式',
+  labels: {
+    left: '左对齐',
+    center: '居中',
+    right: '右对齐',
+  },
+})
 
-// ❌ 错误（单引号会导致 JSON 解析失败）
-@labels({'left':'左对齐', 'center':'居中'})
+// ❌ 不好：缺少某些选项的标签
+withMeta(z.enum(['left', 'center', 'right']), {
+  label: '对齐方式',
+  labels: {
+    left: '左对齐',
+    // center 和 right 没有标签，用户会看到原始值
+  },
+})
 ```
-
-**原因**：JSON 规范要求使用双引号。虽然代码中有 `.replace(/'/g, '"')` 的兼容处理，但直接用双引号更规范。
 
 ---
 
-### 3. 优先使用元数据，而非硬编码
-
-```typescript
-// ❌ 不好：在组件代码中硬编码中文
-if (align === 'left') return '左对齐';
-
-// ✅ 好：在 Schema 中声明元数据
-align: z.enum(['left', 'center', 'right']).describe(
-  '对齐方式: 文本对齐方式 @labels({"left":"左对齐", "center":"居中", "right":"右对齐"})'
-)
-```
-
-**好处**：
-
-- 编辑器和 AI 文档自动同步。
-- 未来支持国际化时，只需修改 Schema。
-
----
-
-### 4. @unit 仅用于 CSS 单位
+### 3. unit 仅用于 CSS 单位
 
 适合：`px`、`rem`、`em`、`%`、`vh`、`vw`
 
@@ -570,50 +784,60 @@ align: z.enum(['left', 'center', 'right']).describe(
 
 ```typescript
 // ✅ 合适的用法
-height: z.number().describe('高度: 容器高度 @unit(px)')
+withMeta(z.number(), {
+  label: '高度',
+  unit: 'px',
+})
 
 // ❌ 不合适的用法
-quantity: z.number().describe('数量: 商品数量 @unit(个)')
+withMeta(z.number(), {
+  label: '数量',
+  unit: '个', // 这会被 TypeScript 接受，但不符合设计意图
+})
 ```
 
-**原因**：`@unit` 的设计初衷是为 CSS 属性提供单位提示。业务单位应在描述文本中说明。
+**原因**：`unit` 的设计初衷是为 CSS 属性提供单位提示。业务单位应在 `description` 中说明。
 
 ---
 
-### 5. 为 Discriminated Union 的字面量添加描述
+### 4. 为 Discriminated Union 的字面量添加 label
 
 ```typescript
-// ✅ 好：每个字面量都有清晰的中文描述
+// ✅ 好：每个字面量都有清晰的中文标签
 const ContentImageSchema = z.object({
-  variant: z.literal('content').describe('普通内容图片'),
+  variant: withMeta(z.literal('content'), {
+    label: '普通内容图片',
+  }),
   // ...
 });
 
-const BackgroundImageSchema = z.object({
-  variant: z.literal('background').describe('背景图片'),
-  // ...
-});
-
-// ❌ 不好：缺少描述，编辑器显示原始值
+// ❌ 不好：缺少 label，编辑器显示原始值
 const ContentImageSchema = z.object({
-  variant: z.literal('content'),
+  variant: z.literal('content'), // 用户会看到 'content'
   // ...
 });
 ```
 
-**编辑器效果**：有描述时，类型选择器显示 "普通内容图片"；无描述时显示 `'content'`。
+**编辑器效果**：有 label 时，类型选择器显示 "普通内容图片"；无 label 时显示 `'content'`。
 
 ---
 
-### 6. 使用 @default 改善初始体验
+### 5. 使用 defaultValue 改善初始体验
 
-对于 Discriminated Union，建议添加 `@default` 注解：
+对于 Discriminated Union，建议添加 `defaultValue`：
 
 ```typescript
-export const ImageSchema = z.discriminatedUnion('variant', [
-  ContentImageSchema,
-  BackgroundImageSchema,
-]).describe('图片类型: 支持内容图片和背景图片两种模式 @default(content)');
+withMeta(
+  z.discriminatedUnion('variant', [
+    ContentImageSchema,
+    BackgroundImageSchema,
+  ]),
+  {
+    label: '图片类型',
+    description: '支持内容图片和背景图片两种模式',
+    defaultValue: 'content',
+  }
+)
 ```
 
 **好处**：
@@ -623,26 +847,49 @@ export const ImageSchema = z.discriminatedUnion('variant', [
 
 ---
 
-### 7. 保持元数据简洁
-
-避免在描述中堆砌过多信息：
+### 6. 保持描述简洁
 
 ```typescript
 // ❌ 过于冗长
-align: z.enum(['left', 'center', 'right']).describe(
-  '对齐方式: 这是一个用于控制文本水平对齐的属性，支持左对齐、居中和右对齐三种模式，默认为左对齐，适用于大多数场景 @labels({"left":"左对齐", "center":"居中", "right":"右对齐"})'
-)
+withMeta(z.enum(['left', 'center', 'right']), {
+  label: '对齐方式',
+  description: '这是一个用于控制文本水平对齐的属性，支持左对齐、居中和右对齐三种模式，默认为左对齐，适用于大多数场景',
+  labels: { ... },
+})
 
 // ✅ 简洁明了
-align: z.enum(['left', 'center', 'right']).describe(
-  '对齐方式: 文本对齐方式 @labels({"left":"左对齐", "center":"居中", "right":"右对齐"})'
-)
+withMeta(z.enum(['left', 'center', 'right']), {
+  label: '对齐方式',
+  description: '文本对齐方式',
+  labels: { ... },
+})
 ```
 
 **原因**：
 
 - 编辑器 UI 空间有限，过长的描述会影响阅读。
 - AI 文档中会原样显示，冗长的描述降低可读性。
+
+---
+
+### 7. label 与 description 的区别
+
+- **label**: 简短的名称，通常 2-6 个字（如 "按钮文本"、"对齐方式"）
+- **description**: 详细说明，可以包含用法提示（如 "点击按钮后的跳转地址 (优先级高于点击提示)"）
+
+```typescript
+// ✅ 好的区分
+withMeta(z.string(), {
+  label: '跳转链接', // 简短
+  description: '点击按钮后的跳转地址 (优先级高于点击提示)', // 详细
+})
+
+// ❌ 不好：label 太长
+withMeta(z.string(), {
+  label: '点击按钮后的跳转地址优先级高于点击提示',
+  description: '跳转链接',
+})
+```
 
 ---
 

@@ -1,4 +1,4 @@
-// 知识库生成器脚本
+// Agent 知识库文档生成脚本
 import fs from 'fs';
 import path from 'path';
 import { ZodType, ZodObject, ZodEnum, ZodOptional, ZodDefault, ZodString, ZodNumber, ZodBoolean, ZodArray, ZodDiscriminatedUnion, ZodLiteral } from 'zod';
@@ -44,58 +44,47 @@ function getOptions(schema: ZodType): string[] | number[] | null {
 }
 
 /**
- * 清理和解析 schema 描述中的元数据标记
+ * 从 Zod schema 的 .meta() 调用中提取元数据
  */
-function cleanDescription(rawDescription: string): { label: string, description: string, unit?: string, defaultValue?: string } {
-  let description = rawDescription;
-  let label = '';
-  let unit: string | undefined;
-  let defaultValue: string | undefined;
+function getMetadata(schema: ZodType): { label?: string, description?: string, labels?: Record<string, string>, unit?: string, defaultValue?: string } {
+  let current: ZodType | null = schema;
 
-  // 1. 提取标签（冒号前的部分）
-  if (description.includes(': ')) {
-    const parts = description.split(': ');
-    if (parts.length > 1) {
-      label = parts[0];
-      description = parts.slice(1).join(': ');
+  // 通过解包 schema 来查找元数据
+  while (current) {
+    // 使用 .meta() 方法获取元数据（Zod 4 API）
+    const metadata = (current as any).meta?.();
+    if (metadata) {
+      return {
+        label: metadata.label,
+        description: metadata.description,
+        labels: metadata.labels,
+        unit: metadata.unit,
+        defaultValue: metadata.defaultValue,
+      };
+    }
+
+    // 解包 ZodOptional 和 ZodDefault 来检查内部 schema
+    if (current instanceof ZodOptional) {
+      current = (current as any).unwrap?.() || (current as any)._def?.innerType;
+    } else if (current instanceof ZodDefault) {
+      current = (current as any).removeDefault?.() || (current as any)._def?.innerType;
+    } else {
+      current = null;
     }
   }
 
-  // 2. 保留 @labels({...}) - Agent 需要通过这些标签理解选项含义
-  // 不移除 @labels，因为用户在编辑器中看到的是这些 label
-
-  // 3. 解析并转换 @unit(xxx) - Agent 需要知道单位
-  const unitMatch = description.match(/@unit\(([^)]+)\)/);
-  if (unitMatch) {
-    unit = unitMatch[1];
-    description = description.replace(unitMatch[0], '').trim();
-    description += ` (单位: ${unit})`;
-  }
-
-  // 4. 解析 @default(xxx) - Agent 需要知道默认行为
-  const defaultMatch = description.match(/@default\(([^)]+)\)/);
-  if (defaultMatch) {
-    defaultValue = defaultMatch[1];
-    description = description.replace(defaultMatch[0], '').trim();
-  }
-
-  return { label, description, unit, defaultValue };
+  return {};
 }
 
 function getDescription(schema: ZodType): string {
-  if (schema.description) return schema.description;
-  
-  if (schema.def && 'description' in schema.def && typeof schema.def.description === 'string') {
-    return schema.def.description;
+  const metadata = getMetadata(schema);
+  if (metadata.label || metadata.description) {
+    // 组合 label 和 description 以保持向后兼容
+    if (metadata.label && metadata.description) {
+      return `${metadata.label}: ${metadata.description}`;
+    }
+    return metadata.label || metadata.description || '';
   }
-  
-  if (schema instanceof ZodOptional) {
-    return getDescription(schema.def.innerType as ZodType);
-  }
-  if (schema instanceof ZodDefault) {
-    return getDescription(schema.def.innerType as ZodType);
-  }
-
   return '';
 }
 
@@ -118,18 +107,17 @@ function getDefault(schema: ZodType): unknown {
 function renderSchema(schema: ZodType, level: number = 0): string {
   let output = '';
 
-  // 处理 Discriminated Union（可辨识联合）
+  // 处理可辨识联合类型（Discriminated Union）
   if (schema instanceof ZodDiscriminatedUnion) {
     const discriminator = schema.def.discriminator;
     const options = schema.options as ZodObject<any>[];
-    const rawDesc = getDescription(schema);
-    const { description, defaultValue } = cleanDescription(rawDesc);
+    const metadata = getMetadata(schema);
 
-    if (description) {
-        output += `${description}\n\n`;
+    if (metadata.description) {
+        output += `${metadata.description}\n\n`;
     }
-    if (defaultValue) {
-        output += `> 默认类型: \`${defaultValue}\`\n\n`;
+    if (metadata.defaultValue) {
+        output += `> 默认类型: \`${metadata.defaultValue}\`\n\n`;
     }
 
     output += `**支持的类型 (${discriminator})**:\n`;
@@ -138,44 +126,33 @@ function renderSchema(schema: ZodType, level: number = 0): string {
       const shape = option.shape;
       const discriminatorField = shape[discriminator];
       
-      // 获取字面量的值
+      // 获取字面量值
       const discriminatorValue = discriminatorField._def?.value || discriminatorField.value;
       
-      // 获取字面量的描述作为标签
-      const literalDesc = getDescription(discriminatorField);
-      
-      // 对于字面量，如果描述中没有冒号，整个描述就是标签
-      let displayLabel = discriminatorValue;
-      if (literalDesc) {
-        if (literalDesc.includes(':')) {
-          const { label: literalLabel } = cleanDescription(literalDesc);
-          displayLabel = literalLabel || discriminatorValue;
-        } else {
-          // 没有冒号，整个描述就是标签
-          displayLabel = literalDesc;
-        }
-      }
+      // 获取字面量标签
+      const literalMetadata = getMetadata(discriminatorField);
+      let displayLabel = literalMetadata.label || discriminatorValue;
       
       output += `\n#### 类型: \`${discriminatorValue}\` - ${displayLabel}\n`;
       
-      // 如果整个选项有描述，也显示出来
+      // 如果整个选项有描述也显示
       const optionDesc = getDescription(option);
       if (optionDesc) {
           output += `${optionDesc}\n`;
       }
       
-      // 渲染该类型的特有字段
+      // 渲染该类型特有的字段
       output += renderObjectProperties(option, level, discriminator);
     }
     return output;
   }
 
-  // 处理对象
+  // 处理对象类型
   if (schema instanceof ZodObject) {
     return renderObjectProperties(schema, level);
   }
 
-  // 简单类型的兜底处理（通常顶层是 Object 或 Union）
+  // 简单类型的兜底处理（通常顶层是对象或联合类型）
   return `(类型: ${getType(schema)})`;
 }
 
@@ -187,36 +164,54 @@ function renderObjectProperties(schema: ZodObject<any>, level: number, skipField
   const shape = schema.shape;
 
   for (const [propName, propSchema] of Object.entries(shape)) {
-    if (propName === skipField) continue; // 跳过辨识符字段（已在上层显示）
+    if (propName === skipField) continue; // 跳过辨识符字段（已在上层展示）
 
     const fieldSchema = propSchema as ZodType;
     const type = getType(fieldSchema);
     const options = getOptions(fieldSchema);
-    const rawDescription = getDescription(fieldSchema);
+    const metadata = getMetadata(fieldSchema);
     const required = isRequired(fieldSchema);
     const defaultValue = getDefault(fieldSchema);
 
-    const { label, description } = cleanDescription(rawDescription);
-
     output += `- **${propName}** ${required ? '(必填)' : '(可选)'}\n`;
-    if (label) {
-      output += `  - **中文名**: ${label}\n`;
+    
+    // 输出中文名
+    if (metadata.label) {
+      output += `  - **中文名**: ${metadata.label}\n`;
     }
+    
+    // 输出类型
     output += `  - 类型: \`${type}\`\n`;
     
+    // 输出选项及其中文标签
     if (options) {
-      output += `  - 选项: ${options.map((o: string | number) => `\`${o}\``).join(', ')}\n`;
+      if (metadata.labels) {
+        // 有标签元数据时显示中文标签
+        output += `  - 选项: ${options.map((o: string | number) => {
+          const label = metadata.labels?.[String(o)];
+          return label ? `\`${o}\` (${label})` : `\`${o}\``;
+        }).join(', ')}\n`;
+      } else {
+        // 无标签时只显示原始值
+        output += `  - 选项: ${options.map((o: string | number) => `\`${o}\``).join(', ')}\n`;
+      }
     }
 
+    // 输出默认值
     if (defaultValue !== undefined) {
       output += `  - 默认值: \`${JSON.stringify(defaultValue)}\`\n`;
     }
 
-    if (description) {
-      output += `  - 描述: ${description}\n`;
+    // 输出描述及单位信息
+    if (metadata.description) {
+      let desc = metadata.description;
+      if (metadata.unit) {
+        desc += ` (单位: ${metadata.unit})`;
+      }
+      output += `  - 描述: ${desc}\n`;
     }
     
-    // 递归处理嵌套对象（AutoForm 支持，文档也应该支持）
+    // 递归处理嵌套对象
     if (fieldSchema instanceof ZodObject) {
          output += `  - **属性详情**:\n`;
          // 增加缩进
@@ -242,11 +237,11 @@ function renderObjectProperties(schema: ZodObject<any>, level: number, skipField
 function generateExamples(name: string, schema: ZodType, typeId: number): string {
   let output = '### 配置示例\n\n';
   
-  // 检查是否有预定义的 mock data
+  // 检查是否有预定义的 mock 数据
   const mockData = MockDatas[name as keyof typeof MockDatas];
   
   if (mockData) {
-    // 使用预定义的 mock data
+    // 使用预定义的 mock 数据
     const minimalExample = {
       id: `floor_${name.toLowerCase()}_example`,
       type: typeId,

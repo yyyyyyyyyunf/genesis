@@ -26,16 +26,16 @@
 - **align** (可选)
   - **中文名**: 对齐方式
   - 类型: `enum`
-  - 选项: `left`, `center`, `right`
+  - 选项: `left` (左对齐), `center` (居中), `right` (右对齐)
   - 默认值: `"left"`
-  - 描述: 文本对齐方式 @labels({"left":"左对齐", "center":"居中", "right":"右对齐"})
+  - 描述: 文本对齐方式
 
 - **size** (可选)
   - **中文名**: 字体大小
   - 类型: `enum`
-  - 选项: `sm`, `base`, `lg`, `xl`, `2xl`
+  - 选项: `sm` (小), `base` (标准), `lg` (大), `xl` (超大), `2xl` (特大)
   - 默认值: `"base"`
-  - 描述: 字体大小 @labels({"sm":"小", "base":"标准", "lg":"大", "xl":"超大", "2xl":"特大"})
+  - 描述: 字体大小
 
 - **color** (可选)
   - **中文名**: 文本颜色
@@ -46,9 +46,9 @@
 - **mode** (可选)
   - **中文名**: 显示模式
   - 类型: `enum`
-  - 选项: `simple`, `with-locale`
+  - 选项: `simple` (标准模式), `with-locale` (多语言模式)
   - 默认值: `"simple"`
-  - 描述: 显示模式 @labels({"simple":"标准模式", "with-locale":"多语言模式"})
+  - 描述: 显示模式
 
 ### 配置示例
 
@@ -94,8 +94,8 @@
 - **layout** (必填)
   - **中文名**: 布局模式
   - 类型: `enum`
-  - 选项: `grid`, `scroll`
-  - 描述: 布局模式：grid (双列网格) 或 scroll (横向滚动) @labels({"grid":"网格", "scroll":"滚动"})
+  - 选项: `grid` (网格), `scroll` (滚动)
+  - 描述: 布局模式：grid (双列网格) 或 scroll (横向滚动)
 
 - **title** (可选)
   - **中文名**: 标题
@@ -335,9 +335,9 @@
 - **objectFit** (可选)
   - **中文名**: 填充模式
   - 类型: `enum`
-  - 选项: `cover`, `contain`, `fill`
+  - 选项: `cover` (覆盖), `contain` (包含), `fill` (拉伸)
   - 默认值: `"cover"`
-  - 描述: CSS object-fit 属性 @labels({"cover":"覆盖", "contain":"包含", "fill":"拉伸"})
+  - 描述: CSS object-fit 属性
 
 
 #### 类型: `background` - 背景图片
@@ -437,16 +437,16 @@
 - **variant** (可选)
   - **中文名**: 样式变体
   - 类型: `enum`
-  - 选项: `solid`, `outline`, `ghost`, `link`
+  - 选项: `solid` (实心), `outline` (描边), `ghost` (幽灵), `link` (链接)
   - 默认值: `"solid"`
-  - 描述: 样式变体 @labels({"solid":"实心", "outline":"描边", "ghost":"幽灵", "link":"链接"})
+  - 描述: 样式变体
 
 - **size** (可选)
   - **中文名**: 尺寸
   - 类型: `enum`
-  - 选项: `sm`, `base`, `lg`
+  - 选项: `sm` (小), `base` (中), `lg` (大)
   - 默认值: `"base"`
-  - 描述: 按钮的大小 @labels({"sm":"小", "base":"中", "lg":"大"})
+  - 描述: 按钮的大小
 
 - **color** (可选)
   - **中文名**: 颜色主题
@@ -457,9 +457,9 @@
 - **radius** (可选)
   - **中文名**: 圆角
   - 类型: `enum`
-  - 选项: `none`, `sm`, `md`, `lg`, `full`
+  - 选项: `none` (无), `sm` (小), `md` (中), `lg` (大), `full` (全圆)
   - 默认值: `"md"`
-  - 描述: 按钮的圆角大小 @labels({"none":"无", "sm":"小", "md":"中", "lg":"大", "full":"全圆"})
+  - 描述: 按钮的圆角大小
 
 - **fullWidth** (可选)
   - **中文名**: 全宽
@@ -550,9 +550,9 @@
 - **aspectRatio** (可选)
   - **中文名**: 宽高比
   - 类型: `enum`
-  - 选项: `16/9`, `4/3`, `1/1`, `auto`
+  - 选项: `16/9` (宽屏), `4/3` (标准), `1/1` (方形), `auto` (自适应)
   - 默认值: `"16/9"`
-  - 描述: 视频容器的宽高比 @labels({"16/9":"宽屏", "4/3":"标准", "1/1":"方形", "auto":"自适应"})
+  - 描述: 视频容器的宽高比
 
 ### 配置示例
 
@@ -642,9 +642,9 @@
 - **aspectRatio** (可选)
   - **中文名**: 宽高比
   - 类型: `enum`
-  - 选项: `16/9`, `4/3`, `3/1`, `auto`
+  - 选项: `16/9` (宽屏), `4/3` (标准), `3/1` (全景), `auto` (自适应)
   - 默认值: `"16/9"`
-  - 描述: 轮播容器的宽高比 @labels({"16/9":"宽屏", "4/3":"标准", "3/1":"全景", "auto":"自适应"})
+  - 描述: 轮播容器的宽高比
 
 ### 配置示例
 
@@ -795,9 +795,9 @@
 - **layout** (可选)
   - **中文名**: 布局模式
   - 类型: `enum`
-  - 选项: `list`, `card`
+  - 选项: `list` (列表), `card` (卡片)
   - 默认值: `"list"`
-  - 描述: 展示方式，list (列表) 或 card (卡片) @labels({"list":"列表", "card":"卡片"})
+  - 描述: 展示方式，list (列表) 或 card (卡片)
 
 - **columns** (可选)
   - **中文名**: 列数
@@ -876,14 +876,14 @@
 ### 属性 (Properties)
 
 - **items** (可选)
+  - **中文名**: 折叠项列表
   - 类型: `array`
   - 默认值: `[{"title":"FAQ 1","content":"Answer to FAQ 1"}]`
-  - 描述: 折叠项列表
 
 - **allowMultiple** (可选)
+  - **中文名**: 允许多个展开
   - 类型: `boolean`
   - 默认值: `false`
-  - 描述: 允许多个展开
 
 ### 配置示例
 
@@ -943,28 +943,28 @@
 ### 属性 (Properties)
 
 - **title** (可选)
+  - **中文名**: 表单标题
   - 类型: `string`
   - 默认值: `"联系我们"`
-  - 描述: 表单标题
 
 - **description** (可选)
+  - **中文名**: 表单描述
   - 类型: `string`
-  - 描述: 表单描述
 
 - **fields** (可选)
+  - **中文名**: 字段列表
   - 类型: `array`
   - 默认值: `[{"label":"姓名","name":"name","type":"text","placeholder":"请输入您的姓名","required":true},{"label":"邮箱","name":"email","type":"email","placeholder":"请输入您的邮箱","required":true}]`
-  - 描述: 字段列表
 
 - **submitText** (可选)
+  - **中文名**: 提交按钮文案
   - 类型: `string`
   - 默认值: `"提交"`
-  - 描述: 提交按钮文案
 
 - **successMessage** (可选)
+  - **中文名**: 提交成功提示
   - 类型: `string`
   - 默认值: `"提交成功！我们会尽快联系您。"`
-  - 描述: 提交成功提示
 
 ### 配置示例
 
@@ -1035,24 +1035,27 @@
 ### 属性 (Properties)
 
 - **targetDate** (可选)
+  - **中文名**: 目标时间
   - 类型: `string`
-  - 默认值: `"2025-11-25T11:53:31.999Z"`
-  - 描述: 目标时间 (ISO格式)
+  - 默认值: `"2025-11-27T09:48:25.619Z"`
+  - 描述: ISO格式
 
 - **textColor** (可选)
+  - **中文名**: 文字颜色
   - 类型: `string`
   - 默认值: `"text-gray-900"`
-  - 描述: 文字颜色 (Tailwind 类)
+  - 描述: Tailwind 类
 
 - **backgroundColor** (可选)
+  - **中文名**: 背景颜色
   - 类型: `string`
   - 默认值: `"bg-white"`
-  - 描述: 背景颜色 (Tailwind 类)
+  - 描述: Tailwind 类
 
 - **endMessage** (可选)
+  - **中文名**: 结束文案
   - 类型: `string`
   - 默认值: `"活动已结束"`
-  - 描述: 结束文案
 
 ### 配置示例
 
@@ -1063,7 +1066,7 @@
   "id": "floor_countdown_example",
   "type": 12,
   "data": {
-    "targetDate": "2025-11-25T11:53:32.030Z",
+    "targetDate": "2025-11-27T09:48:25.856Z",
     "textColor": "text-gray-900",
     "backgroundColor": "bg-white",
     "endMessage": "活动已结束"
@@ -1079,7 +1082,7 @@
   "type": 12,
   "alias": "示例倒计时",
   "data": {
-    "targetDate": "2025-11-27T11:53:32.030Z",
+    "targetDate": "2025-11-29T09:48:25.856Z",
     "textColor": "text-white",
     "backgroundColor": "bg-gradient-to-r from-red-500 to-pink-500",
     "endMessage": "限时抢购已结束，敬请期待下次活动！"
@@ -1094,20 +1097,20 @@
 ### 属性 (Properties)
 
 - **images** (可选)
+  - **中文名**: 头像链接列表
   - 类型: `array`
   - 默认值: `["https://api.dicebear.com/7.x/avataaars/svg?seed=Felix","https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka","https://api.dicebear.com/7.x/avataaars/svg?seed=Bob"]`
-  - 描述: 头像链接列表
 
 - **size** (可选)
+  - **中文名**: 尺寸
   - 类型: `enum`
-  - 选项: `sm`, `md`, `lg`
+  - 选项: `sm` (小), `md` (中), `lg` (大)
   - 默认值: `"md"`
-  - 描述: 尺寸 @labels({"sm":"小", "md":"中", "lg":"大"})
 
 - **max** (可选)
+  - **中文名**: 最大显示数量
   - 类型: `number`
   - 默认值: `5`
-  - 描述: 最大显示数量
 
 ### 配置示例
 
@@ -1161,24 +1164,27 @@
 - **style** (可选)
   - **中文名**: 样式
   - 类型: `enum`
-  - 选项: `solid`, `dashed`, `dotted`
+  - 选项: `solid` (实线), `dashed` (虚线), `dotted` (点线)
   - 默认值: `"solid"`
-  - 描述: 分割线样式 @labels({"solid":"实线", "dashed":"虚线", "dotted":"点线"})
+  - 描述: 分割线样式
 
 - **color** (可选)
+  - **中文名**: 颜色
   - 类型: `string`
   - 默认值: `"border-gray-200"`
-  - 描述: 颜色 (Tailwind 类)
+  - 描述: Tailwind 类
 
 - **thickness** (可选)
+  - **中文名**: 粗细
   - 类型: `number`
   - 默认值: `1`
-  - 描述: 粗细 (px) (单位: px)
+  - 描述: px (单位: px)
 
 - **margin** (可选)
+  - **中文名**: 上下间距
   - 类型: `number`
   - 默认值: `20`
-  - 描述: 上下间距 (px) (单位: px)
+  - 描述: px (单位: px)
 
 ### 配置示例
 
@@ -1330,9 +1336,9 @@
 - **type** (可选)
   - **中文名**: 类型
   - 类型: `enum`
-  - 选项: `bar`, `line`
+  - 选项: `bar` (柱状图), `line` (折线图)
   - 默认值: `"bar"`
-  - 描述: 图表类型 (柱状图/折线图) @labels({"bar":"柱状图", "line":"折线图"})
+  - 描述: 图表类型 (柱状图/折线图)
 
 - **data** (可选)
   - **中文名**: 数据
@@ -1563,9 +1569,9 @@
 - **action** (可选)
   - **中文名**: 动作
   - 类型: `enum`
-  - 选项: `backToTop`, `link`, `custom`
+  - 选项: `backToTop` (回到顶部), `link` (跳转链接), `custom` (自定义)
   - 默认值: `"backToTop"`
-  - 描述: 点击按钮触发的行为 @labels({"backToTop":"回到顶部", "link":"跳转链接", "custom":"自定义"})
+  - 描述: 点击按钮触发的行为
 
 - **link** (可选)
   - **中文名**: 链接
@@ -1575,9 +1581,9 @@
 - **position** (可选)
   - **中文名**: 位置
   - 类型: `enum`
-  - 选项: `bottom-right`, `bottom-left`
+  - 选项: `bottom-right` (右下角), `bottom-left` (左下角)
   - 默认值: `"bottom-right"`
-  - 描述: 按钮位置 @labels({"bottom-right":"右下角", "bottom-left":"左下角"})
+  - 描述: 按钮位置
 
 - **bottomOffset** (可选)
   - **中文名**: 底部偏移

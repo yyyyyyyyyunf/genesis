@@ -21,94 +21,50 @@ export interface SchemaMetadata {
   unit: string | undefined;
   enumLabels: Record<string, string> | undefined;
   defaultValue: string | undefined;
-  literalLabels?: Record<string, string>; // Discriminated Union 的字面量选项标签
+  literalLabels?: Record<string, string>; // 可辨识联合类型的字面量选项标签
 }
 
 export function getSchemaMeta(schema: ZodType, defaultLabel?: string): SchemaMetadata {
   let current: ZodType | null = schema;
-  let fullDescription: string | undefined;
 
+  // 通过解包 schema 来查找元数据
   while (current) {
-      if (current.description) {
-        fullDescription = current.description;
-        break; // 找到描述就停止，通常最外层的描述最准确
-      }
+    // 使用 .meta() 方法获取元数据（Zod 4 API）
+    const metadata = (current as any).meta?.();
+    if (metadata) {
+      return {
+        label: metadata.label || defaultLabel,
+        description: metadata.description,
+        unit: metadata.unit,
+        enumLabels: metadata.labels,
+        defaultValue: metadata.defaultValue,
+        literalLabels: undefined,
+      };
+    }
 
-      // 逐层解包
-      if (current instanceof ZodOptional) {
-        current = current.unwrap() as ZodType;
-      } else if (current instanceof ZodDefault) {
-        current = current.removeDefault() as ZodType;
-      } else {
-        current = null;
-      }
-  }
-
-  if (!fullDescription) {
-    return {
-      label: defaultLabel,
-      description: undefined,
-      unit: undefined,
-      enumLabels: undefined,
-      defaultValue: undefined,
-    };
-  }
-
-  // 解析元数据
-  let label = defaultLabel;
-  let description = fullDescription;
-  let unit: string | undefined;
-  let enumLabels: Record<string, string> | undefined;
-  let defaultValue: string | undefined;
-
-  // 1. 提取标签（冒号前的部分）
-  const parts = fullDescription.split(': ');
-  if (parts.length > 0) {
-    label = parts[0];
-    if (parts.length > 1) {
-        description = parts.slice(1).join(': ');
+    // 解包 ZodOptional 和 ZodDefault 来检查内部 schema
+    if (current instanceof ZodOptional) {
+      current = current.unwrap() as ZodType;
+    } else if (current instanceof ZodDefault) {
+      current = current.removeDefault() as ZodType;
+    } else {
+      current = null;
     }
   }
 
-  // 2. 解析 @unit(单位)
-  const unitMatch = description?.match(/@unit\(([^)]+)\)/);
-  if (unitMatch) {
-    unit = unitMatch[1];
-    description = description?.replace(unitMatch[0], '').trim();
-  }
-
-  // 3. 解析 @labels(JSON映射)
-  const labelsMatch = description?.match(/@labels\(([^)]+)\)/);
-  if (labelsMatch) {
-    try {
-      // 尝试解析 JSON，将单引号替换为双引号
-      const jsonStr = labelsMatch[1].replace(/'/g, '"');
-      enumLabels = JSON.parse(jsonStr);
-      description = description?.replace(labelsMatch[0], '').trim();
-    } catch {
-      console.warn('无法解析 @labels 元数据:', labelsMatch[1]);
-    }
-  }
-
-  // 4. 解析 @default(默认值)
-  const defaultMatch = description?.match(/@default\(([^)]+)\)/);
-  if (defaultMatch) {
-      defaultValue = defaultMatch[1];
-      description = description?.replace(defaultMatch[0], '').trim();
-  }
-
+  // 兜底：返回带默认 label 的空元数据
   return {
-    label,
-    description,
-    unit,
-    enumLabels,
-    defaultValue,
+    label: defaultLabel,
+    description: undefined,
+    unit: undefined,
+    enumLabels: undefined,
+    defaultValue: undefined,
     literalLabels: undefined,
   };
 }
 
 /**
- * 从 discriminated union 的各个 literal schema 中提取标签
+ * 从可辨识联合类型的各个字面量 schema 中提取标签
  * 用于在属性检查器中显示友好的选项名称
  */
 export function getLiteralLabelsFromUnion(
@@ -122,7 +78,7 @@ export function getLiteralLabelsFromUnion(
     const discriminatorField = shape?.[discriminator];
     
     if (discriminatorField) {
-      // 获取 literal 的值
+      // 获取字面量的值
       let value: string | undefined;
       if ('value' in discriminatorField) {
         value = discriminatorField.value as string;
@@ -131,7 +87,7 @@ export function getLiteralLabelsFromUnion(
       }
       
       if (value) {
-        // 尝试从 description 中提取标签
+        // 从元数据中提取标签
         const meta = getSchemaMeta(discriminatorField);
         if (meta.label) {
           labels[value] = meta.label;
